@@ -1,0 +1,12 @@
+dist/
+newcode/*
+!newcode/.gitkeep
+jobs/build/*
+!jobs/build/.gitkeep
+net/*.o
+net/*.elf
+net/*.bin
+net/jobs.inc
+net/coops.inc
+__pycache__/
+*.tmp.mp4
