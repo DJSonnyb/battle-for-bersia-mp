@@ -27,12 +27,14 @@ def walk(buf):
         else: n = struct.unpack_from('<I', buf, p + 1)[0]; l += 1; lb += n; p += 5 + n
     return c, l, lb
 
-if isinstance(head, dict):          # Heroes.exe installer
-    print('Heroes.exe installer, version', head['ver'])
-    print('  source  Heroes.exe (Steam)  sha256', head['osha'], 'size', head['osize'])
-    print('  result  Heroes.exe          sha256', head['nsha'], 'size', head['nsize'])
-    c, l, lb = walk(ops)
-    print('  %d copy runs from the player\'s own exe, %d inserted blocks (%d bytes of mod code/changes)' % (c, l, lb))
+if isinstance(head, dict):          # main installer: Heroes.exe + Interface_Misc.txt
+    print('Battle for Bersia MP installer, version', head['ver'])
+    for f in head['files']:
+        c, l, lb = walk(ops[f['off']:f['off'] + f['len']])
+        print('  %s' % f['path'])
+        print('    source (player\'s own file) sha256 %s size %d' % (f['osha'], f['osize']))
+        print('    result                      sha256 %s size %d' % (f['nsha'], f['nsize']))
+        print('    %d copy runs from the player\'s file, %d inserted blocks (%d bytes of mod content)' % (c, l, lb))
 else:                               # Crusaders installer: list of files
     print('Crusaders installer: %d files' % len(head))
     for e in head:

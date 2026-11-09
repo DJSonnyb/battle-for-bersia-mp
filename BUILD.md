@@ -5,13 +5,15 @@ The build is reproducible: following these steps gives **byte-identical** files 
 | Output | SHA-256 |
 |---|---|
 | `dist/Heroes_MP_v1.4.exe` | `51df96a69ae1fcb4ee3854cbee341da1c2b5bc1e5d807fcfac4a0df588114888` |
-| `dist/BattleForBersiaMP_v1.4_Install.bat` | `bd16d66cec341564eeaa396dc6a33abd24246245619621051ffea5832a1b90e2` |
+| `Data/Interface/Interface_Misc.txt` (installed) | `f9ca955d87282cb491acc6be80958bc697a939f617fa029fd2bb5d2b7070fab2` |
+| `dist/BattleForBersiaMP_v1.4_Install.bat` | `2344c9aa81abbe9ff7a52f10cf9aa0172c96ab7bc17b445e6739b77cca09e2c4` |
 
 ## 1. What you need
 
 * **Your own copy of Kingdom Under Fire: Heroes (Steam).** The build reads two things from it:
   * the original `Heroes.exe`, SHA-256 `8b2702c1aac408f1ef687af18e6a9ff7d133ad0368c9c16ed48ac8f7c345aa1c` (file size 7,041,568 bytes). Use Steam > Verify integrity of game files if yours differs.
   * the stage files in `Data/Mission/`. The co-op army levels are read from them.
+  * `Data/Interface/Interface_Misc.txt`, the game's menu layout, SHA-256 `e10bb4cff0be2201a4b69d4c39447416220edc7fa314a33bfa610e5febe0ea91`. `ui/Interface_Misc.diff` adds the multiplayer menus to it.
 * **Linux with these tools.** The release was built on Ubuntu 24.04 with the versions below. Other versions build a working mod, but the bytes may differ.
 
 | Tool | Ubuntu 24.04 package | Version used |
@@ -20,12 +22,12 @@ The build is reproducible: following these steps gives **byte-identical** files 
 | clang, lld, llvm-objcopy, llvm-readelf | `clang-18 lld-18 llvm-18` (with `clang`, `ld.lld`, `llvm-objcopy`, `llvm-readelf` on PATH) | 18.1.3 |
 | nasm | `nasm` | 2.16.01 |
 | ImageMagick 6 (`convert`, for the DXT5 icon data) | `imagemagick` | 6.9.12-98 |
-| `nm`, `sha256sum` | `binutils coreutils` | |
+| `nm`, `sha256sum`, `patch` | `binutils coreutils patch` | |
 
 Install everything on Ubuntu 24.04 (Windows users: WSL with Ubuntu 24.04 works the same way):
 
 ```
-sudo apt install python3 python3-pil clang lld llvm nasm imagemagick binutils
+sudo apt install python3 python3-pil clang lld llvm nasm imagemagick binutils patch
 ```
 
 Or use the included `Dockerfile`:
@@ -52,7 +54,7 @@ export KUF_HEROES_EXE="$KUF_GAME/Heroes.exe"        # the original Steam exe
    * writes the hook assembly `newcode/kuf.asm` and assembles it with nasm.
 2. `scripts/relink.py` puts the built code into `out/patch_heroes_multi_lobby.py` and fixes the jump targets.
 3. `out/patch_heroes_multi_lobby.py <original Heroes.exe> dist/Heroes_MP_v1.4.exe` applies every patch. Each patch is checked against the original bytes first. The script then adds the sections.
-4. `scripts/exe_patcher.py` writes `dist/BattleForBersiaMP_v1.4_Install.bat`, the release installer.
+4. `scripts/exe_patcher.py` writes `dist/BattleForBersiaMP_v1.4_Install.bat`, the release installer. It applies `ui/Interface_Misc.diff` to your `Interface_Misc.txt` and stores both targets as copy/insert deltas.
 
 `./build.sh E` builds the separate Encablossa test build (`Heroes_MP_v1.4E.exe`), which is not part of the Nexus release.
 

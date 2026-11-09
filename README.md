@@ -40,10 +40,11 @@ each .bat, between the lines `#PSSTART` and `#PAYLOAD`. After `#PAYLOAD` comes b
 "copy bytes N..M from your own file" and "insert these bytes" instructions. **`tools/inspect_installer.py` decodes it.**
 
 * `BattleForBersiaMP_v1.4_Install.bat` (made by `scripts/exe_patcher.py`):
-  * Checks that `Heroes.exe` is the Steam original (SHA-256 `8b2702c1…aa1c`).
-  * Keeps the original as `Heroes_original.exe`.
-  * Rebuilds `Heroes.exe` as Battle for Bersia MP and checks the result's SHA-256.
-  * `uninstall` restores the original.
+  * Checks that `Heroes.exe` (SHA-256 `8b2702c1…aa1c`) and `Data\Interface\Interface_Misc.txt` are the Steam originals.
+  * Keeps the originals as `Heroes_original.exe` and `Interface_Misc_original.txt`.
+  * Rebuilds `Heroes.exe`, and adds the multiplayer menus (`ui/Interface_Misc.diff`) to `Interface_Misc.txt`.
+  * Checks each result's SHA-256 before writing, and writes nothing unless every file checks out.
+  * `uninstall` restores the originals.
 * `BattleForBersiaMP_Crusaders_Install.bat` (made by `scripts/crus_installer.py` and `scripts/crus_bat.py`). This one is optional:
   * Builds the Crusaders co-op missions from the player's own *Kingdom Under Fire: The Crusaders* install.
   * Copies 362 files and converts 54 from deltas, checking every file's SHA-256.
@@ -60,6 +61,7 @@ Both installers write only inside the Heroes folder they are run from and only *
 | `jobs/` | custom job and ability icons and the scripts that draw them |
 | `kport/` | the tool that moved Keaton's DLL fixes into the exe (needs her DLL, not included) |
 | `crusconv/` | converter for the Crusaders mission and music files |
+| `ui/` | `Interface_Misc.diff`: the multiplayer menus added to the game's menu layout file |
 | `tools/` | `inspect_installer.py` |
 
 ## Credits

@@ -1,0 +1,1090 @@
+--- a/Data/Interface/Interface_Misc.txt
++++ b/Data/Interface/Interface_Misc.txt
+@@ -33,7 +33,7 @@
+ 			_ATTR_1_1, _ALIGN_LEFT
+ 			_CTRL_STR_TITEL_SINGLE
+ 		SELPRINT_DEF
+-			_SS_TITLE_OPTION
++			_SS_TITLE_MULTIGAME
+ 			285, 310, 350, 80
+ 			_BT_OFF, _BT_OFF
+ 			5, 10
+@@ -41,10 +41,20 @@
+ 			_NONE_HELP_ID
+ 			_FONT_SHADOW
+ 			_ATTR_1_1, _ALIGN_LEFT
++			_CTRL_STR_TITEL_MULTI
++		SELPRINT_DEF
++			_SS_TITLE_OPTION
++			285, 345, 350, 80
++			_BT_OFF, _BT_OFF
++			5, 10
++			-1
++			_NONE_HELP_ID
++			_FONT_SHADOW
++			_ATTR_1_1, _ALIGN_LEFT
+ 			_CTRL_STR_TITEL_OPTION
+ 		SELPRINT_DEF
+ 			_SS_TITLE_CREDIT
+-			285, 345, 350, 80
++			285, 380, 350, 80
+ 			_BT_OFF, _BT_OFF
+ 			5, 10
+ 			-1
+@@ -54,7 +64,7 @@
+ 			_CTRL_STR_TITEL_CREDIT
+ 		SELPRINT_DEF
+ 			_SS_TITLE_EXIT
+-			285, 380, 350, 80
++			285, 415, 350, 80
+ 			_BT_OFF, _BT_OFF
+ 			5, 10
+ 			-1
+@@ -62,6 +72,28 @@
+ 			_FONT_SHADOW
+ 			_ATTR_1_1, _ALIGN_LEFT
+ 			_CTRL_STR_TITEL_EXIT
++		// ---- v43: credit lines, short so they never wrap (not selectable) ----
++		PRINT_DEF
++			_S_LIVE_OPTIMATCH_CAPTION_TAG
++			12, 394, 270, 12
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++		PRINT_DEF
++			_S_LIVE_OPTIMATCH_CAPTION_MAP
++			12, 407, 270, 12
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++		PRINT_DEF
++			_S_LIVE_OPTIMATCH_CAPTION_STATE
++			12, 420, 270, 12
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
+ 
+ 	PANEL_DEF
+ 		_PN_TITLESUBMENU
+@@ -171,6 +203,850 @@
+ 			_FONT_SHADOW
+ 			_ATTR_1_1, _ALIGN_LEFT
+ 			-1
++	PANEL_DEF
++		_PN_LIVE_LOBBY_EX
++		50, 70, 540, 342
++		_PMT_NONE, 0
++		_OLT_8P_29, _DRAW_BASE_ON
++		_FONT_SHADOW
++		_ATTR_1_1, _ALIGN_LEFT
++		_CT_OFF
++		-1
++		SPRITE_DEF
++			_IMG_LIVE_LOBBY_PLAYER1_PORTRAIT
++			80, 105
++			250, 255, 255, 255
++			0.4, 0.4
++			0.0
++			0
++		OUTLINE_DEF
++			_OL_LIVE_LOBBY_PLAYER1
++			13, 20, 30, 30
++			_OLT_8P_33
++
++		BUTTON_DEF
++			_B_LIVE_LOBBY_PLAYER1_INFO
++			52, 22, 230, 28
++			_OLT_28_3P_48, _OLT_28_3P_32
++			5, 15
++			_HT_LIVE_SLOT
++			_FONT_SHADOW
++			_ATTR_2_7, _ALIGN_CENTER
++			_CTRL_STR_LOBBY_OPEN
++		BUTTON_DEF
++			_B_LIVE_LOBBY_PLAYER_COLOR
++			309, 22, 35, 28
++			_OLT_28_3P_48, _OLT_28_3P_32
++			5, 15
++			_HT_LIVE_LOBBY_DEFAULT
++			_FONT_SHADOW
++			_ATTR_1_6,_ALIGN_CENTER
++			_CTRL_STR_NULL
++
++		PRINT_DEF
++			_S_LIVE_LOBBY_PLAYER1_COLOR
++			315, 36, 30, 30
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++
++		PRINT_DEF
++			_S_LIVE_LOBBY_PLAYER1_VOICE
++			341, 36, 30, 30
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++
++		BUTTON_DEF
++			_B_LIVE_LOBBY_TEAM_INDEX
++			278, 22, 35, 28
++			_OLT_28_3P_48, _OLT_28_3P_32
++			5, 15
++			_HT_LIVE_LOBBY_DEFAULT
++			_FONT_SHADOW
++			_ATTR_1_6,_ALIGN_CENTER
++			_CTRL_STR_NULL
++
++		PRINT_DEF
++			_S_LIVE_LOBBY_TEAM1_INDEX
++			284, 36, 24, 24
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++
++		SPRITE_DEF
++			_IMG_LIVE_LOBBY_PLAYER2_PORTRAIT
++			80, 149
++			250, 255, 255, 255
++			0.4, 0.4
++			0.0
++			0
++		OUTLINE_DEF
++			_OL_LIVE_LOBBY_PLAYER2
++			13, 64, 30, 30
++			_OLT_8P_33
++		BUTTON_DEF
++			_B_LIVE_LOBBY_PLAYER2_INFO
++			52, 66, 230, 28
++			_OLT_28_3P_48, _OLT_28_3P_32
++			5, 15
++			_HT_LIVE_SLOT
++			_FONT_SHADOW
++			_ATTR_2_7, _ALIGN_CENTER
++			_CTRL_STR_LOBBY_OPEN
++		PRINT_DEF
++			_S_LIVE_LOBBY_PLAYER2_COLOR
++			315, 80, 24, 24
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++
++		PRINT_DEF
++			_S_LIVE_LOBBY_PLAYER2_VOICE
++			341, 80, 30, 30
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++
++		PRINT_DEF
++			_S_LIVE_LOBBY_TEAM2_INDEX
++			284, 80, 24, 24
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++
++		SPRITE_DEF
++			_IMG_LIVE_LOBBY_PLAYER3_PORTRAIT
++			80, 193
++			250, 255, 255, 255
++			0.4, 0.4
++			0.0
++			0
++		OUTLINE_DEF
++			_OL_LIVE_LOBBY_PLAYER3
++			13, 108, 30, 30
++			_OLT_8P_33
++		BUTTON_DEF
++			_B_LIVE_LOBBY_PLAYER3_INFO
++			52, 110, 230, 28
++			_OLT_28_3P_48, _OLT_28_3P_32
++			5, 15
++			_HT_LIVE_SLOT
++			_FONT_SHADOW
++			_ATTR_2_7, _ALIGN_CENTER
++			_CTRL_STR_LOBBY_OPEN
++		PRINT_DEF
++			_S_LIVE_LOBBY_PLAYER3_COLOR
++			315, 124, 24, 24
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++
++		PRINT_DEF
++			_S_LIVE_LOBBY_PLAYER3_VOICE
++			341, 124, 30, 30
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++
++		PRINT_DEF
++			_S_LIVE_LOBBY_TEAM3_INDEX
++			284, 124, 24, 24
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++
++		SPRITE_DEF
++			_IMG_LIVE_LOBBY_PLAYER4_PORTRAIT
++			80, 237
++			250, 255, 255, 255
++			0.4, 0.4
++			0.0
++			0
++		OUTLINE_DEF
++			_OL_LIVE_LOBBY_PLAYER4
++			13, 152, 30, 30
++			_OLT_8P_33
++		BUTTON_DEF
++			_B_LIVE_LOBBY_PLAYER4_INFO
++			52, 154, 230, 28
++			_OLT_28_3P_48, _OLT_28_3P_32
++			5, 15
++			_HT_LIVE_SLOT
++			_FONT_SHADOW
++			_ATTR_2_7, _ALIGN_CENTER
++			_CTRL_STR_LOBBY_OPEN
++		PRINT_DEF
++			_S_LIVE_LOBBY_PLAYER4_COLOR
++			315, 168, 24, 24
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++
++		PRINT_DEF
++			_S_LIVE_LOBBY_PLAYER4_VOICE
++			341, 168, 30, 30
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++
++		PRINT_DEF
++			_S_LIVE_LOBBY_TEAM4_INDEX
++			284, 168, 24, 24
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++
++		SPRITE_DEF
++			_IMG_LIVE_LOBBY_PLAYER5_PORTRAIT
++			80, 281
++			250, 255, 255, 255
++			0.4, 0.4
++			0.0
++			0
++		OUTLINE_DEF
++			_OL_LIVE_LOBBY_PLAYER5
++			13, 196, 30, 30
++			_OLT_8P_33
++		BUTTON_DEF
++			_B_LIVE_LOBBY_PLAYER5_INFO
++			52, 198, 230, 28
++			_OLT_28_3P_48, _OLT_28_3P_32
++			5, 15
++			_HT_LIVE_SLOT
++			_FONT_SHADOW
++			_ATTR_2_7, _ALIGN_CENTER
++			_CTRL_STR_LOBBY_OPEN
++		PRINT_DEF
++			_S_LIVE_LOBBY_PLAYER5_COLOR
++			315, 212, 24, 24
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++
++		PRINT_DEF
++			_S_LIVE_LOBBY_PLAYER5_VOICE
++			341, 212, 30, 30
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++
++		PRINT_DEF
++			_S_LIVE_LOBBY_TEAM5_INDEX
++			284, 212, 24, 24
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++
++		SPRITE_DEF
++			_IMG_LIVE_LOBBY_PLAYER6_PORTRAIT
++			80, 325
++			250, 255, 255, 255
++			0.4, 0.4
++			0.0
++			0
++		OUTLINE_DEF
++			_OL_LIVE_LOBBY_PLAYER6
++			13, 240, 30, 30
++			_OLT_8P_33
++		BUTTON_DEF
++			_B_LIVE_LOBBY_PLAYER6_INFO
++			52, 242, 230, 28
++			_OLT_28_3P_48, _OLT_28_3P_32
++			5, 15
++			_HT_LIVE_SLOT
++			_FONT_SHADOW
++			_ATTR_2_7, _ALIGN_CENTER
++			_CTRL_STR_LOBBY_OPEN
++		PRINT_DEF
++			_S_LIVE_LOBBY_PLAYER6_COLOR
++			315, 256, 24, 24
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++
++		PRINT_DEF
++			_S_LIVE_LOBBY_PLAYER6_VOICE
++			341, 256, 30, 30
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++
++		PRINT_DEF
++			_S_LIVE_LOBBY_TEAM6_INDEX
++			284, 256, 24, 24
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++
++		OUTLINE_DEF
++			_OL_LIVE_LOBBY_SESSION_INFO
++			370, 18, 160, 256
++			_OLT_8P_33
++
++		PRINT_DEF
++			_S_LIVE_LOBBY_MAPNAME
++			380, 35, 157, 24
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++
++		PRINT_DEF
++			_S_LIVE_LOBBY_REGEN
++			380, 60, 157, 24
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++
++		IMAGE_DEF
++			_IMG_LIVE_LOBBY_MAP
++			498, 250, 50, 0
++			_ATTR_1_1, _ALIGN_LEFT
++		OUTLINE_DEF
++			_OL_LIVE_LOBBY_MAP
++			384, 115, 131, 131
++			_OLT_8P_33
++
++		BUTTON_DEF
++			_B_LIVE_LOBBY_START
++			12, 290, 164, 28
++			_OLT_28_3P_48, _OLT_28_3P_32
++			5, 15
++			_HT_LIVE_LOBBY_DEFAULT
++			_FONT_SHADOW
++			_ATTR_1_6,_ALIGN_CENTER
++			_CTRL_STR_LOBBY_START
++
++		BUTTON_DEF
++			_B_LIVE_LOBBY_CHARACTER_SELECT
++			188, 290, 164, 28
++			_OLT_28_3P_48, _OLT_28_3P_32
++			5, 15
++			_HT_LIVE_LOBBY_TROOPS
++			_FONT_SHADOW
++			_ATTR_1_6,_ALIGN_CENTER
++			_CTRL_STR_CHARACTER
++
++		BUTTON_DEF
++			_B_LIVE_LOBBY_SESSION_OPTION
++			364, 290, 164, 28
++			_OLT_28_3P_48, _OLT_28_3P_32
++			5, 15
++			_HT_LIVE_LOBBY_OPTION
++			_FONT_SHADOW
++			_ATTR_1_6,_ALIGN_CENTER
++			_CTRL_STR_SESSION_OPTION
++		// ---- v40: lobby chat (below the lobby box) ----
++		OUTLINE_DEF
++			_OL_LIVE_MSG
++			0, 344, 540, 64
++			_OLT_8P_41_30
++		PRINT_DEF
++			_S_LIVE_MSG1
++			14, 348, 512, 14
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++		PRINT_DEF
++			_S_LIVE_MSG2
++			14, 361, 512, 14
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++		PRINT_DEF
++			_S_LIVE_MSG3
++			14, 374, 512, 14
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++		PRINT_DEF
++			_S_LIVE_MSG4
++			14, 389, 512, 14
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++
++	// ---- Multiplayer Menu (original expansion main menu layout) ----
++	PANEL_DEF
++		_PN_LIVE_MAIN_MENU_EX
++		140, 150, 325, 150  
++		_PMT_NONE, 0
++		_OLT_8P_41_30, _DRAW_BASE_ON   
++		_FONT_SHADOW
++		_ATTR_1_6, _ALIGN_LEFT
++		_CT_OFF
++		-1
++		BUTTON_DEF
++			_B_LIVE_HERO_BATTLE_EX
++			24, 20, 280, 28
++			_OLT_28_3P_31, _OLT_28_3P_36
++			5, 15
++			_HT_LIVE_HERO_BATTLE
++			_FONT_SHADOW
++			_ATTR_1_6,_ALIGN_CENTER
++			_CTRL_STR_HERO_BATTLE
++		BUTTON_DEF
++			_B_LIVE_TROOP_BATTLE_EX
++			24, 60, 280, 28
++			_OLT_28_3P_31, _OLT_28_3P_36
++			5, 15
++			_HT_LIVE_TROOP_BATTLE
++			_FONT_SHADOW
++			_ATTR_1_6,_ALIGN_CENTER
++			_CTRL_STR_TROOP_BATTLE			
++		BUTTON_DEF
++			_B_LIVE_ETC_MENU_EX
++			24, 100, 280, 28
++			_OLT_28_3P_31, _OLT_28_3P_36
++			5, 15
++			_HT_LIVE_ETC
++			_FONT_SHADOW
++			_ATTR_1_6,_ALIGN_CENTER
++			_CTRL_STR_ETC
++
++
++	// ---- Army Select (original troop select layout) ----
++	PANEL_DEF
++		_PN_LIVE_TROOP_SELECT_MENU
++		0, 0, 640, 480
++		_PMT_NONE, 0
++		_OLT_OFF, _DRAW_BASE_OFF
++		_FONT_SHADOW
++		_ATTR_1_1, _ALIGN_LEFT
++		_CT_OFF
++		-1
++		PANEL_DEF
++			_PN_LIVE_TROOP_SELECT_PORTRAIT_FRAME1
++			90, 82, 122, 116
++			_PMT_NONE, 0
++			_OLT_8P_42_30, _DRAW_BASE_ON
++			_FONT_SHADOW
++			_ATTR_1_1, _ALIGN_LEFT
++			_CT_OFF
++			-1
++		SPRITE_DEF
++			_IMG_LIVE_TROOP_SELECT_PORTRAIT1
++			151, 140
++			255, 255, 255, 255
++			1.0, 1.0
++			0.0
++			0
++		PANEL_DEF
++			_PN_LIVE_TROOP_SELECT_PORTRAIT_FRAME2
++			239, 92, 162, 156
++			_PMT_NONE, 0
++			_OLT_8P_42_30, _DRAW_BASE_ON
++			_FONT_SHADOW
++			_ATTR_1_1, _ALIGN_LEFT
++			_CT_OFF
++			-1
++		SPRITE_DEF
++			_IMG_LIVE_TROOP_SELECT_PORTRAIT2
++			320, 170
++			255, 255, 255, 255
++			1.5, 1.5
++			0.0
++			0
++		PANEL_DEF
++			_PN_LIVE_TROOP_SELECT_PORTRAIT_FRAME3
++			428, 82, 122, 116
++			_PMT_NONE, 0
++			_OLT_8P_42_30, _DRAW_BASE_ON
++			_FONT_SHADOW
++			_ATTR_1_1, _ALIGN_LEFT
++			_CT_OFF
++			-1
++		SPRITE_DEF
++			_IMG_LIVE_TROOP_SELECT_PORTRAIT3
++			489, 140
++			255, 255, 255, 255
++			1.0, 1.0
++			0.0
++			0
++
++	PANEL_DEF
++		_PN_LIVE_TROOP_SELECT
++		106, 236, 214, 222
++		_PMT_NONE, 0
++		_OLT_8P_42_30, _DRAW_BASE_ON
++		_FONT_SHADOW
++		_ATTR_1_1, _ALIGN_LEFT
++		_CT_OFF
++		-1
++		BUTTON_DEF
++			_B_LIVE_TROOP_SELECT_START
++			25, 20, 162, 25
++			_OLT_28_3P_31, _OLT_28_3P_36
++			5, 15
++			_HT_LIVE_SELECT_TROOP
++			_FONT_SHADOW
++			_ATTR_1_6,_ALIGN_CENTER
++			_CTRL_STR_TROOP_SELECT_START
++		BUTTON_DEF
++			_B_LIVE_TROOP_SELECT_MANAGE
++			25, 60, 162, 25
++			_OLT_28_3P_31, _OLT_28_3P_36
++			5, 15
++			_HT_LIVE_TROOP_MANAGE
++			_FONT_SHADOW
++			_ATTR_1_6,_ALIGN_CENTER
++			_CTRL_STR_TROOP_SELECT_MANAGE
++		BUTTON_DEF
++			_B_LIVE_TROOP_GAME_SEARCH
++			25, 100, 162, 25
++			_OLT_28_3P_31, _OLT_28_3P_36
++			5, 15
++			_HT_LIVE_TROOP_MANAGE
++			_FONT_SHADOW
++			_ATTR_1_6,_ALIGN_CENTER
++			_CTRL_STR_TROOP_SELECT_MANAGE
++		BUTTON_DEF
++			_B_LIVE_TROOP_SELECT_CREATE
++			25, 140, 162, 25
++			_OLT_28_3P_31, _OLT_28_3P_36
++			5, 15
++			_HT_LIVE_TROOP_CREATE
++			_FONT_SHADOW
++			_ATTR_1_6,_ALIGN_CENTER
++			_CTRL_STR_TROOP_SELECT_CREATE
++		BUTTON_DEF
++			_B_LIVE_TROOP_SELECT_DELETE
++			25, 180, 162, 25
++			_OLT_28_3P_31, _OLT_28_3P_36
++			5, 15
++			_HT_LIVE_DELETE_TROOP
++			_FONT_SHADOW
++			_ATTR_1_6,_ALIGN_CENTER
++			_CTRL_STR_TROOP_SELECT_DELETE
++
++	PANEL_DEF
++		_PN_LIVE_TROOP_GAME_MENU
++		106, 266, 214, 148
++		_PMT_NONE, 0
++		_OLT_8P_42_30, _DRAW_BASE_ON
++		_FONT_SHADOW
++		_ATTR_1_1, _ALIGN_LEFT
++		_CT_OFF
++		-1
++		BUTTON_DEF
++			_B_LIVE_TROOP_CREATE_FRIENDLY_MATCH
++			25, 20, 162, 25
++			_OLT_28_3P_31, _OLT_28_3P_36
++			5, 15
++			_HT_LIVE_CREATE_FRIENDLY
++			_FONT_SHADOW
++			_ATTR_1_6,_ALIGN_CENTER
++			_CTRL_STR_TROOP_CREATE_FRIENDLY_MATCH
++		BUTTON_DEF
++			_B_LIVE_TROOP_FRIENDLY_MATCH
++			25, 60, 162, 25
++			_OLT_28_3P_31, _OLT_28_3P_36
++			5, 15
++			_HT_LIVE_SEARCH_FRIENDLY
++			_FONT_SHADOW
++			_ATTR_1_6,_ALIGN_CENTER
++			_CTRL_STR_TROOP_FRIENDLY_MATCH
++		BUTTON_DEF
++			_B_LIVE_TROOP_LADDER_MATCH
++			25, 100, 162, 25
++			_OLT_28_3P_31, _OLT_28_3P_36
++			5, 15
++			_HT_LIVE_CREATE_LADDER
++			_FONT_SHADOW
++			_ATTR_1_6,_ALIGN_CENTER
++			_CTRL_STR_TROOP_CREATE_LADDER_MATCH
++
++	PANEL_DEF
++		_PN_LIVE_TROOP_SELECT_INFO
++		336, 266, 218, 132
++		_PMT_NONE, 0
++		_OLT_8P_41_30, _DRAW_BASE_ON
++		_FONT_SHADOW
++		_ATTR_1_1, _ALIGN_LEFT
++		_CT_OFF
++		-1
++		PRINT_DEF
++			_S_LIVE_TROOP_SELECT_INFO_NAME
++			20, 18, 190, 18
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_PLAYER_NAME
++		PRINT_DEF
++			_S_LIVE_TROOP_ICON_1
++			20, 52, 190, 18
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_PLAYER_NAME
++		PRINT_DEF
++			_S_LIVE_TROOP_ICON_2
++			20, 92, 190, 18
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_PLAYER_NAME
++
++
++	// ---- Create Game (original layout) ----
++	PANEL_DEF
++		_PN_LIVE_CREATE_GAME
++		50, 70, 540, 340
++		_PMT_NONE, 0
++		_OLT_8P_29, _DRAW_BASE_ON
++		_FONT_SHADOW
++		_ATTR_1_1, _ALIGN_LEFT
++		_CT_OFF
++		-1
++		BUTTON_DEF
++			_B_LIVE_CREATE_GAME_MAP
++			14, 30, 206, 22
++			_OLT_28_3P_48, _OLT_28_3P_32
++			5, 15
++			_HT_LIVE_CREATE_SESSION
++			_FONT_SHADOW
++			_ATTR_1_3,_ALIGN_CENTER
++			_CTRL_STR_SELECT_MAP
++		OUTLINE_DEF
++			_OL_LIVE_CREATE_GAME_TEAM_TYPE
++			273, 26, 250, 30
++			_OLT_45_8P_43
++		PRINT_DEF
++			_S_LIVE_CREATE_GAME_MAP_NAME
++			273, 42, 250, 22
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_CENTER
++			_CTRL_STR_NULL
++		BUTTON_DEF
++			_B_LIVE_CREATE_GAME_TYPE
++			14, 77, 206, 22
++			_OLT_28_3P_48, _OLT_28_3P_32
++			5, 15
++			_HT_LIVE_CREATE_SESSION
++			_FONT_SHADOW
++			_ATTR_1_3,_ALIGN_CENTER
++			_CTRL_STR_GAME_TYPE
++		OUTLINE_DEF
++			_OL_LIVE_CREATE_GAME_TYPE
++			273, 73, 250, 30
++			_OLT_45_8P_43
++		PRINT_DEF
++			_SS_LIVE_UNVISUAL_TYPE
++			273, 89, 250, 22
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_CENTER
++			_CTRL_STR_NULL
++		BUTTON_DEF
++			_B_LIVE_CREATE_GAME_PLAYER
++			14, 124, 206, 22
++			_OLT_28_3P_48, _OLT_28_3P_32
++			5, 15
++			_HT_LIVE_CREATE_SESSION
++			_FONT_SHADOW
++			_ATTR_1_3,_ALIGN_CENTER
++			_CTRL_STR_JOIN_PLAYER_NUMBER
++		OUTLINE_DEF
++			_OL_LIVE_CREATE_GAME_PLAYER
++			273, 120, 250, 30
++			_OLT_45_8P_43
++		PRINT_DEF
++			_SS_LIVE_UNVISUAL_PLAYER
++			273, 136, 250, 22
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_CENTER
++			_CTRL_STR_NULL
++		BUTTON_DEF
++			_B_LIVE_CREATE_GAME_PUBLIC
++			14, 171, 206, 22
++			_OLT_28_3P_48, _OLT_28_3P_32
++			5, 15
++			_HT_LIVE_CREATE_SESSION
++			_FONT_SHADOW
++			_ATTR_1_3,_ALIGN_CENTER
++			_CTRL_STR_NULL
++		OUTLINE_DEF
++			_OL_LIVE_CREATE_GAME_PUBLIC
++			273, 167, 250, 30
++			_OLT_45_8P_43
++		PRINT_DEF
++			_SS_LIVE_UNVISUAL_PUBLIC
++			273, 183, 250, 22
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_CENTER
++			_CTRL_STR_NULL
++		BUTTON_DEF
++			_B_LIVE_CREATE_GAME_REGEN_NUMBER
++			14, 218, 206, 22
++			_OLT_28_3P_48, _OLT_28_3P_32
++			5, 15
++			_HT_LIVE_CREATE_SESSION
++			_FONT_SHADOW
++			_ATTR_1_3,_ALIGN_CENTER
++			_CTRL_STR_NULL
++		OUTLINE_DEF
++			_OL_LIVE_CREATE_GAME_REGEN_NUMBER
++			273, 214, 250, 30
++			_OLT_45_8P_43
++		PRINT_DEF
++			_SS_LIVE_UNVISUAL_REGEN_NUMBER
++			273, 230, 250, 22
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_CENTER
++			_CTRL_STR_NULL
++		PRINT_DEF
++			_SS_LIVE_UNVISUAL_TIME_LIMIT
++			30, 262, 480, 22
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++		BUTTON_DEF
++			_B_LIVE_CREATE_GAME_OK
++			14, 300, 206, 22
++			_OLT_28_3P_48, _OLT_28_3P_32
++			5, 15
++			_HT_LIVE_CREATE_SESSION
++			_FONT_SHADOW
++			_ATTR_1_3,_ALIGN_CENTER
++			_CTRL_STR_CREATE_GAME
++
++	// ---- Game List (hosted games via Steam) ----
++	PANEL_DEF
++		_PN_LIVE_MATCH_LIST
++		52, 70, 530, 330
++		_PMT_NONE, 0
++		_OLT_8P_29, _DRAW_BASE_ON
++		_FONT_SHADOW
++		_ATTR_1_1, _ALIGN_LEFT
++		_CT_OFF
++		-1
++		BUTTON_DEF
++			_B_LIVE_MATCH_LIST_TYPE_A
++			25, 14, 150, 28
++			_OLT_28_3P_48, _OLT_28_3P_32
++			20, 14
++			_HT_LIVE_LOBBY_DEFAULT
++			_FONT_SHADOW
++			_ATTR_1_6, _ALIGN_CENTER
++			_CTRL_STR_NULL
++		BUTTON_DEF
++			_B_LIVE_MATCH_LIST_TYPE_C
++			350, 14, 150, 28
++			_OLT_28_3P_48, _OLT_28_3P_32
++			20, 14
++			_HT_LIVE_LOBBY_DEFAULT
++			_FONT_SHADOW
++			_ATTR_1_6, _ALIGN_CENTER
++			_CTRL_STR_NULL
++		OUTLINE_DEF
++			_OL_LIVE_MATCH_LIST_FIELD
++			20, 49, 488, 25
++			_OLT_40_3P_47
++		PRINT_DEF
++			_S_LIVE_MATCH_LIST_CAPTION_TAG
++			34, 62, 180, 80
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++		PRINT_DEF
++			_S_LIVE_MATCH_LIST_CAPTION_GAME_TYPE
++			200, 62, 200, 80
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++		PRINT_DEF
++			_S_LIVE_MATCH_LIST_CAPTION_PLAYER_NUMBER
++			420, 62, 100, 80
++			-1
++			_FONT_SHADOW
++			_ATTR_1_1,_ALIGN_LEFT
++			_CTRL_STR_NULL
++		BUTTON_DEF
++			_B_LIVE_CHARACTER_SELECT_NULL1
++			20, 84, 488, 30
++			_OLT_28_3P_48, _OLT_28_3P_32
++			20, 14
++			_HT_LIVE_LOBBY_DEFAULT
++			_FONT_SHADOW
++			_ATTR_2_7, _ALIGN_LEFT
++			_CTRL_STR_NULL
++		BUTTON_DEF
++			_B_LIVE_CHARACTER_SELECT_NULL2
++			20, 122, 488, 30
++			_OLT_28_3P_48, _OLT_28_3P_32
++			20, 14
++			_HT_LIVE_LOBBY_DEFAULT
++			_FONT_SHADOW
++			_ATTR_2_7, _ALIGN_LEFT
++			_CTRL_STR_NULL
++		BUTTON_DEF
++			_B_LIVE_CHARACTER_SELECT_NULL3
++			20, 160, 488, 30
++			_OLT_28_3P_48, _OLT_28_3P_32
++			20, 14
++			_HT_LIVE_LOBBY_DEFAULT
++			_FONT_SHADOW
++			_ATTR_2_7, _ALIGN_LEFT
++			_CTRL_STR_NULL
++		BUTTON_DEF
++			_B_LIVE_CHARACTER_SELECT_NULL4
++			20, 198, 488, 30
++			_OLT_28_3P_48, _OLT_28_3P_32
++			20, 14
++			_HT_LIVE_LOBBY_DEFAULT
++			_FONT_SHADOW
++			_ATTR_2_7, _ALIGN_LEFT
++			_CTRL_STR_NULL
++		BUTTON_DEF
++			_B_LIVE_CHARACTER_SELECT_NULL5
++			20, 236, 488, 30
++			_OLT_28_3P_48, _OLT_28_3P_32
++			20, 14
++			_HT_LIVE_LOBBY_DEFAULT
++			_FONT_SHADOW
++			_ATTR_2_7, _ALIGN_LEFT
++			_CTRL_STR_NULL
++		BUTTON_DEF
++			_B_LIVE_CHARACTER_SELECT_NULL6
++			20, 274, 488, 30
++			_OLT_28_3P_48, _OLT_28_3P_32
++			20, 14
++			_HT_LIVE_LOBBY_DEFAULT
++			_FONT_SHADOW
++			_ATTR_2_7, _ALIGN_LEFT
++			_CTRL_STR_NULL
++
+ END_FORM_DEF
+ 
+ 
+@@ -184,7 +1060,7 @@
+ 
+ 	PANEL_DEF
+ 		_PN_TITLE_BOOK_TEXT
+-		0, 270, 0, 210								// ���� �� ��ǥ, ������
++		0, 270, 0, 210								//           ǥ,       
+ 		_PMT_NONE, 0
+ 		_OLT_OFF, _DRAW_BASE_OFF
+ 		_FONT_SHADOW
+@@ -202,7 +1078,7 @@
+ 
+ //-----------------------------------------------------------------------------
+ // Name: MENU_CUSTOM_SETTING_MENU_EX
+-// Desc: Ȯ���ѿ� Ŀ���� ���� �޴�
++// Desc: Ȯ   ѿ  Ŀ           ޴ 
+ //-----------------------------------------------------------------------------
+ FORM_DEF
+ 	MENU_CUSTOM_SETTING_MENU_EX
+@@ -321,7 +1197,7 @@
+ 			_IMG_CUSTOM_SEL_GAME_MAP
+ 			494, 256, 50, 0
+ 			_ATTR_1_1, _ALIGN_LEFT
+-		OUTLINE_DEF								// ���� �ܰ���
++		OUTLINE_DEF								//       ܰ   
+ 			_OTL_CUSTOM_MAP_BORDER
+ 			363, 105, 162, 162
+ 			_OLT_8P_33
+@@ -389,7 +1265,7 @@
+ 			_IMG_CUSTOM_SELECT_MAP_GAME_MAP
+ 			494, 260, 50, 0
+ 			_ATTR_1_1, _ALIGN_LEFT
+-		OUTLINE_DEF								// ���� �ܰ���
++		OUTLINE_DEF								//       ܰ   
+ 			_OTL_CUSTOM_SELECT_MAP_BORDER
+ 			363, 53, 162, 162
+ 			_OLT_8P_33
+@@ -541,7 +1417,7 @@
+ 			_ATTR_2_7, _ALIGN_LEFT
+ 			_ATTR_2_7, _ALIGN_LEFT
+ 			_ATTR_2_7, _ALIGN_LEFT
+-			-1								// _HT_LIVE_TROOP_CREATE - ������ �̰͵� ���� �ʴ´�.
++			-1								// _HT_LIVE_TROOP_CREATE -         ̰͵        ʴ´ .
+ 			
+ 		BUTTON_DEF
+ 			_B_CUSTOM_READY_TROOP_WAIT_TROOP_CAPTION
+@@ -566,7 +1442,7 @@
+ 			_ATTR_2_7, _ALIGN_LEFT
+ 			_ATTR_2_7, _ALIGN_LEFT
+ 			_ATTR_2_7, _ALIGN_LEFT
+-			-1								// _HT_LIVE_TROOP_CREATE - ������ �̰͵� ���� �ʴ´�.
++			-1								// _HT_LIVE_TROOP_CREATE -         ̰͵        ʴ´ .
+ 
+ 	PANEL_DEF
+ 		_PN_LIVE_LOBBY_STAFF_INFO
+@@ -605,12 +1481,12 @@
+ 			_BT_OFF, _BT_OFF
+ 			5, 10
+ 			6, 5, 20
+-			120, -15, 125   //  75, 135, 30   // ��ų��ġ, �Ƹ���, ��ų��
++			120, -15, 125   //  75, 135, 30   //   ų  ġ,  Ƹ   ,   ų  
+ 			_FONT_SHADOW
+ 			_ATTR_8_8, _ALIGN_LEFT
+-			_ATTR_8_8, _ALIGN_LEFT    // ��ų��
+-			_ATTR_26_26, _ALIGN_LEFT  // ��ų��ġ
+-			_ATTR_8_8, _ALIGN_LEFT    // ������
++			_ATTR_8_8, _ALIGN_LEFT    //   ų  
++			_ATTR_26_26, _ALIGN_LEFT  //   ų  ġ
++			_ATTR_8_8, _ALIGN_LEFT    //       
+ 			_HT_TB_BASESKILL
+ 			_CT_OFF
+ 			-1
+@@ -619,7 +1495,7 @@
+ 
+ //-----------------------------------------------------------------------------
+ // Name: 
+-// Desc:  CUSTOM�� Troop Select Menu
++// Desc:  CUSTOM   Troop Select Menu
+ //-----------------------------------------------------------------------------
+ FORM_DEF
+ 	MENU_CUSTOM_SELECT_TROOP_MENU_EX
+@@ -798,7 +1674,7 @@
+ 	
+ 	// Troop Info 		
+ //	PANEL_DEF
+-//		_PN_CUSTOM_TROOP_SELECT_INFO   // ĳ���� ����
++//		_PN_CUSTOM_TROOP_SELECT_INFO   // ĳ         
+ //		80, 350, 480, 50
+ //		_PMT_NONE, 0
+ //		_OLT_8P_42_30, _DRAW_BASE_ON
+@@ -807,16 +1683,16 @@
+ //		_CT_OFF
+ //		-1
+ //		PRINT_DEF
+-//			_S_CUSTOM_TROOP_SELECT_INFO_NAME     // �̸�
++//			_S_CUSTOM_TROOP_SELECT_INFO_NAME     //  ̸ 
+ //			30, 25, 480, 18  // 125, 70, 300, 18
+ //			-1
+ //			_FONT_SHADOW
+-//			_ATTR_1_1,_ALIGN_LEFT					// �ܺ� ����
++//			_ATTR_1_1,_ALIGN_LEFT					//  ܺ      
+ //			_CTRL_STR_PLAYER_NAME
+ 
+ 	// select - copy from live or create
+ 	PANEL_DEF
+-		_PN_CUSTOM_TROOP_SELECT_HOW_TO_CREATE // ĳ���� ����
++		_PN_CUSTOM_TROOP_SELECT_HOW_TO_CREATE // ĳ         
+ 		110, 100, 410, 245   
+ 		_PMT_NONE, 0
+ 		_OLT_8P_41_30, _DRAW_BASE_ON
+@@ -846,7 +1722,7 @@
+ 
+ //-----------------------------------------------------------------------------
+ // Name: 
+-// Desc:  Custom�� Hero Select Menu
++// Desc:  Custom   Hero Select Menu
+ //-----------------------------------------------------------------------------
+ FORM_DEF
+ 	MENU_CUSTOM_SELECT_HERO_MENU_EX
+@@ -1335,7 +2211,7 @@
+ 
+ //-----------------------------------------------------------------------------
+ // Name: 
+-// Desc:  Custom�� Hero Select Menu
++// Desc:  Custom   Hero Select Menu
+ //-----------------------------------------------------------------------------
+ FORM_DEF
+ 	MENU_CUSTOM_COPY_FROM_LIVE_MENU_EX
+@@ -1380,32 +2256,32 @@
+ 			0
+ 			
+ 		PRINT_DEF
+-			_S_CUSTOM_COPY_INFO_NAME1     // �̸�
++			_S_CUSTOM_COPY_INFO_NAME1     //  ̸ 
+ 			150, 120, 480, 18  // 125, 70, 300, 18
+ 			-1
+ 			_FONT_SHADOW
+-			_ATTR_1_1,_ALIGN_LEFT					// �ܺ� ����
++			_ATTR_1_1,_ALIGN_LEFT					//  ܺ      
+ 			_CTRL_STR_PLAYER_NAME
+ 		PRINT_DEF
+-			_S_CUSTOM_COPY_INFO_NAME2     // �̸�
++			_S_CUSTOM_COPY_INFO_NAME2     //  ̸ 
+ 			150, 180, 480, 18  // 125, 70, 300, 18
+ 			-1
+ 			_FONT_SHADOW
+-			_ATTR_1_1,_ALIGN_LEFT					// �ܺ� ����
++			_ATTR_1_1,_ALIGN_LEFT					//  ܺ      
+ 			_CTRL_STR_PLAYER_NAME
+ 		PRINT_DEF
+-			_S_CUSTOM_COPY_INFO_NAME3     // �̸�
++			_S_CUSTOM_COPY_INFO_NAME3     //  ̸ 
+ 			150, 240, 480, 18  // 125, 70, 300, 18
+ 			-1
+ 			_FONT_SHADOW
+-			_ATTR_1_1,_ALIGN_LEFT					// �ܺ� ����
++			_ATTR_1_1,_ALIGN_LEFT					//  ܺ      
+ 			_CTRL_STR_PLAYER_NAME
+ 		PRINT_DEF
+-			_S_CUSTOM_COPY_INFO_NAME4     // �̸�
++			_S_CUSTOM_COPY_INFO_NAME4     //  ̸ 
+ 			150, 300, 480, 18  // 125, 70, 300, 18
+ 			-1
+ 			_FONT_SHADOW
+-			_ATTR_1_1,_ALIGN_LEFT					// �ܺ� ����
++			_ATTR_1_1,_ALIGN_LEFT					//  ܺ      
+ 			_CTRL_STR_PLAYER_NAME
+ 			
+ END_FORM_DEF
