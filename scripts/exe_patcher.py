@@ -51,7 +51,9 @@ targets = [('Heroes.exe', 'Heroes_original.exe', open(ORIG, 'rb').read(), open(n
 shutil.rmtree(tmp)
 meta = []; blob = bytearray()
 for path, bak, a, b in targets:
-    d = delta(a, b) if path.endswith('.txt') else None
+    # Text files: store the whole new file, so it installs over any version of the player's file
+    # (copies differ between players). The exe is always rebuilt from the exact Steam original.
+    d = (b'L' + struct.pack('<I', len(b)) + b) if path.endswith('.txt') else None
     if d is None:   # exe: same-offset runs (the mod only appends sections and patches bytes in place)
         ops = bytearray(); i = 0; n = len(b)
         while i < n:
@@ -64,7 +66,7 @@ for path, bak, a, b in targets:
                 while j < n and not (j + 16 <= len(a) and a[j:j + 16] == b[j:j + 16]): j += 1
                 ops += b'L' + struct.pack('<I', j - i) + b[i:j]; i = j
         d = bytes(ops)
-    meta.append(dict(path=path, bak=bak, osha=sha(a), osize=len(a), nsha=sha(b), nsize=len(b), off=len(blob), len=len(d)))
+    meta.append(dict(path=path, bak=bak, osha=sha(a), osize=len(a), nsha=sha(b), nsize=len(b), off=len(blob), len=len(d), any=path.endswith('.txt')))
     blob += d
 mj = json.dumps(dict(ver=ver, files=meta)).encode()
 pk = gzip.compress(struct.pack('<I', len(mj)) + mj + bytes(blob), 9, mtime=0)
@@ -106,13 +108,14 @@ foreach ($f in $m.files) {
     $dst = Join-Path $dir $f.path; $bak = Join-Path $dir $f.bak
     $hd = Sha $dst; $hb = Sha $bak
     if ($env:HMP_MODE -eq 'uninstall') {
-        if ($hb -eq $f.osha) { $plan += ,@($f, 'restore', $bak, $dst) }
+        if ($hb -eq $f.osha -or ($f.any -and $hb -ne '')) { $plan += ,@($f, 'restore', $bak, $dst) }
         elseif ($hd -ne $f.osha) { Write-Host "  No original backup of $($f.path) found - use Steam > Verify integrity of game files instead." -ForegroundColor Yellow }
         continue
     }
     if ($hd -eq $f.nsha) { $plan += ,@($f, 'ok', $dst, $dst); continue }
     if ($hd -eq $f.osha) { $plan += ,@($f, 'build', $dst, $dst); continue }
     if ($hb -eq $f.osha) { $plan += ,@($f, 'build', $bak, $dst); continue }
+    if ($f.any) { $plan += ,@($f, 'build', $dst, $dst); continue }
     Write-Host "  $($f.path) is not the Steam version this mod is made for (or is already modified)," -ForegroundColor Red
     Write-Host '  and no original backup was found. In Steam: right-click KUF Heroes > Properties > Installed Files >' -ForegroundColor Red
     Write-Host '  Verify integrity of game files, then run this installer again. Nothing was changed.' -ForegroundColor Red
@@ -127,7 +130,7 @@ $outs = @()
 foreach ($p in $plan) {
     $f = $p[0]
     if ($p[1] -eq 'ok') { continue }
-    $a = [IO.File]::ReadAllBytes($p[2]); $o = New-Object IO.MemoryStream
+    $a = $null; if (-not $f.any) { $a = [IO.File]::ReadAllBytes($p[2]) }; $o = New-Object IO.MemoryStream
     $q = 4 + $ml + $f.off; $end = $q + $f.len
     while ($q -lt $end) {
         if ($pay[$q] -eq 67) { $o.Write($a, [BitConverter]::ToInt32($pay, $q + 1), [BitConverter]::ToInt32($pay, $q + 5)); $q += 9 }
@@ -140,7 +143,8 @@ foreach ($p in $plan) {
 }
 foreach ($x in $outs) {
     $f = $x[0]; $dst = Join-Path $dir $f.path; $bak = Join-Path $dir $f.bak
-    if ((Sha $bak) -ne $f.osha) { Copy-Item -LiteralPath $x[2] -Destination $bak -Force; Write-Host "  Backed up the original as $($f.bak)" }
+    $hb = Sha $bak
+    if (($f.any -and $hb -eq '' -and (Test-Path -LiteralPath $x[2])) -or (-not $f.any -and $hb -ne $f.osha)) { Copy-Item -LiteralPath $x[2] -Destination $bak -Force; Write-Host "  Backed up the original as $($f.bak)" }
     [IO.File]::WriteAllBytes($dst, $x[1])
 }
 Write-Host ''

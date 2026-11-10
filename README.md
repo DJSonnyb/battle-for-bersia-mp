@@ -40,9 +40,10 @@ each .bat, between the lines `#PSSTART` and `#PAYLOAD`. After `#PAYLOAD` comes b
 "copy bytes N..M from your own file" and "insert these bytes" instructions. **`tools/inspect_installer.py` decodes it.**
 
 * `BattleForBersiaMP_v1.4_Install.bat` (made by `scripts/exe_patcher.py`):
-  * Checks that `Heroes.exe` (SHA-256 `8b2702c1…aa1c`) and `Data\Interface\Interface_Misc.txt` are the Steam originals.
-  * Keeps the originals as `Heroes_original.exe` and `Interface_Misc_original.txt`.
-  * Rebuilds `Heroes.exe`, and adds the multiplayer menus (`ui/Interface_Misc.diff`) to `Interface_Misc.txt`.
+  * Checks that `Heroes.exe` is the Steam original (SHA-256 `8b2702c1…aa1c`) and keeps it as `Heroes_original.exe`.
+  * Rebuilds `Heroes.exe` from copy runs of the player's own exe plus the mod code.
+  * Writes `Data\Interface\Interface_Misc.txt` with the multiplayer menus (the game's file + `ui/Interface_Misc.diff`).
+    This text file is stored whole, because players' copies differ; their old copy is kept as `Interface_Misc_original.txt`.
   * Checks each result's SHA-256 before writing, and writes nothing unless every file checks out.
   * `uninstall` restores the originals.
 * `BattleForBersiaMP_Crusaders_Install.bat` (made by `scripts/crus_installer.py` and `scripts/crus_bat.py`). This one is optional:

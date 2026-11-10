@@ -6,7 +6,7 @@ The build is reproducible: following these steps gives **byte-identical** files 
 |---|---|
 | `dist/Heroes_MP_v1.4.exe` | `51df96a69ae1fcb4ee3854cbee341da1c2b5bc1e5d807fcfac4a0df588114888` |
 | `Data/Interface/Interface_Misc.txt` (installed) | `f9ca955d87282cb491acc6be80958bc697a939f617fa029fd2bb5d2b7070fab2` |
-| `dist/BattleForBersiaMP_v1.4_Install.bat` | `2344c9aa81abbe9ff7a52f10cf9aa0172c96ab7bc17b445e6739b77cca09e2c4` |
+| `dist/BattleForBersiaMP_v1.4_Install.bat` | `98dd1c3d9b7464fa0733070bd1e8cc29d0063f3cd86ccfab9888787c7e00be9a` |
 
 ## 1. What you need
 
@@ -54,7 +54,7 @@ export KUF_HEROES_EXE="$KUF_GAME/Heroes.exe"        # the original Steam exe
    * writes the hook assembly `newcode/kuf.asm` and assembles it with nasm.
 2. `scripts/relink.py` puts the built code into `out/patch_heroes_multi_lobby.py` and fixes the jump targets.
 3. `out/patch_heroes_multi_lobby.py <original Heroes.exe> dist/Heroes_MP_v1.4.exe` applies every patch. Each patch is checked against the original bytes first. The script then adds the sections.
-4. `scripts/exe_patcher.py` writes `dist/BattleForBersiaMP_v1.4_Install.bat`, the release installer. It applies `ui/Interface_Misc.diff` to your `Interface_Misc.txt` and stores both targets as copy/insert deltas.
+4. `scripts/exe_patcher.py` writes `dist/BattleForBersiaMP_v1.4_Install.bat`, the release installer. It stores `Heroes.exe` as a copy/insert delta against the Steam original. It applies `ui/Interface_Misc.diff` to your `Interface_Misc.txt` and stores the result whole, so it installs over any player's copy of that file.
 
 `./build.sh E` builds the separate Encablossa test build (`Heroes_MP_v1.4E.exe`), which is not part of the Nexus release.
 
