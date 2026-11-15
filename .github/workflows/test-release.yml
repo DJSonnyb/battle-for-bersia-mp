@@ -9,15 +9,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Create the pre-release (never marked latest)
+      - name: Create or update the pre-release (never marked latest)
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           TAG="$(tr -d ' \r\n' < tag.txt)"
+          FILES=$(ls *_Install.bat BattleForBersiaLauncher-*.exe 2>/dev/null)
           if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            echo "release $TAG already exists - nothing to do"; exit 0
+            gh release upload "$TAG" $FILES --clobber --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+              --prerelease --latest=false \
+              --title "$(cat title.txt)" --notes-file release_notes.md $FILES
           fi
-          gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
-            --prerelease --latest=false \
-            --title "$(cat title.txt)" --notes-file release_notes.md \
-            *_Install.bat
