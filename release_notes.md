@@ -1,11 +1,12 @@
-**Test build 20 - for testers only. Not the official release (the official version is still v1.4).**
+**Test build 21 - for testers only. Not the official release (the official version is v1.4).**
 
-New in Test 20:
-- Possible fix for many desyncs: drawing troops on screen no longer uses the battle's random numbers.
-- Desync recorder: after a desync, send KUF_netlog.txt from BOTH players.
-- Co-op: Orc Axemen are no longer upgraded to Orc Heavy (Lucretia 4).
+Test 21 takes out two Test 20 / Test 13 changes that a code review found can make the two PCs' battles differ:
+- the separate random numbers for troop animations (Test 20) - animations are part of the battle itself;
+- the story hero / officer model fix (Tests 13-20) - heroes may show as plain soldiers again in co-op.
 
-Everyone in a game must be on the same test build.
+The desync recorder stays: after a desync, send KUF_netlog.txt from BOTH players.
+
+Please update from Test 20 - do not play Test 20.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -15,9 +16,6 @@ v1.5 CHANGELOG (in testing - not released yet)
 Fixes
 -----
 - Sky going black or swinging around in long or busy battles.
-- Multiplayer: a cause of desyncs where drawing the troops on screen used up
-  random numbers the battle itself relies on - each PC draws different troops
-  at different times, so the battles drifted apart.
 - Multiplayer: when a desync happens the netlog now records the last 64 turns
   in detail. Please send KUF_netlog.txt from BOTH players after a desync.
 - Co-op: fixed a major cause of desyncs, where the two players' games could
@@ -57,12 +55,6 @@ New
   the script moves it, and Player 2's cinematic shots follow the host's hero.
 - Co-op: fixed a crash at the start of missions (e.g. Ellen 1 at the first
   cut-scene) that hit both players.
-- Network co-op: story heroes, officers and other campaign-only characters
-  controlled by the computer or belonging to the host's mission army are
-  now drawn with their own models. Before, many appeared as plain soldiers
-  or were missing (Morene, Rupert, Regnier, the King, officers).
-- Computer-controlled troops in other network modes (Invasion waves) use
-  the same fix.
 - Multiplayer balance: archers hit about 15% softer in network battles -
   Archer 20 -> 17, Dark Archer and Cavalry Archer -15%, Longbow 26 -> 20
   (was 23). Single player is unchanged.
@@ -115,7 +107,8 @@ Known issues still being looked at
 - Invasion desyncs reported with test build 12 (v1.4 is fine). This build
   runs Invasion and versus battles like v1.4 for draw distance, shadow range
   and Shock Wave - please retest Invasion.
-- A crash in Gerald co-op when Ellen's officer move is used (may be fixed by
-  the model fix above - please retest).
+- Story heroes and officers shown as plain soldiers in network co-op (the
+  model fix from tests 13-20 is taken out again - it was a desync suspect).
+- A crash in Gerald co-op when Ellen's officer move is used.
 - Flickering light on Paladins.
 ```
