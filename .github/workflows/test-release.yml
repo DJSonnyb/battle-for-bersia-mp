@@ -16,6 +16,9 @@ jobs:
           TAG="$(tr -d ' \r\n' < tag.txt)"
           FILES=$(ls *_Install.bat BattleForBersiaLauncher-*.exe 2>/dev/null)
           if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            for a in $(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name'); do
+              case " $FILES " in *" $a "*) ;; *) gh release delete-asset "$TAG" "$a" --yes --repo "$GITHUB_REPOSITORY" ;; esac
+            done
             gh release upload "$TAG" $FILES --clobber --repo "$GITHUB_REPOSITORY"
           else
             gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
