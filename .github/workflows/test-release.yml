@@ -14,7 +14,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           TAG="$(tr -d ' \r\n' < tag.txt)"
-          FILES=$(ls *_Install.bat BattleForBersiaLauncher-*.exe 2>/dev/null)
+          FILES=$(ls *_Install.bat *Crusaders*.bat BattleForBersiaLauncher-*.exe 2>/dev/null | sort -u)
           if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             for a in $(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name'); do
               case " $FILES " in *" $a "*) ;; *) gh release delete-asset "$TAG" "$a" --yes --repo "$GITHUB_REPOSITORY" ;; esac
