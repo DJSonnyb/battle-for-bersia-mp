@@ -20,6 +20,7 @@ jobs:
               case " $FILES " in *" $a "*) ;; *) gh release delete-asset "$TAG" "$a" --yes --repo "$GITHUB_REPOSITORY" ;; esac
             done
             gh release upload "$TAG" $FILES --clobber --repo "$GITHUB_REPOSITORY"
+            gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --title "$(cat title.txt)" --notes-file release_notes.md
           else
             gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
               --prerelease --latest=false \

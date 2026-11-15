@@ -1,3 +1,14 @@
+**REQUIRED TESTS FOR TEST 21** (2 players, both on Test 21, both send KUF_netlog.txt after EACH game that desyncs)
+
+1. Lucretia 2 co-op - play the first minute (it used to go out of sync at the very start).
+2. Lucretia 4 co-op - play the first minute (out of sync after about 5 seconds before).
+3. Ellen 1 co-op - play the first 2 minutes (out of sync after about 48 seconds before).
+4. Invasion on Ruin - play to wave 3 (out of sync after about 8 seconds before).
+5. Any other co-op mission you like, as long as you want.
+
+For each game, note: mission, who hosted, and whether the "out of sync" message appeared.
+Known in Test 21: story heroes and officers may be missing or shown as plain soldiers in co-op (being worked on).
+
 **Test build 21 - for testers only. Not the official release (the official version is v1.4).**
 
 Test 21 takes out two Test 20 / Test 13 changes that a code review found can make the two PCs' battles differ:
