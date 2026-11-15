@@ -25,3 +25,14 @@ jobs:
               --prerelease --latest=false \
               --title "$(cat title.txt)" --notes-file release_notes.md $FILES
           fi
+      - name: Official release (created once, never changed afterwards)
+        if: hashFiles('stable/tag.txt') != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="$(tr -d ' \r\n' < stable/tag.txt)"
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "official release $TAG already exists - left as it is"; exit 0
+          fi
+          gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --target main --latest \
+            --title "$(cat stable/title.txt)" --notes-file stable/release_notes.md stable/*.bat
