@@ -122,4 +122,8 @@ Known issues still being looked at
   model fix from tests 13-20 is taken out again - it was a desync suspect).
 - A crash in Gerald co-op when Ellen's officer move is used.
 - Flickering light on Paladins.
+- Holy Explosion and Elemental Boost show no glow on the troops, and burning,
+  shock, freeze, poison and curse show no effect on units (the effects work,
+  only the visuals are missing - a PC port bug, to be restored from the Xbox
+  version).
 ```
