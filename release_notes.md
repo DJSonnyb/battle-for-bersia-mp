@@ -1,16 +1,23 @@
-**REQUIRED TESTS FOR TEST 22d** (2 players, both on Test 22d, both send KUF_netlog.txt after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 23** (2 players, both on Test 23, both send KUF_netlog.txt after EVERY game, even if it seemed fine)
 
-1. Ellen 2 co-op - play at least 5 minutes. Use your officer's assist (the fire spell) as normal, and note roughly when you used it.
-2. If you have time: Ellen 2 again WITHOUT using any officer assists, so we can compare.
+1. Ellen 2 co-op - play at least 5 minutes and USE the officer's fire spell assist several times (both players). Does it stay in sync? Does the spell still hurt the enemies on both screens?
+2. Ellen 2 co-op - are both heroes level 5 and the orcs level 7? Is the difficulty OK?
+3. Another co-op mission where officers or heroes use spells (e.g. a Gerald or Lucretia mission) - 5-10 minutes.
+4. Versus or Invasion with heroes / officers using spells - does it stay in sync?
+5. Lobby: is your own colour icon as bright as the other players' now?
 
 For each game, note: mission, who hosted, and whether the "out of sync" message appeared.
-Known: story heroes and officers (e.g. Rupert) may be shown as plain soldiers in co-op (being worked on). Ellen is level 1 in Ellen 2 co-op (fixed for Test 23).
+Known: story heroes and officers (e.g. Rupert) may be shown as plain soldiers in co-op (being worked on).
 
-**Test build 22d - for testers only. Not the official release (the official version is v1.4).**
+**Test build 23 - for testers only. Not the official release (the official version is v1.4).**
 
-Test 22c's logs cleared the catapults: every stone landed in exactly the same place on both PCs. The desync started with an orc troop losing HP on one PC only. Test 22d records every hit (who hit whom, how hard, and with what) for the last 64 turns before a desync, so the next logs name the attack. Nothing else changed.
+New in Test 23:
+- Fix for the Ellen 2 co-op desync: spell hits (such as the officer Fire Ball assist) landed up to a second apart on the two PCs. The host's PC now decides every spell hit and both PCs apply it on the same turn. On player 2's screen a spell's damage can show a moment after the fireball lands - that is expected.
+- Co-op levels: in the original campaigns both players' heroes and troops are the enemies' average level + 2 (Ellen 2: level 5, was 1). With two players every enemy is at least 2 levels above the heroes (all co-op missions, Crusaders too).
+- Lobby: your own colour icon is drawn at full brightness.
+- Bersia Map Forge (the map editor) is attached below as Bersia_Map_Forge.html - download it and open it in your browser. You need your own game files to load maps.
 
-Please update from Test 22c - do not play Test 22c.
+Please update from Test 22d - do not play Test 22d.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -32,7 +39,7 @@ Fixes
   set from the mission's own enemies - about 2 levels above the typical
   enemy troop, heroes 2 levels higher again. Before, they followed a fixed
   curve and ended up far above the enemies (e.g. Gerald 7: troops level 26
-  against enemies of level 6-14). Enemies still get +15% with two players.
+  against enemies of level 6-14). With two players enemies get +15% levels.
 - Co-op: troops are upgraded by their level (Archer -> Longbow from level
   10, Infantry -> Heavy Infantry -> Knight from 10 / 15, Cavalry -> Heavy
   Cavalry from 17 (never Storm Riders, which are support troops), Sapper -> PyroTech from 13, Dark
@@ -73,6 +80,17 @@ New
 - After a desync, KUF_netlog.txt now also records every troop of every army
   (position, HP and what it is doing) for the last 64 turns, so the troop
   that went different on the two PCs can be found (Test 22b).
+- Network battles: spell hits (e.g. the officer Fire Ball assist) no longer
+  put the two PCs out of sync. A spell's hit is applied when its visual
+  effect reaches the target, and that happened up to a second apart on the
+  two PCs. Now the host's PC decides each spell hit and both PCs apply it on
+  the same turn. This was the cause of the Ellen 2 co-op desyncs.
+- Co-op levels (original campaigns): both players' heroes and troops are now
+  the enemies' average level + 2 (Ellen 2: level 5 instead of 1). Player 2
+  matches the host.
+- Co-op with two players (all missions, Crusaders too): every enemy troop is
+  at least 2 levels above the players' hero (Ellen 2: level 7).
+- Lobby: your own colour icon is now drawn as bright as the others.
 - After a desync, the netlog now also lists every hit in the last 64 turns
   (who hit whom, how hard, and with what), and records which attack caused
   each status effect (Tests 22c / 22d).
@@ -143,8 +161,8 @@ Known issues still being looked at
 - Story heroes and officers shown as plain soldiers in network co-op (the
   model fix from tests 13-20 is taken out again - it was a desync suspect).
 - A crash in Gerald co-op when Ellen's officer move is used.
-- Ellen 2 co-op: a desync about 9 minutes in, and player 2's troops are not
-  moved into place for the Gerald / Ellen cut-scene.
+- Ellen 2 co-op: player 2's troops are not moved into place for the
+  Gerald / Ellen cut-scene.
 - Flickering light on Paladins.
 - Holy Explosion and Elemental Boost show no glow on the troops, and burning,
   shock, freeze, poison and curse show no effect on units (the effects work,
