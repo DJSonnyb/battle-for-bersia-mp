@@ -1,23 +1,22 @@
-**REQUIRED TESTS FOR TEST 23** (2 players, both on Test 23, both send KUF_netlog.txt after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 24** (2 players, both on Test 24, both send KUF_netlog.txt after EVERY game, even if it seemed fine)
 
-1. Ellen 2 co-op - play at least 5 minutes and USE the officer's fire spell assist several times (both players). Does it stay in sync? Does the spell still hurt the enemies on both screens?
-2. Ellen 2 co-op - are both heroes level 5 and the orcs level 7? Is the difficulty OK?
-3. Another co-op mission where officers or heroes use spells (e.g. a Gerald or Lucretia mission) - 5-10 minutes.
-4. Versus or Invasion with heroes / officers using spells - does it stay in sync?
-5. Lobby: is your own colour icon as bright as the other players' now?
+1. A co-op mission with enemy story heroes or officers, e.g. a Rupert, Leinhart or Gerald mission - 10 minutes. Are the story heroes and officers shown as themselves (not plain soldiers)? Do enemy heroes / officers use their spells? Does it stay in sync?
+2. Urukubarr 5 co-op - do the allied Scorpions use Shock Wave on the walls? Does it stay in sync?
+3. A co-op mission with dark elves or other spell-using computer troops (e.g. a Cirith or Morene mission) - 10 minutes.
+4. Ellen 2 co-op again with the officer's fire spell - check it still stays in sync.
+5. Gerald co-op: use Ellen's officer move (it used to crash) - does it crash?
 
-For each game, note: mission, who hosted, and whether the "out of sync" message appeared.
-Known: story heroes and officers (e.g. Rupert) may be shown as plain soldiers in co-op (being worked on).
+For each game, note: mission, who hosted, whether the "out of sync" message appeared, and anything that looks wrong (missing or odd-looking units).
 
-**Test build 23 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 24 - for testers only. Not the official release (the official version is v1.4).**
 
-New in Test 23:
-- Fix for the Ellen 2 co-op desync: spell hits (such as the officer Fire Ball assist) landed up to a second apart on the two PCs. The host's PC now decides every spell hit and both PCs apply it on the same turn. On player 2's screen a spell's damage can show a moment after the fireball lands - that is expected.
-- Co-op levels: in the original campaigns both players' heroes and troops are the enemies' average level + 2 (Ellen 2: level 5, was 1). With two players every enemy is at least 2 levels above the heroes (all co-op missions, Crusaders too).
-- Lobby: your own colour icon is drawn at full brightness.
-- Bersia Map Forge (the map editor) is attached below as Bersia_Map_Forge.html - download it and open it in your browser. You need your own game files to load maps.
+Test 23 fixed the Ellen 2 desync: spell hits now go through the host. With that fixed, Test 24 brings back what earlier tests had to take out because of desyncs:
+- Co-op: story heroes and officers are shown as themselves again, and officers are back (co-op only).
+- Co-op: computer-controlled troops have their skills again, as in single player.
+- Co-op: spell heals and spell effects (burning, freeze...) are synced through the host too.
+- Versus and Invasion: back to exactly how they played before Test 23 (no officers there).
 
-Please update from Test 22d - do not play Test 22d.
+Please update from Test 23 - do not play Test 23.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -91,6 +90,15 @@ New
 - Co-op with two players (all missions, Crusaders too): every enemy troop is
   at least 2 levels above the players' hero (Ellen 2: level 7).
 - Lobby: your own colour icon is now drawn as bright as the others.
+- Co-op: story heroes and officers (e.g. Rupert, Morene, the King) are shown
+  as themselves again instead of plain soldiers, and officers are back. Their
+  look only - Versus and Invasion are unchanged.
+- Co-op: when a mission upgrades a troop (e.g. Infantry -> Knight), a story
+  hero or officer leading it now stays its leader.
+- Co-op: computer-controlled troops (enemies and allies) have their skills
+  again, as in single player (e.g. Scorpions' Shock Wave, dark elf spells).
+- Spell hits, heals and spell effects such as burning are synced through the
+  host in co-op only; Versus and Invasion work exactly as before.
 - After a desync, the netlog now also lists every hit in the last 64 turns
   (who hit whom, how hard, and with what), and records which attack caused
   each status effect (Tests 22c / 22d).
@@ -110,7 +118,8 @@ New
   Archer 20 -> 17, Dark Archer and Cavalry Archer -15%, Longbow 26 -> 20
   (was 23). Single player is unchanged.
 - Urukubarr 5 co-op: once the walls can be broken, the allied Scorpions stop
-  chasing the respawning dark elves and go for the walls.
+  chasing the respawning dark elves and go for the walls (and Shock Wave
+  them again now that computer troops have their skills).
 - Scorpion Shock Wave: fixed waves that crawled or never ended and left the
   Scorpion stuck (single player only in this test build).
 - Graphics options, all on by default except anti-aliasing:
@@ -145,21 +154,11 @@ Anti-Aliasing work everywhere.
 The settings are kept in Documents\KUF2 Heroes\KUFH.ini.
 
 
-Taken out again in this test build
-----------------------------------
-- Skills for computer-controlled troops in network co-op (test builds 11
-  and 12). Co-op desynced in every mission with it, so it is removed until
-  it can be made identical on both PCs. Scorpions will not Shock Wave the
-  walls in Urukubarr 5 co-op for now.
-
-
 Known issues still being looked at
 ----------------------------------
 - Invasion desyncs reported with test build 12 (v1.4 is fine). This build
   runs Invasion and versus battles like v1.4 for draw distance, shadow range
   and Shock Wave - please retest Invasion.
-- Story heroes and officers shown as plain soldiers in network co-op (the
-  model fix from tests 13-20 is taken out again - it was a desync suspect).
 - A crash in Gerald co-op when Ellen's officer move is used.
 - Ellen 2 co-op: player 2's troops are not moved into place for the
   Gerald / Ellen cut-scene.
