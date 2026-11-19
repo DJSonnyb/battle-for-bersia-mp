@@ -1,23 +1,26 @@
-**REQUIRED TESTS FOR TEST 21** (2 players, both on Test 21, both send KUF_netlog.txt after EACH game that desyncs)
+**REQUIRED TESTS FOR TEST 22** (2 players, both on Test 22, both send KUF_netlog.txt after EACH game that desyncs)
 
-1. Lucretia 2 co-op - play the first minute (it used to go out of sync at the very start).
-2. Lucretia 4 co-op - play the first minute (out of sync after about 5 seconds before).
-3. Ellen 1 co-op - play the first 2 minutes (out of sync after about 48 seconds before).
-4. Invasion on Ruin - play to wave 3 (out of sync after about 8 seconds before).
+1. Ellen 1 co-op, then Ellen 2 co-op straight after, WITHOUT restarting the game. Someone skips a cut-scene in Ellen 1. (Test 21 went out of sync from the first second in the mission after a skipped cut-scene.)
+2. Ellen 1 co-op - at the start, the host attacks a DIFFERENT orc troop from the one player 2 is fighting (or waits until player 2's fight is over). Does the host's troop attack normally?
+3. Ellen 2 co-op - play past the Gerald / Ellen cut-scene and about 2 minutes further (Test 21 went out of sync about 9 minutes in). Player 2: do the catapult shots and the Gerald / Ellen scene show properly now?
+4. Invasion on Ruin - play to wave 3.
 5. Any other co-op mission you like, as long as you want.
 
 For each game, note: mission, who hosted, and whether the "out of sync" message appeared.
-Known in Test 21: story heroes and officers may be missing or shown as plain soldiers in co-op (being worked on).
+If one player gets a low frame rate, please check whether they get the same in single player on that mission.
+Known in Test 22: story heroes and officers (e.g. Rupert) may be shown as plain soldiers in co-op (being worked on).
 
-**Test build 21 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 22 - for testers only. Not the official release (the official version is v1.4).**
 
-Test 21 takes out two Test 20 / Test 13 changes that a code review found can make the two PCs' battles differ:
-- the separate random numbers for troop animations (Test 20) - animations are part of the battle itself;
-- the story hero / officer model fix (Tests 13-20) - heroes may show as plain soldiers again in co-op.
+New in Test 22:
+- Co-op: fixed an intro skipping itself on one PC only after a cut-scene was skipped in the previous mission (no need to restart the game between missions any more).
+- Co-op cut-scenes: player 2's camera no longer jumps back onto the troops at the start of some shots.
+- The netlog now records status effects (burning, shock and so on) in network battles, to find the Ellen 2 desync.
+- Versus and Invasion: battle music changes to another track when one ends.
+- Lobby: team mates can share a colour; purple and brown now have icons.
+- Dwarf, Elf Warrior, Dark Elf Guard, Lich and Ogre troops get their own equipment looks.
 
-The desync recorder stays: after a desync, send KUF_netlog.txt from BOTH players.
-
-Please update from Test 20 - do not play Test 20.
+Please update from Test 21 - do not play Test 21.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -66,6 +69,29 @@ New
   the script moves it, and Player 2's cinematic shots follow the host's hero.
 - Co-op: fixed a crash at the start of missions (e.g. Ellen 1 at the first
   cut-scene) that hit both players.
+- Versus and Invasion: when a battle track has finished, another battle track
+  is picked at random (Heroes' battle music, plus the Crusaders music when
+  the Crusaders missions are installed) instead of the same one looping all
+  game. Co-op missions keep their own music.
+- Co-op: fixed an intro skipping itself on one PC only at the start of a
+  mission (this put the two players out of sync from the first second).
+- Co-op cut-scenes: player 2's camera no longer jumps back onto the troops
+  at the start of some shots (e.g. the catapults and the Gerald / Ellen
+  scene in Ellen 2 showed only trees or soldiers for player 2).
+- KUF_netlog.txt now records every status effect (burning, shock and so on)
+  given to a unit in network battles, to track down an Ellen 2 desync.
+- Lobby colours: players on the same team can now pick the same colour in
+  Versus (e.g. team 1 both blue, team 2 both red). In Invasion and co-op any
+  colour can be shared.
+- Lobby colours: the last two colours now have icons (purple and brown)
+  instead of the words "White" and "Brown". The installer adds them to your
+  own Data\Interface\Font2.dds (the original is kept as Font2_original.dds).
+  If you install the community patch afterwards, run the installer again.
+- Dwarf, Elf Warrior, Dark Elf Guard, Lich and Ogre troops now get their own
+  equipment in the barracks instead of the human / orc gear they borrowed
+  (e.g. Elf Warriors: elven sword, ring, bow or staff). Looks only, as with
+  all multiplayer equipment. Existing troops of these kinds swap to the new
+  default gear automatically.
 - Multiplayer balance: archers hit about 15% softer in network battles -
   Archer 20 -> 17, Dark Archer and Cavalry Archer -15%, Longbow 26 -> 20
   (was 23). Single player is unchanged.
@@ -121,6 +147,8 @@ Known issues still being looked at
 - Story heroes and officers shown as plain soldiers in network co-op (the
   model fix from tests 13-20 is taken out again - it was a desync suspect).
 - A crash in Gerald co-op when Ellen's officer move is used.
+- Ellen 2 co-op: a desync about 9 minutes in, and player 2's troops are not
+  moved into place for the Gerald / Ellen cut-scene.
 - Flickering light on Paladins.
 - Holy Explosion and Elemental Boost show no glow on the troops, and burning,
   shock, freeze, poison and curse show no effect on units (the effects work,
