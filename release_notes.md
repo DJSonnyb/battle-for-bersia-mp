@@ -1,16 +1,16 @@
-**REQUIRED TESTS FOR TEST 22c** (2 players, both on Test 22c, both send KUF_netlog.txt after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 22d** (2 players, both on Test 22d, both send KUF_netlog.txt after EVERY game, even if it seemed fine)
 
-1. Ellen 2 co-op - play at least 5 minutes, past the point where the allied catapults on the hill start firing at the orcs.
-2. If you have time: another co-op mission with catapults or other siege weapons, and Invasion on Ruin to wave 3.
+1. Ellen 2 co-op - play at least 5 minutes. Use your officer's assist (the fire spell) as normal, and note roughly when you used it.
+2. If you have time: Ellen 2 again WITHOUT using any officer assists, so we can compare.
 
 For each game, note: mission, who hosted, and whether the "out of sync" message appeared.
 Known: story heroes and officers (e.g. Rupert) may be shown as plain soldiers in co-op (being worked on). Ellen is level 1 in Ellen 2 co-op (fixed for Test 23).
 
-**Test build 22c - for testers only. Not the official release (the official version is v1.4).**
+**Test build 22d - for testers only. Not the official release (the official version is v1.4).**
 
-Test 22b's logs showed the Ellen 2 desync starts with an orc troop taking a big fire hit on one PC only - most likely a stone from the allied catapults landing differently on the two PCs. Test 22c records every catapult stone landing and which attack caused each burn, so the next Ellen 2 logs show exactly what differs. Nothing else changed.
+Test 22c's logs cleared the catapults: every stone landed in exactly the same place on both PCs. The desync started with an orc troop losing HP on one PC only. Test 22d records every hit (who hit whom, how hard, and with what) for the last 64 turns before a desync, so the next logs name the attack. Nothing else changed.
 
-Please update from Test 22b - do not play Test 22b.
+Please update from Test 22c - do not play Test 22c.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -73,8 +73,9 @@ New
 - After a desync, KUF_netlog.txt now also records every troop of every army
   (position, HP and what it is doing) for the last 64 turns, so the troop
   that went different on the two PCs can be found (Test 22b).
-- The netlog now also records where every catapult stone lands in network
-  battles, and which attack caused each status effect (Test 22c).
+- After a desync, the netlog now also lists every hit in the last 64 turns
+  (who hit whom, how hard, and with what), and records which attack caused
+  each status effect (Tests 22c / 22d).
 - Lobby colours: players on the same team can now pick the same colour in
   Versus (e.g. team 1 both blue, team 2 both red). In Invasion and co-op any
   colour can be shared.
