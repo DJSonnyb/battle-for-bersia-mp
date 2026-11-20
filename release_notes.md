@@ -1,22 +1,21 @@
-**REQUIRED TESTS FOR TEST 24** (2 players, both on Test 24, both send KUF_netlog.txt after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 25** (everyone in a game must be on Test 25; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
 
-1. A co-op mission with enemy story heroes or officers, e.g. a Rupert, Leinhart or Gerald mission - 10 minutes. Are the story heroes and officers shown as themselves (not plain soldiers)? Do enemy heroes / officers use their spells? Does it stay in sync?
-2. Urukubarr 5 co-op - do the allied Scorpions use Shock Wave on the walls? Does it stay in sync?
-3. A co-op mission with dark elves or other spell-using computer troops (e.g. a Cirith or Morene mission) - 10 minutes.
-4. Ellen 2 co-op again with the officer's fire spell - check it still stays in sync.
-5. Gerald co-op: use Ellen's officer move (it used to crash) - does it crash?
+1. Ellen 2 co-op, start to finish. Is Gerald visible and leading his troop? Is Rupert's line in the first cut-scene ("Five years of service...") shown properly instead of under the ground? Does player 1 see Ellen and Gerald in the second cut-scene? Are officers still there and using their spells? A recording from both players like last time helps a lot.
+2. Lobby colours: pick each of the 12 colours once and note what colour the troops' team colour shows in battle. Please check human infantry AND an orc or dark elf army.
+3. Battle Order: change your army's order, choose Save, then play a match - are the troops you picked the ones that go into battle?
+4. Invasion - Randomiser or Insanity: one game if you have time.
+5. 6 army slots: make an army in slot 4, 5 or 6, restart the game - is it still there?
 
-For each game, note: mission, who hosted, whether the "out of sync" message appeared, and anything that looks wrong (missing or odd-looking units).
+For each game, note: mission or mode, who hosted, whether the "out of sync" message appeared, and anything that looks wrong.
 
-**Test build 24 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 25 - for testers only. Not the official release (the official version is v1.4).**
 
-Test 23 fixed the Ellen 2 desync: spell hits now go through the host. With that fixed, Test 24 brings back what earlier tests had to take out because of desyncs:
-- Co-op: story heroes and officers are shown as themselves again, and officers are back (co-op only).
-- Co-op: computer-controlled troops have their skills again, as in single player.
-- Co-op: spell heals and spell effects (burning, freeze...) are synced through the host too.
-- Versus and Invasion: back to exactly how they played before Test 23 (no officers there).
+- Co-op: Gerald is no longer invisible in Ellen 2 and Rupert's cut-scene shot works again (a Test 24 bug). Story heroes leading a troop look as they did in Test 23; officers keep their own look.
+- Lobby colours fixed: Yellow no longer plays as red, Brown is a real brown, and there are 6 new colours (12 in all).
+- Battle Order now uses the campaign's briefing troop list: pick your 4 troops, press B and choose Save.
+- 6 army slots, Invasion Randomiser / Insanity, and your own colour icon is now bright in the lobby.
 
-Please update from Test 23 - do not play Test 23.
+Please update from Test 24 - Test 24 and Test 25 players cannot join each other.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -84,12 +83,31 @@ New
   effect reaches the target, and that happened up to a second apart on the
   two PCs. Now the host's PC decides each spell hit and both PCs apply it on
   the same turn. This was the cause of the Ellen 2 co-op desyncs.
+- Invasion variants (Create Game, Game Type): Invasion - Randomiser (the
+  enemy's troops are random kinds every game, custom troops included; wave
+  levels as normal), Invasion - Insanity (every enemy troop level 99, fully
+  upgraded, with all its job's skills) and Invasion - Random Insanity (both).
+- Multiplayer armies: 6 army slots instead of 3 (armies 4-6 are kept in
+  MultiplayerArmies2.sav next to the first file).
+- Lobby: six new team colours - black, white, turquoise, orange, pink and
+  grey (12 in all). They are made in the game from its own team textures,
+  so no extra files are needed.
+- Multiplayer armies: Battle Order now opens the campaign's briefing troop
+  list over the army screen. Your hero is fixed at the top; pick the 4 troops
+  that go into battle (max 1 support). Press B and choose Save or Don't
+  Save. The order is used in every mode.
 - Co-op levels (original campaigns): both players' heroes and troops are now
   the enemies' average level + 2 (Ellen 2: level 5 instead of 1). Player 2
   matches the host.
 - Co-op with two players (all missions, Crusaders too): every enemy troop is
   at least 2 levels above the players' hero (Ellen 2: level 7).
-- Lobby: your own colour icon is now drawn as bright as the others.
+- Co-op (Test 24 bug): Gerald invisible in Ellen 2 and Rupert's cut-scene
+  shot going under the ground. Only officers now use the campaign look;
+  story heroes leading a troop look as they did in Test 23.
+- Lobby colours: Yellow no longer plays as red, and Brown is now its own
+  brown (made in the game, like the new colours). Red uses the game's red.
+- Lobby: your own colour icon is now really drawn as bright as the others
+  (the colour button was being drawn over it).
 - Co-op: story heroes and officers (e.g. Rupert, Morene, the King) are shown
   as themselves again instead of plain soldiers, and officers are back. Their
   look only - Versus and Invasion are unchanged.
