@@ -1,22 +1,20 @@
-**REQUIRED TESTS FOR TEST 28** (everyone in a game must be on Test 28; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 29** (everyone in a game must be on Test 29; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
 
-1. Team colours: please try the NEW colours - black, white, turquoise, orange, pink and grey. Does each one show the right colour on your troops in battle? Also check one or two of the old ones (blue, red, yellow, green, purple, brown).
-2. Ogre troops (custom troop): bring Ogres into a Versus or Invasion game - are they visible now, in their three ogre colours?
-3. Invasion with the randomiser: enemy troops should only become normal troop types now - no Geralds, nothing that can't be killed, no crash.
-4. Graphics: Renderer / AA now offers DirectX 12, or DirectX 9 with anti-aliasing. If you want anti-aliasing, pick DirectX 9 + AA and restart. Report anything that looks wrong.
+1. Invasion with the randomiser: enemy waves can now include the custom troops (dwarves, elf warriors, dark elf guards, liches, ogres). Do they look right, can they be killed, do they use their skills, and does the game stay stable?
+2. Team colours: please try the NEW colours - black, white, turquoise, orange, pink and grey. Does each one show the right colour on your troops in battle?
+3. Ogre troops (yours and enemy ones): visible, in their ogre colours?
+4. Graphics: Renderer / AA offers DirectX 12, or DirectX 9 with anti-aliasing. Report anything that looks wrong.
 5. Co-op story missions (Ellen 2, Gerald 5 or others): story heroes and cut-scenes - anything still wrong?
 
 For each game, note: mission or mode, who hosted, whether the "out of sync" message appeared, and anything that looks wrong.
 
-**Test build 28 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 29 - for testers only. Not the official release (the official version is v1.4).**
 
-- The new team colours now show correctly (they showed the colour before them).
-- Ogre troops are visible again in multiplayer battles.
-- Invasion randomiser: enemy troops no longer become custom troops (an enemy Lich showed as Geralds, could not be killed and could crash the game).
-- Anti-aliasing is now offered with DirectX 9 only (with DirectX 12 it could leave the screen blank on some PCs).
-- Everything from Test 27 (co-op story leaders - thanks Keaton - and DirectX 12 by default).
+- Invasion randomiser: enemy troops can become the custom troops again, now with their own models (before, an enemy Lich showed as Geralds, could not be killed and could crash the game).
+- From Test 28: the new team colours show correctly, Ogre troops are visible again, anti-aliasing with DirectX 9 only.
+- From Test 27: co-op story leaders (thanks Keaton) and DirectX 12 by default.
 
-Please update from Test 27 - Test 27 and Test 28 players cannot join each other.
+Please update from Test 28 - Test 28 and Test 29 players cannot join each other.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -109,9 +107,10 @@ New
 - Ogre troops were invisible in multiplayer battles: their coloured ogre
   looks only exist in the single-player look table. They are now drawn from
   it in every mode.
-- Invasion randomiser: enemy troops no longer turn into the new custom troops
-  (dwarves, elves, dark elf guards, liches, ogres). An enemy Lich showed as
-  a troop of Geralds, could not be killed and could crash the game.
+- Invasion randomiser: enemy troops can now also become the new custom troops
+  (dwarves, elves, dark elf guards, liches, ogres), with their own models.
+  Before, an enemy Lich showed as a troop of Geralds, could not be killed and
+  could crash the game.
 - The new team colours showed the colour before them in battle (black came
   out brown, white black, turquoise white, and so on). Fixed.
 - Co-op: computer armies keep their campaign colours. Before, an army whose
