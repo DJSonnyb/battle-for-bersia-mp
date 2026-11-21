@@ -1,20 +1,22 @@
-**REQUIRED TESTS FOR TEST 27** (everyone in a game must be on Test 27; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 28** (everyone in a game must be on Test 28; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
 
-1. Ellen 2 co-op, start to finish: after the cut-scene, is Gerald there leading his troop? Do the cut-scenes show the right characters?
-2. Gerald 5 co-op: does Regnier appear as himself (not as an orc)?
-3. Any other co-op mission with story characters - do they all appear and lead their troops?
-4. Versus, Invasion and Hero Battle: one quick game each - still no officers or story leaders there, and nothing else changed?
-5. DirectX 12 (now the default): play a big battle, then switch Multiplayer Options > Renderer / AA to DirectX 9, restart the game and play the same battle. Which felt smoother? The netlog records the frame rate and which renderer was used. Report anything that looks wrong (water, effects, shadows, anti-aliasing).
+1. Team colours: please try the NEW colours - black, white, turquoise, orange, pink and grey. Does each one show the right colour on your troops in battle? Also check one or two of the old ones (blue, red, yellow, green, purple, brown).
+2. Ogre troops (custom troop): bring Ogres into a Versus or Invasion game - are they visible now, in their three ogre colours?
+3. Invasion with the randomiser: enemy troops should only become normal troop types now - no Geralds, nothing that can't be killed, no crash.
+4. Graphics: Renderer / AA now offers DirectX 12, or DirectX 9 with anti-aliasing. If you want anti-aliasing, pick DirectX 9 + AA and restart. Report anything that looks wrong.
+5. Co-op story missions (Ellen 2, Gerald 5 or others): story heroes and cut-scenes - anything still wrong?
 
 For each game, note: mission or mode, who hosted, whether the "out of sync" message appeared, and anything that looks wrong.
 
-**Test build 27 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 28 - for testers only. Not the official release (the official version is v1.4).**
 
-- Co-op: story heroes and officers now lead their troops (e.g. Gerald in Ellen 2), so cut-scenes find the right units. Found and fixed by Keaton - thank you!
-- Graphics: DirectX 12 (Windows' D3D9On12) is now on by default and should be faster on most PCs. Multiplayer Options > Renderer / AA switches back to DirectX 9 (restart the game after changing it). If your PC can't use it, the game uses DirectX 9 automatically.
-- Everything from Test 26 (Xbox Live Options removed, co-op levels, co-op colours).
+- The new team colours now show correctly (they showed the colour before them).
+- Ogre troops are visible again in multiplayer battles.
+- Invasion randomiser: enemy troops no longer become custom troops (an enemy Lich showed as Geralds, could not be killed and could crash the game).
+- Anti-aliasing is now offered with DirectX 9 only (with DirectX 12 it could leave the screen blank on some PCs).
+- Everything from Test 27 (co-op story leaders - thanks Keaton - and DirectX 12 by default).
 
-Please update from Test 26 - Test 26 and Test 27 players cannot join each other.
+Please update from Test 27 - Test 27 and Test 28 players cannot join each other.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -104,6 +106,14 @@ New
   players' hero.
 - Co-op: computer allies (e.g. the Hironeiden army in Ellen 2) are raised to
   the players' hero level. Before, they could stay at level 1.
+- Ogre troops were invisible in multiplayer battles: their coloured ogre
+  looks only exist in the single-player look table. They are now drawn from
+  it in every mode.
+- Invasion randomiser: enemy troops no longer turn into the new custom troops
+  (dwarves, elves, dark elf guards, liches, ogres). An enemy Lich showed as
+  a troop of Geralds, could not be killed and could crash the game.
+- The new team colours showed the colour before them in battle (black came
+  out brown, white black, turquoise white, and so on). Fixed.
 - Co-op: computer armies keep their campaign colours. Before, an army whose
   colour matched a player's lobby colour was given another colour, so the
   Hironeiden army changed colour depending on what player 2 picked.
@@ -186,8 +196,10 @@ In this test build Draw Distance and Shadow Range are used in single player
 only. Multiplayer battles run them as v1.4 did (original), for every player,
 while the desyncs are tracked down. Texture Filter, Shadow Detail and
 Anti-Aliasing work everywhere.
-- Renderer / AA: DirectX 9 or DirectX 12, with anti-aliasing Off, 2x, 4x, 8x
-                  (default DirectX 12, Off). Restart the
+- Renderer / AA: DirectX 12, or DirectX 9 with anti-aliasing Off, 2x, 4x, 8x
+                  (default DirectX 12). Anti-aliasing is only offered with
+                  DirectX 9 (with DirectX 12 it could leave the screen
+                  blank on some PCs). Restart the
                   game after changing it. If water or effects look wrong,
                   set it back to DirectX 9, Off.
 
