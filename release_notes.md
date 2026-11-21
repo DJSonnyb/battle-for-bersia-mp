@@ -1,21 +1,21 @@
-**REQUIRED TESTS FOR TEST 25** (everyone in a game must be on Test 25; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 26** (everyone in a game must be on Test 26; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
 
-1. Ellen 2 co-op, start to finish. Is Gerald visible and leading his troop? Is Rupert's line in the first cut-scene ("Five years of service...") shown properly instead of under the ground? Does player 1 see Ellen and Gerald in the second cut-scene? Are officers still there and using their spells? A recording from both players like last time helps a lot.
-2. Lobby colours: pick each of the 12 colours once and note what colour the troops' team colour shows in battle. Please check human infantry AND an orc or dark elf army.
-3. Battle Order: change your army's order, choose Save, then play a match - are the troops you picked the ones that go into battle?
-4. Invasion - Randomiser or Insanity: one game if you have time.
-5. 6 army slots: make an army in slot 4, 5 or 6, restart the game - is it still there?
+1. Ellen 2 co-op, start to finish, and play past the cut-scene where Gerald should join. Is Gerald there leading his troop? If not, note roughly when you noticed - the netlog now tracks him.
+2. Co-op levels: do the enemies and your own troops feel about right now (heroes 1 level above the typical enemy)? Are the computer allies (Hironeiden army in Ellen 2) still useful?
+3. Co-op colours: does the Hironeiden army keep the same colour whichever hero player 2 brings?
+4. Open Options during a battle - the Xbox Live Options entry should be gone, and the other options should still work.
+5. Any other co-op mission if you have time.
 
 For each game, note: mission or mode, who hosted, whether the "out of sync" message appeared, and anything that looks wrong.
 
-**Test build 25 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 26 - for testers only. Not the official release (the official version is v1.4).**
 
-- Co-op: Gerald is no longer invisible in Ellen 2 and Rupert's cut-scene shot works again (a Test 24 bug). Story heroes leading a troop look as they did in Test 23; officers keep their own look.
-- Lobby colours fixed: Yellow no longer plays as red, Brown is a real brown, and there are 6 new colours (12 in all).
-- Battle Order now uses the campaign's briefing troop list: pick your 4 troops, press B and choose Save.
-- 6 army slots, Invasion Randomiser / Insanity, and your own colour icon is now bright in the lobby.
+- Options during a battle: the Xbox Live Options entry that crashed the game is gone.
+- Co-op levels: heroes and troops are now the typical enemy level + 1 (was + 2), enemies at least 1 level above your hero, and computer allies are raised to your hero's level.
+- Co-op: computer armies keep their campaign colours instead of changing with player 2's colour.
+- The netlog now tracks story heroes in co-op, to find out why Gerald is missing in Ellen 2.
 
-Please update from Test 24 - Test 24 and Test 25 players cannot join each other.
+Please update from Test 25 - Test 25 and Test 26 players cannot join each other.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -97,10 +97,21 @@ New
   that go into battle (max 1 support). Press B and choose Save or Don't
   Save. The order is used in every mode.
 - Co-op levels (original campaigns): both players' heroes and troops are now
-  the enemies' average level + 2 (Ellen 2: level 5 instead of 1). Player 2
-  matches the host.
-- Co-op with two players (all missions, Crusaders too): every enemy troop is
-  at least 2 levels above the players' hero (Ellen 2: level 7).
+  the typical (median) enemy level + 1. One very strong story enemy (e.g.
+  Regnier in Gerald 5) no longer lifts the players' levels. Player 2 matches
+  the host.
+- Co-op with two players (all missions, Crusaders too): enemies get +15%
+  levels (at least +1), and every enemy troop is at least 1 level above the
+  players' hero.
+- Co-op: computer allies (e.g. the Hironeiden army in Ellen 2) are raised to
+  the players' hero level. Before, they could stay at level 1.
+- Co-op: computer armies keep their campaign colours. Before, an army whose
+  colour matched a player's lobby colour was given another colour, so the
+  Hironeiden army changed colour depending on what player 2 picked.
+- Options menu during a battle: the "Xbox Live Options" entry is gone. It
+  crashed the game.
+- KUF_netlog.txt now records each story hero in co-op (model, HP, state and
+  position) to track down Gerald missing in Ellen 2.
 - Co-op (Test 24 bug): Gerald invisible in Ellen 2 and Rupert's cut-scene
   shot going under the ground. Only officers now use the campaign look;
   story heroes leading a troop look as they did in Test 23.
