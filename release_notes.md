@@ -1,20 +1,21 @@
-**REQUIRED TESTS FOR TEST 31** (everyone in a game must be on Test 31; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 32** (everyone in a game must be on Test 32; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
 
-1. Team colours: try each NEW colour - black, white, turquoise, orange, pink and grey - and brown. Is it the right colour on your troops and hero? Do the troops now keep their detail (shading, trims, metal and gold) like the original colours? Anything that looks patchy or the wrong colour?
-2. Ogres and the Invasion randomiser: still visible and stable?
-3. Co-op story missions and graphics (DirectX 12 / DirectX 9 + AA): anything wrong?
+1. Sounds: bring Mortars (and Sappers / PyroTechs, Archers) into a battle. Do you now hear mortar explosions (the game itself plays one about half the time), troop victory cheers and the archers' bow draw? Any sound that seems wrong or too loud?
+2. Team colours: all colours, new and old - right colour and full detail on your troops?
+3. Ogres, the Invasion randomiser, co-op story missions and graphics (DirectX 12 / DirectX 9 + AA): anything wrong?
 
-For each game, note: mission or mode, who hosted, whether the "out of sync" message appeared, and anything that looks wrong.
+For each game, note: mission or mode, who hosted, whether the "out of sync" message appeared, and anything that looks or sounds wrong.
 
-**Test build 31 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 32 - for testers only. Not the official release (the official version is v1.4).**
 
-- Team colours: the new colours (and brown) now keep the original artwork's detail. Only the team-coloured cloth is recoloured, with its light and shade kept; trims, metal, leather and gold stay as they are, like the game's own colours.
+- Sound: mortar, cannon, mine and trap explosions, troop victory cheers, the archers' bow draw and some Storm Rider and Regnier sounds now play their own sounds. Since the original PC version they played a quiet sword swing or nothing.
+- From Test 31: the new team colours (and brown) keep the original artwork's detail.
 - From Test 30: Ogres visible in multiplayer (drawn as Urukubarr-style ogres if their coloured looks can't be loaded).
 - From Test 29: custom troops in the Invasion randomiser.
 - From Test 28: new team colours fixed, anti-aliasing with DirectX 9 only.
 - From Test 27: co-op story leaders (thanks Keaton), DirectX 12 by default.
 
-Please update from Test 30 - everyone in a game should be on the same test build.
+Please update from Test 31 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -117,6 +118,10 @@ New
 - The new team colours (and brown) now keep the original artwork's detail.
   Only the team-coloured cloth is recoloured, with its light and shade kept;
   trims, metal, leather and gold stay as they are, like the game's own colours.
+- Sound: mortar, cannon, mine and trap explosions, troop victory cheers, the
+  archers' bow draw and some Storm Rider and Regnier sounds now play their own
+  sounds. Since the original PC version they played a quiet sword swing or
+  nothing (one wrong number in the game). Single player gets this too.
 - Co-op: computer armies keep their campaign colours. Before, an army whose
   colour matched a player's lobby colour was given another colour, so the
   Hironeiden army changed colour depending on what player 2 picked.
