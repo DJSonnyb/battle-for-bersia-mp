@@ -1,21 +1,20 @@
-**REQUIRED TESTS FOR TEST 26** (everyone in a game must be on Test 26; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 27** (everyone in a game must be on Test 27; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
 
-1. Ellen 2 co-op, start to finish, and play past the cut-scene where Gerald should join. Is Gerald there leading his troop? If not, note roughly when you noticed - the netlog now tracks him.
-2. Co-op levels: do the enemies and your own troops feel about right now (heroes 1 level above the typical enemy)? Are the computer allies (Hironeiden army in Ellen 2) still useful?
-3. Co-op colours: does the Hironeiden army keep the same colour whichever hero player 2 brings?
-4. Open Options during a battle - the Xbox Live Options entry should be gone, and the other options should still work.
-5. Any other co-op mission if you have time.
+1. Ellen 2 co-op, start to finish: after the cut-scene, is Gerald there leading his troop? Do the cut-scenes show the right characters?
+2. Gerald 5 co-op: does Regnier appear as himself (not as an orc)?
+3. Any other co-op mission with story characters - do they all appear and lead their troops?
+4. Versus, Invasion and Hero Battle: one quick game each - still no officers or story leaders there, and nothing else changed?
+5. DirectX 12 (now the default): play a big battle, then switch Multiplayer Options > Renderer / AA to DirectX 9, restart the game and play the same battle. Which felt smoother? The netlog records the frame rate and which renderer was used. Report anything that looks wrong (water, effects, shadows, anti-aliasing).
 
 For each game, note: mission or mode, who hosted, whether the "out of sync" message appeared, and anything that looks wrong.
 
-**Test build 26 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 27 - for testers only. Not the official release (the official version is v1.4).**
 
-- Options during a battle: the Xbox Live Options entry that crashed the game is gone.
-- Co-op levels: heroes and troops are now the typical enemy level + 1 (was + 2), enemies at least 1 level above your hero, and computer allies are raised to your hero's level.
-- Co-op: computer armies keep their campaign colours instead of changing with player 2's colour.
-- The netlog now tracks story heroes in co-op, to find out why Gerald is missing in Ellen 2.
+- Co-op: story heroes and officers now lead their troops (e.g. Gerald in Ellen 2), so cut-scenes find the right units. Found and fixed by Keaton - thank you!
+- Graphics: DirectX 12 (Windows' D3D9On12) is now on by default and should be faster on most PCs. Multiplayer Options > Renderer / AA switches back to DirectX 9 (restart the game after changing it). If your PC can't use it, the game uses DirectX 9 automatically.
+- Everything from Test 26 (Xbox Live Options removed, co-op levels, co-op colours).
 
-Please update from Test 25 - Test 25 and Test 26 players cannot join each other.
+Please update from Test 26 - Test 26 and Test 27 players cannot join each other.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -110,6 +109,11 @@ New
   Hironeiden army changed colour depending on what player 2 picked.
 - Options menu during a battle: the "Xbox Live Options" entry is gone. It
   crashed the game.
+- Co-op: story heroes and officers now lead their troops (e.g. Gerald in
+  Ellen 2), so cut-scenes find the right units. The network battle load was
+  removing every mission leader except the players' heroes; co-op now keeps
+  them. Versus, Invasion and Hero Battle are unchanged. Found and fixed by
+  Keaton - thank you!
 - KUF_netlog.txt now records each story hero in co-op (model, HP, state and
   position) to track down Gerald missing in Ellen 2.
 - Co-op (Test 24 bug): Gerald invisible in Ellen 2 and Rupert's cut-scene
@@ -158,6 +162,12 @@ New
     - optional anti-aliasing (experimental)
 - More detail in KUF_netlog.txt (sky, performance and co-op events) to help
   track down bugs.
+- Graphics: DirectX 12, on by default. The game now runs through Windows'
+  own D3D9On12 layer (Windows 10 / 11), which should be faster on most PCs.
+  Multiplayer Options > "Renderer / AA" switches back to DirectX 9 (restart
+  the game after changing it). If DirectX 12 isn't available on your PC the
+  game simply uses DirectX 9 as before. Drawing only - players
+  can use different settings. KUF_netlog.txt records which one was used.
 
 
 Changing the graphics options
@@ -176,9 +186,10 @@ In this test build Draw Distance and Shadow Range are used in single player
 only. Multiplayer battles run them as v1.4 did (original), for every player,
 while the desyncs are tracked down. Texture Filter, Shadow Detail and
 Anti-Aliasing work everywhere.
-- Anti-Aliasing:  Off, 2x, 4x, 8x (default Off, experimental). Restart the
+- Renderer / AA: DirectX 9 or DirectX 12, with anti-aliasing Off, 2x, 4x, 8x
+                  (default DirectX 12, Off). Restart the
                   game after changing it. If water or effects look wrong,
-                  set it back to Off.
+                  set it back to DirectX 9, Off.
 
 The settings are kept in Documents\KUF2 Heroes\KUFH.ini.
 
