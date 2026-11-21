@@ -1,20 +1,20 @@
-**REQUIRED TESTS FOR TEST 30** (everyone in a game must be on Test 30; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 31** (everyone in a game must be on Test 31; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
 
-1. Ogres: bring Ogre troops into an Invasion game with the randomiser on (so enemy Ogres can appear too). Are your Ogres and the enemy Ogres visible? Do they show in different ogre colours, or all like Urukubarr? Does the game stay in sync to the end?
-2. Invasion randomiser: the other custom enemy troops (dwarves, elf warriors, dark elf guards, liches) - do they look right, can they be killed, does the game stay stable?
-3. Team colours: the NEW colours - black, white, turquoise, orange, pink and grey - right colour on your troops?
-4. Co-op story missions and graphics (DirectX 12 / DirectX 9 + AA): anything wrong?
+1. Team colours: try each NEW colour - black, white, turquoise, orange, pink and grey - and brown. Is it the right colour on your troops and hero? Do the troops now keep their detail (shading, trims, metal and gold) like the original colours? Anything that looks patchy or the wrong colour?
+2. Ogres and the Invasion randomiser: still visible and stable?
+3. Co-op story missions and graphics (DirectX 12 / DirectX 9 + AA): anything wrong?
 
 For each game, note: mission or mode, who hosted, whether the "out of sync" message appeared, and anything that looks wrong.
 
-**Test build 30 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 31 - for testers only. Not the official release (the official version is v1.4).**
 
-- Ogres: their looks are now loaded in multiplayer battles, on every PC, so they are visible again - and the desync they caused in Test 29 (Ogre soldiers out of step between PCs) should be gone. If their coloured looks ever can't be loaded, they are drawn as Urukubarr-style ogres instead of disappearing.
+- Team colours: the new colours (and brown) now keep the original artwork's detail. Only the team-coloured cloth is recoloured, with its light and shade kept; trims, metal, leather and gold stay as they are, like the game's own colours.
+- From Test 30: Ogres visible in multiplayer (drawn as Urukubarr-style ogres if their coloured looks can't be loaded).
 - From Test 29: custom troops in the Invasion randomiser.
 - From Test 28: new team colours fixed, anti-aliasing with DirectX 9 only.
 - From Test 27: co-op story leaders (thanks Keaton), DirectX 12 by default.
 
-Please update from Test 29 - Test 29 and Test 30 players cannot join each other.
+Please update from Test 30 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -114,6 +114,9 @@ New
   could crash the game.
 - The new team colours showed the colour before them in battle (black came
   out brown, white black, turquoise white, and so on). Fixed.
+- The new team colours (and brown) now keep the original artwork's detail.
+  Only the team-coloured cloth is recoloured, with its light and shade kept;
+  trims, metal, leather and gold stay as they are, like the game's own colours.
 - Co-op: computer armies keep their campaign colours. Before, an army whose
   colour matched a player's lobby colour was given another colour, so the
   Hironeiden army changed colour depending on what player 2 picked.
