@@ -1,20 +1,24 @@
-**REQUIRED TESTS FOR TEST 35** (everyone in a game must be on Test 35; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 36** (everyone in a game must be on Test 36; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
 
-1. Ogres: bring an Ogre troop into any multiplayer battle (Versus, Invasion randomiser or co-op). Do the ogres show mixed ogre colours instead of all looking like Urukubarr? Any invisible ogres, or a crash while the battle loads?
-2. Spell effects: cast Bless & Heal, Heal, Holy Explosion and Elemental Boost. Do they look smooth now instead of blocky / pixelated? A close-up screenshot helps either way.
-3. Co-op difficulty (two players, e.g. Ellen 2 or 3): lowered a little since Test 34. Too hard, too easy, or about right now?
-4. Weapons: does every hero and officer hold their weapon (Ellen, Dark Elf officers...)? If a weapon is missing, say who, which mission, and whether you play on DirectX 9 or DirectX 12.
+1. NEW - Invasion Roguelike: in Create Game pick "Invasion - Roguelike". Play as many waves as you can with 2+ players.
+   - Before each wave: do 3 upgrade cards show up, and can you pick one with 1, 2 or 3? Is the picked one highlighted?
+   - Does your army start at level 1 and gain levels each wave? Do the upgrades feel noticeable?
+   - Did "out of sync" ever appear, and at which wave?
+   - Is the countdown / card text readable and placed well on your screen? A screenshot helps.
+2. Normal Invasion (and Randomiser / Insanity), Versus and co-op: still exactly as before?
+3. Spell effects (Bless & Heal, Heal, Holy Explosion, Elemental Boost): smooth instead of blocky? Co-op difficulty after the lowering: about right?
+4. Weapons: does every hero and officer hold their weapon? If not: who, which mission, DirectX 9 or 12?
 
 For each game, note: mission or mode, who hosted, whether the "out of sync" message appeared, and anything that looks, sounds or feels wrong.
 
-**Test build 35 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 36 - for testers only. Not the official release (the official version is v1.4).**
 
-- Graphics: spell effects (Bless & Heal, Heal, Holy Explosion, Elemental Boost and other glows) should no longer look blocky or pixelated.
-- Co-op difficulty lowered a little: with two players enemies now get +9% levels (was +15%), still at least +3.
-- From Test 34: coloured ogre models loaded in multiplayer.
-- From Test 33: co-op officers at their troop's level, Elvish speech readable, DirectX 9 default again.
+- NEW: Invasion - Roguelike. Armies start at level 1 and gain 2 levels every wave; before each wave you choose 1 of 3 upgrades for your whole army (keys 1, 2, 3); the enemy gets a stacking random trait each wave.
+- From Test 35: blocky spell effects fix, co-op enemies +9% levels (was +15%).
+- From Test 34: coloured ogre models in multiplayer.
+- From Test 33: co-op officers at their troop's level, Elvish speech readable, DirectX 9 default.
 
-Please update from Test 34 - everyone in a game should be on the same test build.
+Please update from Test 35 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -148,6 +152,19 @@ New
   gets this too.
 - Co-op difficulty lowered a little (players found Test 34 too hard): with
   two players enemies now get +9% levels (was +15%), still at least +3.
+- NEW: Invasion - Roguelike (first version, pick it in Create Game like the
+  other Invasion variants):
+  - Every army starts the battle at level 1 (your Barracks armies are not
+    changed) and gains 2 levels at the start of every wave.
+  - Before every wave you choose 1 of 3 upgrades for your whole army: press
+    1, 2 or 3 during the countdown (15 seconds). No choice = a random one of
+    the three. Upgrades stack. The cards come from: Attack +10%, Defence +8%,
+    Elemental resist +15%, HP +12%, Charge/blast resist +12%, Glass cannon
+    (+25% attack, but 12% more damage taken) and +3 levels.
+  - Every wave the enemy gets a random trait that also stacks: Ironclad,
+    Berserk, Warded, Hardened or Brutal. The countdown shows the next one.
+  - Resistances never go past 75%.
+  - Keyboard only for now (1, 2, 3); controller support comes later.
 - Co-op: computer armies keep their campaign colours. Before, an army whose
   colour matched a player's lobby colour was given another colour, so the
   Hironeiden army changed colour depending on what player 2 picked.
