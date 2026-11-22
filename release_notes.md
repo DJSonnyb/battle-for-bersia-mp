@@ -1,21 +1,23 @@
-**REQUIRED TESTS FOR TEST 32** (everyone in a game must be on Test 32; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 33** (everyone in a game must be on Test 33; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
 
-1. Sounds: bring Mortars (and Sappers / PyroTechs, Archers) into a battle. Do you now hear mortar explosions (the game itself plays one about half the time), troop victory cheers and the archers' bow draw? Any sound that seems wrong or too loud?
-2. Team colours: all colours, new and old - right colour and full detail on your troops?
-3. Ogres, the Invasion randomiser, co-op story missions and graphics (DirectX 12 / DirectX 9 + AA): anything wrong?
+1. Co-op difficulty (two players, e.g. Ellen 2 or 3): how does it feel now? Enemy officers should no longer die in 3-4 hits and may use their spells (Meteor, Curatio...). Too hard, too easy, or about right?
+2. Co-op officers: do both players' assist officers feel stronger and get their spells?
+3. Elvish speech (e.g. Ellen's missions): shown as Elvish words instead of symbols like "&$* 5.,$"?
+4. Graphics: the game now starts on DirectX 9. Does it run without crashes? (DirectX 12 can still be picked in the Options menu.)
+5. Sounds and team colours from Tests 31-32: still fine?
 
-For each game, note: mission or mode, who hosted, whether the "out of sync" message appeared, and anything that looks or sounds wrong.
+For each game, note: mission or mode, who hosted, whether the "out of sync" message appeared, and anything that looks, sounds or feels wrong.
 
-**Test build 32 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 33 - for testers only. Not the official release (the official version is v1.4).**
 
-- Sound: mortar, cannon, mine and trap explosions, troop victory cheers, the archers' bow draw and some Storm Rider and Regnier sounds now play their own sounds. Since the original PC version they played a quiet sword swing or nothing.
-- From Test 31: the new team colours (and brown) keep the original artwork's detail.
-- From Test 30: Ogres visible in multiplayer (drawn as Urukubarr-style ogres if their coloured looks can't be loaded).
-- From Test 29: custom troops in the Invasion randomiser.
-- From Test 28: new team colours fixed, anti-aliasing with DirectX 9 only.
-- From Test 27: co-op story leaders (thanks Keaton), DirectX 12 by default.
+- Co-op: every officer now has its troop's level - enemy officers, computer allies' officers and both players' assist officers (they were all level 1).
+- Co-op difficulty raised again: with two players enemies get +15% levels, at least +3, and every enemy troop is at least 3 levels above the players' hero.
+- Elvish speech is shown as Elvish words instead of symbols.
+- Graphics: DirectX 9 is the default again; DirectX 12 stays in the Options menu.
+- From Test 32: mortar explosions and other missing unit sounds fixed.
+- From Test 31: the new team colours keep the original artwork's detail.
 
-Please update from Test 31 - everyone in a game should be on the same test build.
+Please update from Test 32 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -122,6 +124,20 @@ New
   archers' bow draw and some Storm Rider and Regnier sounds now play their own
   sounds. Since the original PC version they played a quiet sword swing or
   nothing (one wrong number in the game). Single player gets this too.
+- Co-op: every officer now has its troop's level - enemy officers, computer
+  allies' officers and both players' assist officers. Every officer in the
+  original missions is level 1, so the level raises only reached the troop
+  leaders and officers died in a few hits.
+- Co-op difficulty raised again now that officers are levelled (they get
+  their spells, e.g. Meteor): with two players enemies get +15% levels, at
+  least +3 (was +1), and every enemy troop is at least 3 levels above the
+  players' hero (was 1). Enemy officers follow their troop's level.
+- Elvish speech is shown as Elvish words (e.g. "Dal fijas waka quwehdedlo!")
+  instead of symbols like "&$* 5.,$". The PC version lost the Elvish rune
+  letters from its font. Single player gets this too.
+- Graphics: DirectX 9 is the default again (a few crashes with DirectX 12).
+  DirectX 12 stays in the Options menu; everyone starts on DirectX 9 once,
+  even if they had picked DirectX 12 before.
 - Co-op: computer armies keep their campaign colours. Before, an army whose
   colour matched a player's lobby colour was given another colour, so the
   Hironeiden army changed colour depending on what player 2 picked.
