@@ -1,23 +1,19 @@
-**REQUIRED TESTS FOR TEST 33** (everyone in a game must be on Test 33; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 34** (everyone in a game must be on Test 34; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
 
-1. Co-op difficulty (two players, e.g. Ellen 2 or 3): how does it feel now? Enemy officers should no longer die in 3-4 hits and may use their spells (Meteor, Curatio...). Too hard, too easy, or about right?
-2. Co-op officers: do both players' assist officers feel stronger and get their spells?
-3. Elvish speech (e.g. Ellen's missions): shown as Elvish words instead of symbols like "&$* 5.,$"?
-4. Graphics: the game now starts on DirectX 9. Does it run without crashes? (DirectX 12 can still be picked in the Options menu.)
-5. Sounds and team colours from Tests 31-32: still fine?
+1. Ogres: bring an Ogre troop into any multiplayer battle (Versus, Invasion randomiser or co-op). Do the ogres now show mixed ogre colours instead of all looking like Urukubarr? Any invisible ogres, or a crash while the battle loads?
+2. Co-op difficulty (two players, e.g. Ellen 2 or 3): how does it feel? Enemy officers should no longer die in 3-4 hits and may use their spells. Too hard, too easy, or about right?
+3. Elvish speech shown as Elvish words instead of symbols? Game starts on DirectX 9 without crashes?
 
 For each game, note: mission or mode, who hosted, whether the "out of sync" message appeared, and anything that looks, sounds or feels wrong.
 
-**Test build 33 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 34 - for testers only. Not the official release (the official version is v1.4).**
 
-- Co-op: every officer now has its troop's level - enemy officers, computer allies' officers and both players' assist officers (they were all level 1).
-- Co-op difficulty raised again: with two players enemies get +15% levels, at least +3, and every enemy troop is at least 3 levels above the players' hero.
-- Elvish speech is shown as Elvish words instead of symbols.
-- Graphics: DirectX 9 is the default again; DirectX 12 stays in the Options menu.
+- Ogres: the coloured ogre models are now loaded in multiplayer, so Ogre troops show their mixed colours instead of all being Urukubarr's model (never invisible - falls back to Urukubarr if a model fails to load).
+- From Test 33: co-op officers at their troop's level, co-op difficulty raised, Elvish speech readable, DirectX 9 default again.
 - From Test 32: mortar explosions and other missing unit sounds fixed.
 - From Test 31: the new team colours keep the original artwork's detail.
 
-Please update from Test 32 - everyone in a game should be on the same test build.
+Please update from Test 33 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -138,6 +134,11 @@ New
 - Graphics: DirectX 9 is the default again (a few crashes with DirectX 12).
   DirectX 12 stays in the Options menu; everyone starts on DirectX 9 once,
   even if they had picked DirectX 12 before.
+- Ogres: the coloured ogre models are now loaded in multiplayer, so Ogre
+  troops show their mixed ogre colours instead of all being Urukubarr's model.
+  The game only loaded one ogre model; the other three were never loaded. If a
+  model still fails to load, that ogre falls back to Urukubarr's model, never
+  invisible.
 - Co-op: computer armies keep their campaign colours. Before, an army whose
   colour matched a player's lobby colour was given another colour, so the
   Hironeiden army changed colour depending on what player 2 picked.
