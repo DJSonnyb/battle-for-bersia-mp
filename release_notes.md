@@ -1,19 +1,20 @@
-**REQUIRED TESTS FOR TEST 34** (everyone in a game must be on Test 34; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 35** (everyone in a game must be on Test 35; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
 
-1. Ogres: bring an Ogre troop into any multiplayer battle (Versus, Invasion randomiser or co-op). Do the ogres now show mixed ogre colours instead of all looking like Urukubarr? Any invisible ogres, or a crash while the battle loads?
-2. Co-op difficulty (two players, e.g. Ellen 2 or 3): how does it feel? Enemy officers should no longer die in 3-4 hits and may use their spells. Too hard, too easy, or about right?
-3. Elvish speech shown as Elvish words instead of symbols? Game starts on DirectX 9 without crashes?
+1. Ogres: bring an Ogre troop into any multiplayer battle (Versus, Invasion randomiser or co-op). Do the ogres show mixed ogre colours instead of all looking like Urukubarr? Any invisible ogres, or a crash while the battle loads?
+2. Spell effects: cast Bless & Heal, Heal, Holy Explosion and Elemental Boost. Do they look smooth now instead of blocky / pixelated? A close-up screenshot helps either way.
+3. Co-op difficulty (two players, e.g. Ellen 2 or 3): lowered a little since Test 34. Too hard, too easy, or about right now?
+4. Weapons: does every hero and officer hold their weapon (Ellen, Dark Elf officers...)? If a weapon is missing, say who, which mission, and whether you play on DirectX 9 or DirectX 12.
 
 For each game, note: mission or mode, who hosted, whether the "out of sync" message appeared, and anything that looks, sounds or feels wrong.
 
-**Test build 34 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 35 - for testers only. Not the official release (the official version is v1.4).**
 
-- Ogres: the coloured ogre models are now loaded in multiplayer, so Ogre troops show their mixed colours instead of all being Urukubarr's model (never invisible - falls back to Urukubarr if a model fails to load).
-- From Test 33: co-op officers at their troop's level, co-op difficulty raised, Elvish speech readable, DirectX 9 default again.
-- From Test 32: mortar explosions and other missing unit sounds fixed.
-- From Test 31: the new team colours keep the original artwork's detail.
+- Graphics: spell effects (Bless & Heal, Heal, Holy Explosion, Elemental Boost and other glows) should no longer look blocky or pixelated.
+- Co-op difficulty lowered a little: with two players enemies now get +9% levels (was +15%), still at least +3.
+- From Test 34: coloured ogre models loaded in multiplayer.
+- From Test 33: co-op officers at their troop's level, Elvish speech readable, DirectX 9 default again.
 
-Please update from Test 33 - everyone in a game should be on the same test build.
+Please update from Test 34 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -139,6 +140,14 @@ New
   The game only loaded one ogre model; the other three were never loaded. If a
   model still fails to load, that ogre falls back to Urukubarr's model, never
   invisible.
+- Graphics: spell effects (Bless & Heal, Heal, Holy Explosion, Elemental
+  Boost and other glows and particles) should no longer look blocky or
+  pixelated. The game asked for a texture filter that many graphics cards
+  don't offer for enlarged effect pictures, so they fell back to square
+  pixels; enlarged pictures now use smooth (linear) filtering. Single player
+  gets this too.
+- Co-op difficulty lowered a little (players found Test 34 too hard): with
+  two players enemies now get +9% levels (was +15%), still at least +3.
 - Co-op: computer armies keep their campaign colours. Before, an army whose
   colour matched a player's lobby colour was given another colour, so the
   Hironeiden army changed colour depending on what player 2 picked.
