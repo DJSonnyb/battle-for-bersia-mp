@@ -1,24 +1,21 @@
-**REQUIRED TESTS FOR TEST 36** (everyone in a game must be on Test 36; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 37** (everyone in a game must be on Test 37; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
 
-1. NEW - Invasion Roguelike: in Create Game pick "Invasion - Roguelike". Play as many waves as you can with 2+ players.
-   - Before each wave: do 3 upgrade cards show up, and can you pick one with 1, 2 or 3? Is the picked one highlighted?
-   - Does your army start at level 1 and gain levels each wave? Do the upgrades feel noticeable?
-   - Did "out of sync" ever appear, and at which wave?
-   - Is the countdown / card text readable and placed well on your screen? A screenshot helps.
-2. Normal Invasion (and Randomiser / Insanity), Versus and co-op: still exactly as before?
-3. Spell effects (Bless & Heal, Heal, Holy Explosion, Elemental Boost): smooth instead of blocky? Co-op difficulty after the lowering: about right?
-4. Weapons: does every hero and officer hold their weapon? If not: who, which mission, DirectX 9 or 12?
+1. Invasion - Roguelike (2+ players): during each countdown, can you read the 3 cards and pick one with 1, 2 or 3 (or numpad 1-3)? Does it then say "Chosen: ..."? Any "out of sync"?
+2. NEW - Invasion - Roguelike Hero (2+ players): you start with only your hero. Pick "Reinforcements" when offered - does a new (random) troop appear at the next wave start? A screenshot helps.
+3. NEW - Custom maps: a map saved by Bersia Map Forge into Data\Mission\Live shows up in the map list as "Custom: <name>". Try it with one player who has the map and one who doesn't (Start should say "A player lacks this map"), then with both having it.
+4. Spell effects (Bless & Heal, Holy Explosion...): still blocky? Please send a close-up screenshot and say whether anti-aliasing and Anisotropy are on.
+5. Normal Invasion / Randomiser / Insanity, Versus and co-op: still exactly as before?
 
 For each game, note: mission or mode, who hosted, whether the "out of sync" message appeared, and anything that looks, sounds or feels wrong.
 
-**Test build 36 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 37 - for testers only. Not the official release (the official version is v1.4).**
 
-- NEW: Invasion - Roguelike. Armies start at level 1 and gain 2 levels every wave; before each wave you choose 1 of 3 upgrades for your whole army (keys 1, 2, 3); the enemy gets a stacking random trait each wave.
-- From Test 35: blocky spell effects fix, co-op enemies +9% levels (was +15%).
-- From Test 34: coloured ogre models in multiplayer.
-- From Test 33: co-op officers at their troop's level, Elvish speech readable, DirectX 9 default.
+- Roguelike cards fixed: one readable list under the countdown; 1 / 2 / 3 presses are caught at any time.
+- NEW: Invasion - Roguelike Hero: start with only your hero; Reinforcements cards bring in random troops.
+- NEW: Custom maps in the lobby, with a file check so everyone plays the same map (sending maps to players comes later).
+- The Anisotropy option no longer makes spell effects blocky again.
 
-Please update from Test 35 - everyone in a game should be on the same test build.
+Please update from Test 36 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -149,7 +146,8 @@ New
   pixelated. The game asked for a texture filter that many graphics cards
   don't offer for enlarged effect pictures, so they fell back to square
   pixels; enlarged pictures now use smooth (linear) filtering. Single player
-  gets this too.
+  gets this too. (Test 37: the in-game Anisotropy option no longer turns the
+  effect pictures back to the blocky filter.)
 - Co-op difficulty lowered a little (players found Test 34 too hard): with
   two players enemies now get +9% levels (was +15%), still at least +3.
 - NEW: Invasion - Roguelike (first version, pick it in Create Game like the
@@ -165,6 +163,24 @@ New
     Berserk, Warded, Hardened or Brutal. The countdown shows the next one.
   - Resistances never go past 75%.
   - Keyboard only for now (1, 2, 3); controller support comes later.
+  - Fixed (Test 36 feedback): the cards were drawn on top of each other and
+    key presses were missed. They are now one readable list under the
+    countdown, and 1 / 2 / 3 (or numpad 1 / 2 / 3) are caught at any moment.
+- NEW: Invasion - Roguelike Hero (USER, Iddy's idea): like Roguelike, but you
+  start with only your hero. Your 3 other troops wait off the field as random
+  kinds of troop; a "Reinforcements" card brings one in at the next wave
+  start (on every odd wave one of the 3 cards is Reinforcements while any
+  troop still waits).
+- NEW: Custom maps in the lobby (first part). Maps saved by Bersia Map Forge
+  into Data\Mission\Live show up in the map list as "Custom: <name>".
+  - Every player needs the same map files: the lobby checks them, and Start
+    says "A player lacks this map" until everyone has them. (Sending the map
+    to players who lack it comes next.)
+  - The same check now runs for the normal multiplayer maps too, so an edited
+    copy of a built-in map can't cause an "out of sync" (Start says "Map files
+    differ").
+  - The netlog notes whether the map has a navigation mesh (.nav) - the only
+    thing that stops troops walking through walls and cliffs.
 - Co-op: computer armies keep their campaign colours. Before, an army whose
   colour matched a player's lobby colour was given another colour, so the
   Hironeiden army changed colour depending on what player 2 picked.
