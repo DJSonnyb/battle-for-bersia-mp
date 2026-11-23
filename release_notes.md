@@ -1,19 +1,28 @@
-**REQUIRED TESTS FOR TEST 38** (everyone in a game must be on Test 38; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 39** (everyone in a game must be on Test 39; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
 
-1. Co-op cut-scenes (thanks Keaton): play Ellen 2 in co-op and watch the second cut-scene (Gerald and Ellen talking after the first enemies). Does each shot show the right character on BOTH players' screens? Try other co-op missions' cut-scenes too - note any shot that shows the wrong person, an empty view or your own hero.
-2. NEW - Custom map auto-download: the host picks a "Custom: <name>" map saved by Bersia Map Forge; a player who doesn't have it joins. Does the chat say "Downloaded custom map <name>" and does Start then work? Does the battle play without "out of sync"?
-3. Roguelike / Roguelike Hero (from Test 37): cards readable and pickable with 1 / 2 / 3? Reinforcements arrive?
-4. Normal Invasion, Versus and co-op: still exactly as before?
+New in Test 39:
+1. Spell and status effects: use Bless & Heal, Heal and Chilling Attack. Do the glowing sprites look smooth now instead of blocky squares?
+2. Status effects on units: fire, lightning, ice, poison and curse hits, Holy Explosion and Elemental Boost. Can you see effects on the affected units / an aura on the boosted troop?
+3. Flame Wraiths and Ice Maidens: does their fire / icy glow follow them properly?
+4. Invasion - Randomiser: enemy waves can now be any troop (Encablossa, elementals, Bomber Wings, Catapults, Mammoths, Bone Dragons...). Any troop that looks wrong, can't be killed, or crashes the game? Note which troop.
+
+Still to check from Test 38:
+5. Co-op cut-scenes (thanks Keaton): play Ellen 2 in co-op and watch the second cut-scene (Gerald and Ellen talking after the first enemies). Does each shot show the right character on BOTH players' screens? Other co-op cut-scenes too.
+6. Custom map auto-download: the host picks a "Custom: <name>" map; a player who doesn't have it joins. Does the chat say "Downloaded custom map <name>" and does Start then work, without "out of sync"?
+7. Roguelike / Roguelike Hero: cards readable and pickable with 1 / 2 / 3? Reinforcements arrive?
+8. Normal Invasion, Versus and co-op: still exactly as before?
 
 For each game, note: mission or mode, who hosted, whether the "out of sync" message appeared, and anything that looks, sounds or feels wrong.
 
-**Test build 38 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 39 - for testers only. Not the official release (the official version is v1.4).**
 
-- Co-op cut-scenes: the camera keeps the character the scene films (Keaton's fix) on both players.
-- NEW: Custom maps download automatically from the host when you join without them.
-- From Test 37: Roguelike cards fixed, Roguelike Hero variant, custom maps in the lobby with a file check.
+- Bless & Heal, Heal and Chilling Attack: sprites no longer blocky (thanks Keaton).
+- Status effects and Elemental Boost / Holy Explosion auras now show on units (thanks Keaton).
+- Effects fixed to units (Flame Wraith fire, Ice Maiden glow, hand glows) follow the unit again.
+- Invasion Randomiser now uses every troop kind.
+- Includes everything from Test 38 (co-op cut-scene fix, custom map auto-download).
 
-Please update from Test 37 - everyone in a game should be on the same test build.
+Please update from Test 38 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -35,7 +44,7 @@ Fixes
   set from the mission's own enemies - about 2 levels above the typical
   enemy troop, heroes 2 levels higher again. Before, they followed a fixed
   curve and ended up far above the enemies (e.g. Gerald 7: troops level 26
-  against enemies of level 6-14). With two players enemies get +15% levels.
+  against enemies of level 6-14). With two players enemies get +9% levels (at least +3).
 - Co-op: troops are upgraded by their level (Archer -> Longbow from level
   10, Infantry -> Heavy Infantry -> Knight from 10 / 15, Cavalry -> Heavy
   Cavalry from 17 (never Storm Riders, which are support troops), Sapper -> PyroTech from 13, Dark
@@ -98,8 +107,8 @@ New
   the typical (median) enemy level + 1. One very strong story enemy (e.g.
   Regnier in Gerald 5) no longer lifts the players' levels. Player 2 matches
   the host.
-- Co-op with two players (all missions, Crusaders too): enemies get +15%
-  levels (at least +1), and every enemy troop is at least 1 level above the
+- Co-op with two players (all missions, Crusaders too): enemies get +9%
+  levels (at least +3), and every enemy troop is at least 1 level above the
   players' hero.
 - Co-op: computer allies (e.g. the Hironeiden army in Ellen 2) are raised to
   the players' hero level. Before, they could stay at level 1.
@@ -125,8 +134,7 @@ New
   original missions is level 1, so the level raises only reached the troop
   leaders and officers died in a few hits.
 - Co-op difficulty raised again now that officers are levelled (they get
-  their spells, e.g. Meteor): with two players enemies get +15% levels, at
-  least +3 (was +1), and every enemy troop is at least 3 levels above the
+  their spells, e.g. Meteor): with two players enemies get at least +3 levels (was +1), and every enemy troop is at least 3 levels above the
   players' hero (was 1). Enemy officers follow their troop's level.
 - Elvish speech is shown as Elvish words (e.g. "Dal fijas waka quwehdedlo!")
   instead of symbols like "&$* 5.,$". The PC version lost the Elvish rune
@@ -186,6 +194,22 @@ New
     differ").
   - The netlog notes whether the map has a navigation mesh (.nav) - the only
     thing that stops troops walking through walls and cliffs.
+- Status effects now show on units (Keaton's findings): burning, shock,
+  freeze, poison and curse, plus the Elemental Boost and Holy Explosion
+  auras. The PC version never drew them (only the unit's colour changed);
+  they now work the way they do on the Xbox. Looks only.
+- Effects fixed to a unit now show: the Flame Wraith's fire, the Ice
+  Maiden's icy glow, hand glows and other effects attached to units. They
+  stayed behind instead of following the unit.
+- Bless & Heal, Heal and Chilling Attack (Keaton's findings): their glowing
+  sprites no longer come out as blocky squares. The PC version drew them the
+  Xbox way, which mixed in leftovers from whatever was drawn before them.
+- Invasion Randomiser now uses every troop: besides the normal Human and
+  Dark Legion troops and the custom troops, enemy troops can become Bomber
+  Wings, Mortars, Ballistas, Catapults, Battaloons, Scorpions, Swamp
+  Mammoths, Dirigibles, Wyverns, Bone Dragons, Exploding Ghouls, every kind
+  of Encablossa and the four elementals. Boss and support waves are
+  randomised too. Walls and heroes stay as they are.
 - Co-op: computer armies keep their campaign colours. Before, an army whose
   colour matched a player's lobby colour was given another colour, so the
   Hironeiden army changed colour depending on what player 2 picked.
