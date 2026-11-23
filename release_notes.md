@@ -1,21 +1,19 @@
-**REQUIRED TESTS FOR TEST 37** (everyone in a game must be on Test 37; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 38** (everyone in a game must be on Test 38; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
 
-1. Invasion - Roguelike (2+ players): during each countdown, can you read the 3 cards and pick one with 1, 2 or 3 (or numpad 1-3)? Does it then say "Chosen: ..."? Any "out of sync"?
-2. NEW - Invasion - Roguelike Hero (2+ players): you start with only your hero. Pick "Reinforcements" when offered - does a new (random) troop appear at the next wave start? A screenshot helps.
-3. NEW - Custom maps: a map saved by Bersia Map Forge into Data\Mission\Live shows up in the map list as "Custom: <name>". Try it with one player who has the map and one who doesn't (Start should say "A player lacks this map"), then with both having it.
-4. Spell effects (Bless & Heal, Holy Explosion...): still blocky? Please send a close-up screenshot and say whether anti-aliasing and Anisotropy are on.
-5. Normal Invasion / Randomiser / Insanity, Versus and co-op: still exactly as before?
+1. Co-op cut-scenes (thanks Keaton): play Ellen 2 in co-op and watch the second cut-scene (Gerald and Ellen talking after the first enemies). Does each shot show the right character on BOTH players' screens? Try other co-op missions' cut-scenes too - note any shot that shows the wrong person, an empty view or your own hero.
+2. NEW - Custom map auto-download: the host picks a "Custom: <name>" map saved by Bersia Map Forge; a player who doesn't have it joins. Does the chat say "Downloaded custom map <name>" and does Start then work? Does the battle play without "out of sync"?
+3. Roguelike / Roguelike Hero (from Test 37): cards readable and pickable with 1 / 2 / 3? Reinforcements arrive?
+4. Normal Invasion, Versus and co-op: still exactly as before?
 
 For each game, note: mission or mode, who hosted, whether the "out of sync" message appeared, and anything that looks, sounds or feels wrong.
 
-**Test build 37 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 38 - for testers only. Not the official release (the official version is v1.4).**
 
-- Roguelike cards fixed: one readable list under the countdown; 1 / 2 / 3 presses are caught at any time.
-- NEW: Invasion - Roguelike Hero: start with only your hero; Reinforcements cards bring in random troops.
-- NEW: Custom maps in the lobby, with a file check so everyone plays the same map (sending maps to players comes later).
-- The Anisotropy option no longer makes spell effects blocky again.
+- Co-op cut-scenes: the camera keeps the character the scene films (Keaton's fix) on both players.
+- NEW: Custom maps download automatically from the host when you join without them.
+- From Test 37: Roguelike cards fixed, Roguelike Hero variant, custom maps in the lobby with a file check.
 
-Please update from Test 36 - everyone in a game should be on the same test build.
+Please update from Test 37 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -171,11 +169,18 @@ New
   kinds of troop; a "Reinforcements" card brings one in at the next wave
   start (on every odd wave one of the 3 cards is Reinforcements while any
   troop still waits).
+- Co-op cut-scenes (Keaton's fix): a cut-scene's camera no longer drops the
+  character it was told to film (e.g. Gerald in Ellen 2's second scene) on
+  both players, and player 2 no longer gets the host's hero instead of the
+  scene's actor. Only the view changes.
 - NEW: Custom maps in the lobby (first part). Maps saved by Bersia Map Forge
   into Data\Mission\Live show up in the map list as "Custom: <name>".
   - Every player needs the same map files: the lobby checks them, and Start
-    says "A player lacks this map" until everyone has them. (Sending the map
-    to players who lack it comes next.)
+    says "A player lacks this map" until everyone has them.
+  - Auto-download: a player who joins without the host's custom map (or with
+    a different version of it) gets it from the host automatically - the
+    chat says "Downloaded custom map <name>" and Start works a moment later.
+    Only custom maps are sent, never the built-in ones.
   - The same check now runs for the normal multiplayer maps too, so an edited
     copy of a built-in map can't cause an "out of sync" (Start says "Map files
     differ").
