@@ -1,6 +1,9 @@
-**REQUIRED TESTS FOR TEST 39** (everyone in a game must be on Test 39; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 40** (everyone in a game must be on Test 40; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
 
-New in Test 39:
+New in Test 40:
+0. Co-op: enemy heroes, officers and troop leaders have +50% HP. Do they still die too quickly, or is it too much now? (Levels are unchanged.)
+
+From Test 39:
 1. Spell and status effects: use Bless & Heal, Heal and Chilling Attack. Do the glowing sprites look smooth now instead of blocky squares?
 2. Status effects on units: fire, lightning, ice, poison and curse hits, Holy Explosion and Elemental Boost. Can you see effects on the affected units / an aura on the boosted troop?
 3. Flame Wraiths and Ice Maidens: does their fire / icy glow follow them properly?
@@ -14,15 +17,16 @@ Still to check from Test 38:
 
 For each game, note: mission or mode, who hosted, whether the "out of sync" message appeared, and anything that looks, sounds or feels wrong.
 
-**Test build 39 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 40 - for testers only. Not the official release (the official version is v1.4).**
 
+- NEW: Co-op enemy heroes, officers and troop leaders have +50% HP.
 - Bless & Heal, Heal and Chilling Attack: sprites no longer blocky (thanks Keaton).
 - Status effects and Elemental Boost / Holy Explosion auras now show on units (thanks Keaton).
 - Effects fixed to units (Flame Wraith fire, Ice Maiden glow, hand glows) follow the unit again.
 - Invasion Randomiser now uses every troop kind.
 - Includes everything from Test 38 (co-op cut-scene fix, custom map auto-download).
 
-Please update from Test 38 - everyone in a game should be on the same test build.
+Please update from Test 39 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -210,6 +214,9 @@ New
   Mammoths, Dirigibles, Wyverns, Bone Dragons, Exploding Ghouls, every kind
   of Encablossa and the four elementals. Boss and support waves are
   randomised too. Walls and heroes stay as they are.
+- Co-op (all missions, Crusaders too): enemy heroes, officers and troop
+  leaders have +50% HP, so they no longer go down in a few hits. Levels are
+  unchanged. Computer allies are not affected.
 - Co-op: computer armies keep their campaign colours. Before, an army whose
   colour matched a player's lobby colour was given another colour, so the
   Hironeiden army changed colour depending on what player 2 picked.
