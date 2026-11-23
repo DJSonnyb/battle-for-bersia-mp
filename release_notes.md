@@ -1,6 +1,11 @@
-**REQUIRED TESTS FOR TEST 40** (everyone in a game must be on Test 40; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 41** (everyone in a game must be on Test 41; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
 
-New in Test 40:
+New in Test 41:
+- If a game goes out of sync, "OUT OF SYNC" now shows in the battle's message box (where "Fire at Will: ON" appears). If you see it, send KUF_netlog.txt from BOTH players.
+- Players on Direct3D 12: please say so when you send a log. A fix for DX12 / DX9 players going out of sync together is in this build.
+- If players are on different test builds, a warning now shows in the lobby chat at the start of the battle.
+
+From Test 40:
 0. Co-op: enemy heroes, officers and troop leaders have +50% HP. Do they still die too quickly, or is it too much now? (Levels are unchanged.)
 
 From Test 39:
@@ -15,18 +20,19 @@ Still to check from Test 38:
 7. Roguelike / Roguelike Hero: cards readable and pickable with 1 / 2 / 3? Reinforcements arrive?
 8. Normal Invasion, Versus and co-op: still exactly as before?
 
-For each game, note: mission or mode, who hosted, whether the "out of sync" message appeared, and anything that looks, sounds or feels wrong.
+For each game, note: mission or mode, who hosted, whether the "OUT OF SYNC" message appeared, and anything that looks, sounds or feels wrong.
 
-**Test build 40 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 41 - for testers only. Not the official release (the official version is v1.4).**
 
-- NEW: Co-op enemy heroes, officers and troop leaders have +50% HP.
+- NEW: "OUT OF SYNC" message in battle; fix for desyncs between Direct3D 12 and Direct3D 9 players; each test build has its own build id.
+- Co-op enemy heroes, officers and troop leaders have +50% HP.
 - Bless & Heal, Heal and Chilling Attack: sprites no longer blocky (thanks Keaton).
 - Status effects and Elemental Boost / Holy Explosion auras now show on units (thanks Keaton).
 - Effects fixed to units (Flame Wraith fire, Ice Maiden glow, hand glows) follow the unit again.
 - Invasion Randomiser now uses every troop kind.
 - Includes everything from Test 38 (co-op cut-scene fix, custom map auto-download).
 
-Please update from Test 39 - everyone in a game should be on the same test build.
+Please update from Test 40 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -217,6 +223,17 @@ New
 - Co-op (all missions, Crusaders too): enemy heroes, officers and troop
   leaders have +50% HP, so they no longer go down in a few hits. Levels are
   unchanged. Computer allies are not affected.
+- Network battles: the maths mode of the processor is now set the same on
+  every PC each turn. A different renderer (Direct3D 12) or an overlay /
+  capture tool could change it on one PC only, and the battle then went out
+  of sync. The netlog shows when it had to be reset.
+- Each test build now has its own build id, so players on different test
+  builds get the "different builds" warning in chat at the start of a
+  battle (before, all v1.5 test builds looked the same).
+- Network battles: when the players' games go out of sync, "OUT OF SYNC"
+  now appears in the battle's message box (where "Fire at Will: ON" shows),
+  once per battle, and again in the lobby chat afterwards. Before, a desync
+  was only recorded in KUF_netlog.txt.
 - Co-op: computer armies keep their campaign colours. Before, an army whose
   colour matched a player's lobby colour was given another colour, so the
   Hironeiden army changed colour depending on what player 2 picked.
