@@ -1,6 +1,9 @@
-**REQUIRED TESTS FOR TEST 46** (everyone in a game must be on Test 46; send KUF_netlog.txt from EVERY player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 47** (everyone in a game must be on Test 47; send KUF_netlog.txt from EVERY player after EVERY game, even if it seemed fine)
 
-New in Test 46:
+New in Test 47:
+0. Urukubarr 2 co-op: the crash for player 2 (when the mission turns the minimap on) is fixed. Please play it again.
+
+From Test 46:
 1. Co-op desyncs between PCs with different processors (Intel / AMD): the game's vector maths now gives the same result on every PC. Please replay Urukubarr 1, Leinhart 1, Walter 5 and Ellen 9 in co-op. Does "OUT OF SYNC" still appear? Send BOTH netlogs either way.
 2. Ellen 9 co-op: player 2 and the computer's allies are now level 30 like the host (player 2 was level 24). Better balanced?
 3. Co-op: the heroes' own troops now get level upgrades too (e.g. Ellen leads Knights in Ellen 9, not basic Infantry).
@@ -17,19 +20,20 @@ Still to check from earlier tests:
 10. Invasion Randomiser; co-op cut-scenes; custom map auto-download; Roguelike cards and Reinforcements.
 11. Normal Invasion, Versus and co-op: still exactly as before?
 
-Known, not fixed yet: Ellen's weapon disappears after she is knocked down; Urukubarr 2 crash (please send the netlog).
+Known, not fixed yet: Ellen's weapon disappears after she is knocked down.
 
 For each game, note: mission or mode, who hosted, whether "OUT OF SYNC" appeared, and anything that looks, sounds or feels wrong.
 
-**Test build 46 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 47 - for testers only. Not the official release (the official version is v1.4).**
 
-- NEW: fix for co-op desyncs between PCs with different processors.
+- NEW: Urukubarr 2 co-op crash (player 2) fixed.
+- From Test 46: fix for co-op desyncs between PCs with different processors.
 - NEW: Ellen 9 co-op player 2 and allies at the host's level (30).
 - NEW: heroes' own troops get level upgrades in co-op.
 - NEW: co-op enemy leaders +70% HP; enemy officers hit 20% harder.
-- Includes everything from Test 45 and earlier.
+- Includes everything from Test 46 and earlier.
 
-Please update from Test 45 - everyone in a game should be on the same test build.
+Please update from Test 46 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -257,6 +261,9 @@ New
   AMD PCs could get a slightly different result and a troop slowly drifted
   apart. The game now uses its own version that gives the same result on
   every PC.
+- Crash in Urukubarr 2 co-op (player 2): the mission script turns the
+  minimap on, and the game crashed when the minimap was not there. It is
+  now skipped in that case.
 - Co-op: in missions where the host's army has a minimum level (Ellen 9:
   level 30), player 2 and the computer's allied troops now get that level
   too. Before, player 2 was at 24 next to a level 30 host, and died very
