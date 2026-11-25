@@ -1,6 +1,9 @@
-**REQUIRED TESTS FOR TEST 50** (everyone in a game must be on Test 50; send KUF_netlog.txt from EVERY player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 51** (everyone in a game must be on Test 51; send KUF_netlog.txt from EVERY player after EVERY game, even if it seemed fine)
 
-New in Test 50:
+New in Test 51:
+V. Lobby chat: long messages (file warnings, OUT OF SYNC) no longer overlap, and file paths show correctly. If the "different mission, map or camera files" warning appears, check both players have the same files in Data/Mission and Data/Camera (e.g. the same community patch) - otherwise the battle will go out of sync.
+
+From Test 50:
 W. Walter 5 co-op (most wanted): let your archers and the enemy Black Wyverns fight each other for a minute or two (also note what the Wyverns do to your other troops), then send KUF_netlog.txt from BOTH players. The log now records every troop's resistances and any that change during the battle, plus the numbers behind each Wyvern strike and each arrow that hits a flyer.
 
 From Test 49:
@@ -33,9 +36,10 @@ Known, not fixed yet: Ellen's weapon disappears after she is knocked down.
 
 For each game, note: mission or mode, who hosted, whether "OUT OF SYNC" appeared, and anything that looks, sounds or feels wrong.
 
-**Test build 50 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 51 - for testers only. Not the official release (the official version is v1.4).**
 
-- NEW: netlog records troop resistances and any changes (to find the one-sided damage, e.g. archers vs Wyverns).
+- NEW: lobby chat messages no longer overlap.
+- From Test 50: netlog records troop resistances and any changes (to find the one-sided damage, e.g. archers vs Wyverns).
 - From Test 49: netlog lists the enemy troops doing the most damage to the players (to find the high co-op damage).
 - From Test 48: Urukubarr 1 intro camera fixed (built into the game, no camera file needed).
 - From Test 47: Urukubarr 2 co-op crash (player 2) fixed.
@@ -43,9 +47,9 @@ For each game, note: mission or mode, who hosted, whether "OUT OF SYNC" appeared
 - NEW: Ellen 9 co-op player 2 and allies at the host's level (30).
 - NEW: heroes' own troops get level upgrades in co-op.
 - NEW: co-op enemy leaders +70% HP; enemy officers hit 20% harder.
-- Includes everything from Test 49 and earlier.
+- Includes everything from Test 50 and earlier.
 
-Please update from Test 49 - everyone in a game should be on the same test build.
+Please update from Test 50 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -276,6 +280,9 @@ New
 - Network battles: every 30 seconds KUF_netlog.txt lists the enemy troops
   that did the most damage to the players (job, level, attack values, hits
   and damage), to track down the very high damage reported in co-op.
+- Lobby chat: long lines (the file warnings, OUT OF SYNC) were drawn on top
+  of each other. They are now split over several chat lines and shortened,
+  and "Data\Mission" no longer shows as "Data\ission".
 - Network battles: KUF_netlog.txt also records every troop's resistances
   (damage taken from melee, missiles, explosions, charges and the six
   elements) at the start, and logs any that change during the battle or
