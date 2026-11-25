@@ -1,6 +1,14 @@
-**REQUIRED TESTS FOR TEST 51** (everyone in a game must be on Test 51; send KUF_netlog.txt from EVERY player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 52** (everyone in a game must be on Test 52; send KUF_netlog.txt from EVERY player after EVERY game, even if it seemed fine)
 
-New in Test 51:
+New in Test 52:
+U1. Walter 5 co-op (most wanted): let your / your allies' archers shoot the enemy Black Wyverns for a minute or two, then send KUF_netlog.txt from BOTH players. The log now also shows who damaged which enemy troops (e.g. archers -> Wyverns).
+U2. Urukubarr 1: the installer now adds Keaton's camera fix (Data/Camera/user.cam). Does the intro look right?
+U3. Ellen's own troop should look right again (it stays the mission's own troop, no upgrade).
+U4. Invasion: Cavalry / Elf Cavalry voices - select line, "halt" on Stop, victory line. (Scorpions have no select line in the game's files.)
+U5. Invasion Randomiser: no more Sapper / Pyro-technician enemies.
+Please remove any other mods / DLLs (e.g. a D3D12 shim or dinput8.dll) from the game folder before playing online - they can put games out of sync.
+
+From Test 51:
 V. Lobby chat: long messages (file warnings, OUT OF SYNC) no longer overlap, and file paths show correctly. If the "different mission, map or camera files" warning appears, check both players have the same files in Data/Mission and Data/Camera (e.g. the same community patch) - otherwise the battle will go out of sync.
 
 From Test 50:
@@ -36,9 +44,10 @@ Known, not fixed yet: Ellen's weapon disappears after she is knocked down.
 
 For each game, note: mission or mode, who hosted, whether "OUT OF SYNC" appeared, and anything that looks, sounds or feels wrong.
 
-**Test build 51 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 52 - for testers only. Not the official release (the official version is v1.4).**
 
-- NEW: lobby chat messages no longer overlap.
+- NEW: Keaton's Urukubarr 1 camera fix in the installer; Ellen's troop look fixed; troop voice fix; Randomiser without Sappers; damage-to-enemies log.
+- From Test 51: lobby chat messages no longer overlap.
 - From Test 50: netlog records troop resistances and any changes (to find the one-sided damage, e.g. archers vs Wyverns).
 - From Test 49: netlog lists the enemy troops doing the most damage to the players (to find the high co-op damage).
 - From Test 48: Urukubarr 1 intro camera fixed (built into the game, no camera file needed).
@@ -47,9 +56,9 @@ For each game, note: mission or mode, who hosted, whether "OUT OF SYNC" appeared
 - NEW: Ellen 9 co-op player 2 and allies at the host's level (30).
 - NEW: heroes' own troops get level upgrades in co-op.
 - NEW: co-op enemy leaders +70% HP; enemy officers hit 20% harder.
-- Includes everything from Test 50 and earlier.
+- Includes everything from Test 51 and earlier.
 
-Please update from Test 50 - everyone in a game should be on the same test build.
+Please update from Test 51 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -277,6 +286,9 @@ New
   AMD PCs could get a slightly different result and a troop slowly drifted
   apart. The game now uses its own version that gives the same result on
   every PC.
+- Network battles: KUF_netlog.txt also lists, every 30 seconds, which troops
+  damaged the computer's troops and by how much, per target type (e.g. how
+  much your archers did to Black Wyverns).
 - Network battles: every 30 seconds KUF_netlog.txt lists the enemy troops
   that did the most damage to the players (job, level, attack values, hits
   and damage), to track down the very high damage reported in co-op.
@@ -288,12 +300,16 @@ New
   elements) at the start, and logs any that change during the battle or
   look unusual, to check whether wrong resistances cause the very high
   damage (Keaton's idea).
-- Urukubarr 1 intro: the camera now shows the area the intro is about. The
-  PC version's user.cam points those two intro shots at fixed spots near the
-  corner of the map (the Xbox version built them around the marked area).
-  The game now builds its own two shots around that area, so the intro works
-  the same on every PC whichever user.cam is installed, and the user.cam file
-  no longer has to match between co-op players.
+- Invasion Randomiser: enemy troops are no longer turned into Sappers or
+  Pyro-technicians (work troops; Sappers stood still when they died).
+- Troop voices: after a Scorpion troop's sounds were unloaded, the Scorpion
+  voice fix could hit another troop's voice set (e.g. Elf Cavalry said "halt"
+  on victory, nothing on Stop, and no select line). Fixed. (Scorpions have no
+  select line in the game's files, so selecting them stays quiet.)
+- Urukubarr 1 intro: the installer now adds Keaton's Urukubarr 1 camera fix
+  (Data\Camera\user.cam), so the intro shows the right area for everyone and
+  both co-op players have the same camera file. Your old user.cam is kept as
+  user_original.cam and put back if you uninstall. Thanks Keaton.
 - Crash in Urukubarr 2 co-op (player 2): the mission script turns the
   minimap on, and the game crashed when the minimap was not there. It is
   now skipped in that case.
@@ -301,8 +317,6 @@ New
   level 30), player 2 and the computer's allied troops now get that level
   too. Before, player 2 was at 24 next to a level 30 host, and died very
   quickly to the level 27 wall archers. The enemies' levels are unchanged.
-- Co-op: the heroes' own troops now get the same level-based upgrades as the
-  host's other troops (e.g. Ellen's infantry become Knights in Ellen 9).
 - Co-op: the OUT OF SYNC message no longer shows for a one-off difference
   that matches again at the next check. It now only shows when two checks
   in a row differ (about one second apart). One-off differences are still
