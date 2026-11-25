@@ -1,33 +1,33 @@
-**REQUIRED TESTS FOR TEST 42** (everyone in a game must be on Test 42; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 43** (everyone in a game must be on Test 43; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
 
-New in Test 42:
-1. Sound: soldiers' sounds now carry 40 m instead of 15 m. Can you hear longbows firing from every camera angle, and mortar men firing?
-2. Computer troops (thanks Keaton): a game bug made some AI target rules do nothing. Flying troops (Storm Riders, Black Wyverns, Battaloons, Bone Dragons) and archers using Fire Arrow could go for troops of their own side. Do enemy flyers and archers now go for your troops properly? Do any campaign enemies act strangely?
-3. Black Wyverns: if they seem too hard to kill with archers, or too weak against Dirigibles, play that fight for a minute or two and send KUF_netlog.txt. This build records the first arrow hits on flyers and the first flyer strikes in each battle, so we can see which value is wrong.
-4. Dark Elf troops can learn Taming.
-5. After leaving an online game early (host left, disconnect, quit), single-player battles no longer keep online-only rules.
+New in Test 43:
+1. Co-op campaign: the lobby now warns if the players' camera files (Data\Camera - e.g. the user.cam from Keaton's patch) differ. Different camera files change the cut-scenes and put the game out of sync (seen in Urukubarr 1). If you get the warning, make sure everyone has the same Data\Camera files.
+2. Scorpions (orc army): Stop and other orders now play the right voice lines (Stop used to play their victory line).
+3. Black Wyverns: if archers barely hurt them, or they barely hurt Dirigibles, play that fight for a minute or two and send KUF_netlog.txt. The log now also records the Wyverns' max HP.
 
-Still to check from Test 41 and earlier:
-6. "OUT OF SYNC" message in battle; DX12 / DX9 players together; lobby warning when players are on different test builds.
-7. Co-op: enemy heroes, officers and leaders with +50% HP - too weak, right, or too strong?
-8. Effects: Heal and Chilling Attack sprites, status effects on units, Elemental Boost aura, Flame Wraith / Ice Maiden glow. (Bless & Heal and Holy Explosion are confirmed working.)
-9. Invasion Randomiser with every troop kind: any troop that looks wrong, can't be killed, or crashes?
-10. Co-op cut-scenes (Ellen 2), custom map auto-download, Roguelike / Roguelike Hero cards and Reinforcements.
+From Test 42:
+4. Soldiers' sounds carry 40 m: longbows heard from every angle, mortar men heard firing?
+5. AI target fix (thanks Keaton): enemy flyers and Fire Arrow archers go for your troops, not their own side? Any campaign enemies acting strangely?
+6. Dark Elf troops can learn Taming.
+
+Still to check from earlier tests:
+7. "OUT OF SYNC" message in battle; DX12 / DX9 players together; lobby warning for different test builds.
+8. Co-op: enemy heroes, officers and leaders with +50% HP - too weak, right, or too strong?
+9. Effects: Heal and Chilling Attack sprites, status effects on units, Elemental Boost aura, Flame Wraith / Ice Maiden glow.
+10. Invasion Randomiser with every troop kind; co-op cut-scenes; custom map auto-download; Roguelike cards and Reinforcements.
 11. Normal Invasion, Versus and co-op: still exactly as before?
 
 For each game, note: mission or mode, who hosted, whether "OUT OF SYNC" appeared, and anything that looks, sounds or feels wrong.
 
-**Test build 42 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 43 - for testers only. Not the official release (the official version is v1.4).**
 
-- NEW: soldiers' sounds carry 40 m (longbows heard from every angle, mortar men heard firing).
-- NEW: AI target rules fixed (thanks Keaton) - flyers, Fire Arrow archers and catapults pick proper enemy targets.
-- NEW: Dark Elf troops can learn Taming.
-- NEW: online-only rules no longer carry over into single player after leaving a game early.
-- NEW: extra logging for Black Wyvern damage.
-- Map editor: Help guide, labelled tools, a clearer Waves page and map-name checks.
+- NEW: co-op lobby warning when camera files differ (Urukubarr 1 out-of-sync).
+- NEW: Scorpion voice lines fixed (original game file is missing two lines).
+- NEW: Black Wyvern log includes max HP.
+- From Test 42: 40 m soldier sounds, AI target fix (thanks Keaton), Dark Elf Taming, online-only rules no longer carry into single player, updated map editor.
 - Includes everything from Test 41 and earlier.
 
-Please update from Test 41 - everyone in a game should be on the same test build.
+Please update from Test 42 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -242,6 +242,13 @@ New
   battle camera many were silent and others only played when the camera was
   close or at a low angle. They now carry to 40 m (they still get quieter
   with distance).
+- Co-op: the lobby now warns when the players' camera files (Data\Camera,
+  e.g. the user.cam from Keaton's patch) differ. Different camera files
+  change the campaign's cut-scenes and put the game out of sync.
+- Sound: Scorpion troops (orc army) answered orders with the wrong voice
+  line - Stop played their victory line. The game's own scorpion voice file
+  is missing two lines, so every later line was off by two; they now play
+  the right ones.
 - Dark Elf troops can now learn Taming in the skill window (it was only
   open to Orc troops).
 - Co-op: computer armies keep their campaign colours. Before, an army whose
