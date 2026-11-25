@@ -1,35 +1,35 @@
-**REQUIRED TESTS FOR TEST 45** (everyone in a game must be on Test 45; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 46** (everyone in a game must be on Test 46; send KUF_netlog.txt from EVERY player after EVERY game, even if it seemed fine)
 
-New in Test 45:
-1. "OUT OF SYNC" message: it should no longer pop up when your games are actually still matching. It now only shows if two checks in a row differ (about a second apart). If you see it, send both netlogs.
-2. Urukubarr 1 co-op: please play it again with both players on Test 45 and send BOTH netlogs. The log now records exactly what went different first, to find the cause of the desync about a minute in.
-3. If the game desyncs or freezes on any mission, send both netlogs and say roughly when it happened.
+New in Test 46:
+1. Co-op desyncs between PCs with different processors (Intel / AMD): the game's vector maths now gives the same result on every PC. Please replay Urukubarr 1, Leinhart 1, Walter 5 and Ellen 9 in co-op. Does "OUT OF SYNC" still appear? Send BOTH netlogs either way.
+2. Ellen 9 co-op: player 2 and the computer's allies are now level 30 like the host (player 2 was level 24). Better balanced?
+3. Co-op: the heroes' own troops now get level upgrades too (e.g. Ellen leads Knights in Ellen 9, not basic Infantry).
+4. Co-op enemies: heroes, officers and troop leaders now have +70% HP (was +50%), and enemy officers / officer-type leaders hit 20% harder. Too weak, right, or too strong?
+5. If enemy troops seem to do far too much damage, say which mission and which troops, and send both netlogs (the log shows every troop's real level).
 
-New in Test 44 (not released separately):
-4. If the players' exe, mission, map or camera files differ, the warning now also shows in the battle message box (where "Fire at Will: ON" shows), not only in the lobby chat.
-
-From Test 43:
-5. Co-op lobby warning when the camera files (Data\Camera) differ.
-6. Scorpions: Stop and other orders play the right voice lines?
-7. Black Wyverns vs archers / Dirigibles: if the damage looks wrong, play that fight for a minute or two and send KUF_netlog.txt.
+From Test 45:
+6. "OUT OF SYNC" only shows for a real desync (two checks in a row differ).
+7. File-mismatch warning also shows in the battle message box.
 
 Still to check from earlier tests:
-8. Soldiers' sounds carry 40 m; AI target fix (thanks Keaton); Dark Elf Taming.
-9. Co-op: enemy heroes, officers and leaders with +50% HP - too weak, right, or too strong?
-10. Effects: Heal and Chilling Attack sprites, status effects on units, Elemental Boost aura, Flame Wraith / Ice Maiden glow.
-11. Invasion Randomiser; co-op cut-scenes; custom map auto-download; Roguelike cards and Reinforcements.
-12. Normal Invasion, Versus and co-op: still exactly as before?
+8. Scorpion voice lines; Black Wyverns vs archers / Dirigibles; soldiers' sounds at 40 m; AI target fix; Dark Elf Taming.
+9. Effects: Heal and Chilling Attack sprites, status effects, Elemental Boost aura, Flame Wraith / Ice Maiden glow.
+10. Invasion Randomiser; co-op cut-scenes; custom map auto-download; Roguelike cards and Reinforcements.
+11. Normal Invasion, Versus and co-op: still exactly as before?
+
+Known, not fixed yet: Ellen's weapon disappears after she is knocked down; Urukubarr 2 crash (please send the netlog).
 
 For each game, note: mission or mode, who hosted, whether "OUT OF SYNC" appeared, and anything that looks, sounds or feels wrong.
 
-**Test build 45 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 46 - for testers only. Not the official release (the official version is v1.4).**
 
-- NEW: "OUT OF SYNC" only shows for a real desync (no more false alarms from one-off differences).
-- NEW: more detailed desync log to track down the Urukubarr 1 desync.
-- NEW (Test 44): file-mismatch warning also shown in battle; camera files checked per player.
-- Includes everything from Test 43 and earlier.
+- NEW: fix for co-op desyncs between PCs with different processors.
+- NEW: Ellen 9 co-op player 2 and allies at the host's level (30).
+- NEW: heroes' own troops get level upgrades in co-op.
+- NEW: co-op enemy leaders +70% HP; enemy officers hit 20% harder.
+- Includes everything from Test 45 and earlier.
 
-Please update from Test 43 - everyone in a game should be on the same test build.
+Please update from Test 45 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -226,7 +226,8 @@ New
   of Encablossa and the four elementals. Boss and support waves are
   randomised too. Walls and heroes stay as they are.
 - Co-op (all missions, Crusaders too): enemy heroes, officers and troop
-  leaders have +50% HP, so they no longer go down in a few hits. Levels are
+  leaders have +70% HP, so they no longer go down in a few hits. Enemy
+  officers and officer-type troop leaders also hit 20% harder. Levels are
   unchanged. Computer allies are not affected.
 - Network battles: the maths mode of the processor is now set the same on
   every PC each turn. A different renderer (Direct3D 12) or an overlay /
@@ -250,6 +251,18 @@ New
 - Co-op: when a game goes out of sync, KUF_netlog.txt now records which part
   of a troop went different first (position, height, HP or what the soldiers
   were doing), to track down the Urukubarr 1 desync.
+- Co-op: fixed a desync between PCs with different processors (seen in
+  Urukubarr 1 about a minute in). The game's vector maths (from Direct3D's
+  helper library) picks different code on different processors, so Intel and
+  AMD PCs could get a slightly different result and a troop slowly drifted
+  apart. The game now uses its own version that gives the same result on
+  every PC.
+- Co-op: in missions where the host's army has a minimum level (Ellen 9:
+  level 30), player 2 and the computer's allied troops now get that level
+  too. Before, player 2 was at 24 next to a level 30 host, and died very
+  quickly to the level 27 wall archers. The enemies' levels are unchanged.
+- Co-op: the heroes' own troops now get the same level-based upgrades as the
+  host's other troops (e.g. Ellen's infantry become Knights in Ellen 9).
 - Co-op: the OUT OF SYNC message no longer shows for a one-off difference
   that matches again at the next check. It now only shows when two checks
   in a row differ (about one second apart). One-off differences are still
