@@ -1,6 +1,12 @@
-**REQUIRED TESTS FOR TEST 52** (everyone in a game must be on Test 52; send KUF_netlog.txt from EVERY player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 53** (everyone in a game must be on Test 53; send KUF_netlog.txt from EVERY player after EVERY game, even if it seemed fine)
 
-New in Test 52:
+New in Test 53:
+T1. Walter 5 co-op (most wanted): let your archers shoot the enemy Black Wyverns. They should now do real damage. Send KUF_netlog.txt from BOTH players - the log shows the skills given to the host's troops and the damage done to the Wyverns.
+T2. Co-op in general: your troops now have their proper job skills (e.g. Archers have Melee and Ranged) and lose soldiers less quickly in melee, as in single player. Does co-op feel playable again - too easy, right, or still too hard?
+T3. Player 2: your troops keep their own Barracks skills. Do they look right in the troop info?
+T4. Versus and Invasion should be exactly as in Test 52.
+
+From Test 52:
 U1. Walter 5 co-op (most wanted): let your / your allies' archers shoot the enemy Black Wyverns for a minute or two, then send KUF_netlog.txt from BOTH players. The log now also shows who damaged which enemy troops (e.g. archers -> Wyverns).
 U2. Urukubarr 1: the installer now adds Keaton's camera fix (Data/Camera/user.cam). Does the intro look right?
 U3. Ellen's own troop should look right again (it stays the mission's own troop, no upgrade).
@@ -44,9 +50,10 @@ Known, not fixed yet: Ellen's weapon disappears after she is knocked down.
 
 For each game, note: mission or mode, who hosted, whether "OUT OF SYNC" appeared, and anything that looks, sounds or feels wrong.
 
-**Test build 52 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 53 - for testers only. Not the official release (the official version is v1.4).**
 
-- NEW: Keaton's Urukubarr 1 camera fix in the installer; Ellen's troop look fixed; troop voice fix; Randomiser without Sappers; damage-to-enemies log.
+- NEW: co-op troops get their proper job skills (archers vs Wyverns fixed) and single-player melee damage sharing (thanks Keaton).
+- From Test 52: Keaton's Urukubarr 1 camera fix in the installer; Ellen's troop look fixed; troop voice fix; Randomiser without Sappers; damage-to-enemies log.
 - From Test 51: lobby chat messages no longer overlap.
 - From Test 50: netlog records troop resistances and any changes (to find the one-sided damage, e.g. archers vs Wyverns).
 - From Test 49: netlog lists the enemy troops doing the most damage to the players (to find the high co-op damage).
@@ -58,7 +65,7 @@ For each game, note: mission or mode, who hosted, whether "OUT OF SYNC" appeared
 - NEW: co-op enemy leaders +70% HP; enemy officers hit 20% harder.
 - Includes everything from Test 51 and earlier.
 
-Please update from Test 51 - everyone in a game should be on the same test build.
+Please update from Test 52 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -105,6 +112,16 @@ Fixes
   numbered above 127 were ignored or misread. Flying troops, archers using
   Fire Arrow and catapults could pick troops of their own side as targets,
   and some campaign AI orders never worked (thanks Keaton).
+- Co-op: the host's troops now get their job's skills, as in single player.
+  They used only the skills written in the mission file, which for some
+  missions are placeholders (e.g. Walter 5's archers had Fire and Holy but
+  no Melee or Ranged, so their arrows did almost nothing to Wyverns).
+  Skills from the mission file are kept. Player 2's troops keep their own
+  Barracks skills; their job skills are raised to the mission level if lower
+  (thanks Keaton).
+- Co-op: both players' troops now share melee and charge damage between
+  their soldiers as in single player, so soldiers die less quickly and can
+  be healed in time (thanks Keaton). Versus and Invasion are unchanged.
 
 
 New
