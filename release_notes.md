@@ -1,6 +1,9 @@
-**REQUIRED TESTS FOR TEST 47** (everyone in a game must be on Test 47; send KUF_netlog.txt from EVERY player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 48** (everyone in a game must be on Test 48; send KUF_netlog.txt from EVERY player after EVERY game, even if it seemed fine)
 
-New in Test 47:
+New in Test 48:
+A. Urukubarr 1 intro: the camera should now show the area the intro is about (in single player and co-op), whichever user.cam you have. How does it look? The angles may need tweaking. Keaton's camera fix is no longer needed for this, and a different user.cam no longer puts co-op out of sync.
+
+From Test 47:
 0. Urukubarr 2 co-op: the crash for player 2 (when the mission turns the minimap on) is fixed. Please play it again.
 
 From Test 46:
@@ -24,16 +27,17 @@ Known, not fixed yet: Ellen's weapon disappears after she is knocked down.
 
 For each game, note: mission or mode, who hosted, whether "OUT OF SYNC" appeared, and anything that looks, sounds or feels wrong.
 
-**Test build 47 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 48 - for testers only. Not the official release (the official version is v1.4).**
 
-- NEW: Urukubarr 2 co-op crash (player 2) fixed.
+- NEW: Urukubarr 1 intro camera fixed (built into the game, no camera file needed).
+- From Test 47: Urukubarr 2 co-op crash (player 2) fixed.
 - From Test 46: fix for co-op desyncs between PCs with different processors.
 - NEW: Ellen 9 co-op player 2 and allies at the host's level (30).
 - NEW: heroes' own troops get level upgrades in co-op.
 - NEW: co-op enemy leaders +70% HP; enemy officers hit 20% harder.
-- Includes everything from Test 46 and earlier.
+- Includes everything from Test 47 and earlier.
 
-Please update from Test 46 - everyone in a game should be on the same test build.
+Please update from Test 47 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -261,6 +265,12 @@ New
   AMD PCs could get a slightly different result and a troop slowly drifted
   apart. The game now uses its own version that gives the same result on
   every PC.
+- Urukubarr 1 intro: the camera now shows the area the intro is about. The
+  PC version's user.cam points those two intro shots at fixed spots near the
+  corner of the map (the Xbox version built them around the marked area).
+  The game now builds its own two shots around that area, so the intro works
+  the same on every PC whichever user.cam is installed, and the user.cam file
+  no longer has to match between co-op players.
 - Crash in Urukubarr 2 co-op (player 2): the mission script turns the
   minimap on, and the game crashed when the minimap was not there. It is
   now skipped in that case.
