@@ -1,33 +1,35 @@
-**REQUIRED TESTS FOR TEST 43** (everyone in a game must be on Test 43; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 45** (everyone in a game must be on Test 45; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
 
-New in Test 43:
-1. Co-op campaign: the lobby now warns if the players' camera files (Data\Camera - e.g. the user.cam from Keaton's patch) differ. Different camera files change the cut-scenes and put the game out of sync (seen in Urukubarr 1). If you get the warning, make sure everyone has the same Data\Camera files.
-2. Scorpions (orc army): Stop and other orders now play the right voice lines (Stop used to play their victory line).
-3. Black Wyverns: if archers barely hurt them, or they barely hurt Dirigibles, play that fight for a minute or two and send KUF_netlog.txt. The log now also records the Wyverns' max HP.
+New in Test 45:
+1. "OUT OF SYNC" message: it should no longer pop up when your games are actually still matching. It now only shows if two checks in a row differ (about a second apart). If you see it, send both netlogs.
+2. Urukubarr 1 co-op: please play it again with both players on Test 45 and send BOTH netlogs. The log now records exactly what went different first, to find the cause of the desync about a minute in.
+3. If the game desyncs or freezes on any mission, send both netlogs and say roughly when it happened.
 
-From Test 42:
-4. Soldiers' sounds carry 40 m: longbows heard from every angle, mortar men heard firing?
-5. AI target fix (thanks Keaton): enemy flyers and Fire Arrow archers go for your troops, not their own side? Any campaign enemies acting strangely?
-6. Dark Elf troops can learn Taming.
+New in Test 44 (not released separately):
+4. If the players' exe, mission, map or camera files differ, the warning now also shows in the battle message box (where "Fire at Will: ON" shows), not only in the lobby chat.
+
+From Test 43:
+5. Co-op lobby warning when the camera files (Data\Camera) differ.
+6. Scorpions: Stop and other orders play the right voice lines?
+7. Black Wyverns vs archers / Dirigibles: if the damage looks wrong, play that fight for a minute or two and send KUF_netlog.txt.
 
 Still to check from earlier tests:
-7. "OUT OF SYNC" message in battle; DX12 / DX9 players together; lobby warning for different test builds.
-8. Co-op: enemy heroes, officers and leaders with +50% HP - too weak, right, or too strong?
-9. Effects: Heal and Chilling Attack sprites, status effects on units, Elemental Boost aura, Flame Wraith / Ice Maiden glow.
-10. Invasion Randomiser with every troop kind; co-op cut-scenes; custom map auto-download; Roguelike cards and Reinforcements.
-11. Normal Invasion, Versus and co-op: still exactly as before?
+8. Soldiers' sounds carry 40 m; AI target fix (thanks Keaton); Dark Elf Taming.
+9. Co-op: enemy heroes, officers and leaders with +50% HP - too weak, right, or too strong?
+10. Effects: Heal and Chilling Attack sprites, status effects on units, Elemental Boost aura, Flame Wraith / Ice Maiden glow.
+11. Invasion Randomiser; co-op cut-scenes; custom map auto-download; Roguelike cards and Reinforcements.
+12. Normal Invasion, Versus and co-op: still exactly as before?
 
 For each game, note: mission or mode, who hosted, whether "OUT OF SYNC" appeared, and anything that looks, sounds or feels wrong.
 
-**Test build 43 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 45 - for testers only. Not the official release (the official version is v1.4).**
 
-- NEW: co-op lobby warning when camera files differ (Urukubarr 1 out-of-sync).
-- NEW: Scorpion voice lines fixed (original game file is missing two lines).
-- NEW: Black Wyvern log includes max HP.
-- From Test 42: 40 m soldier sounds, AI target fix (thanks Keaton), Dark Elf Taming, online-only rules no longer carry into single player, updated map editor.
-- Includes everything from Test 41 and earlier.
+- NEW: "OUT OF SYNC" only shows for a real desync (no more false alarms from one-off differences).
+- NEW: more detailed desync log to track down the Urukubarr 1 desync.
+- NEW (Test 44): file-mismatch warning also shown in battle; camera files checked per player.
+- Includes everything from Test 43 and earlier.
 
-Please update from Test 42 - everyone in a game should be on the same test build.
+Please update from Test 43 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -245,6 +247,13 @@ New
 - Co-op: the lobby now warns when the players' camera files (Data\Camera,
   e.g. the user.cam from Keaton's patch) differ. Different camera files
   change the campaign's cut-scenes and put the game out of sync.
+- Co-op: when a game goes out of sync, KUF_netlog.txt now records which part
+  of a troop went different first (position, height, HP or what the soldiers
+  were doing), to track down the Urukubarr 1 desync.
+- Co-op: the OUT OF SYNC message no longer shows for a one-off difference
+  that matches again at the next check. It now only shows when two checks
+  in a row differ (about one second apart). One-off differences are still
+  recorded in KUF_netlog.txt.
 - Sound: Scorpion troops (orc army) answered orders with the wrong voice
   line - Stop played their victory line. The game's own scorpion voice file
   is missing two lines, so every later line was off by two; they now play
