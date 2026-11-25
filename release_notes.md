@@ -24,6 +24,7 @@ For each game, note: mission or mode, who hosted, whether "OUT OF SYNC" appeared
 - NEW: Dark Elf troops can learn Taming.
 - NEW: online-only rules no longer carry over into single player after leaving a game early.
 - NEW: extra logging for Black Wyvern damage.
+- Map editor: Help guide, labelled tools, a clearer Waves page and map-name checks.
 - Includes everything from Test 41 and earlier.
 
 Please update from Test 41 - everyone in a game should be on the same test build.

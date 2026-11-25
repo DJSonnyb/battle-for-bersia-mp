@@ -29,10 +29,12 @@ h1 { font: 700 19px/1 var(--display); letter-spacing: .06em; margin: 0; color: v
 .btn.primary { background: var(--bronze); color: var(--bronze-ink); border-color: var(--bronze); font-weight: 600; }
 .btn:disabled { opacity: .45; cursor: default; }
 :focus-visible { outline: 2px solid var(--bronze); outline-offset: 2px; }
-.main { display: grid; grid-template-columns: 56px minmax(0, 1fr) 320px; min-height: 0; }
+.main { display: grid; grid-template-columns: 78px minmax(0, 1fr) 320px; min-height: 0; }
 .rail { display: flex; flex-direction: column; gap: 4px; padding: 8px 6px; border-right: 1px solid var(--line); background: var(--panel); overflow-y: auto; }
 .rail .sep { height: 1px; background: var(--line); margin: 4px 2px; }
-.tool { width: 44px; height: 40px; border-radius: 6px; border: 1px solid transparent; background: none; cursor: pointer; display: grid; place-items: center; color: var(--dim); }
+.tool { width: 64px; min-height: 46px; padding: 4px 2px 3px; border-radius: 6px; border: 1px solid transparent; background: none; cursor: pointer; display: grid; justify-items: center; align-content: center; gap: 2px; color: var(--dim); }
+.tool .tl { font-size: 10px; line-height: 1.15; text-align: center; }
+.rail .grp { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--bronze); text-align: center; margin-top: 4px; opacity: .8; }
 .tool svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .tool:hover { color: var(--fg); background: var(--raised); }
 .tool[aria-pressed="true"] { color: var(--bronze); border-color: var(--bronze); background: var(--raised); }
@@ -104,6 +106,25 @@ dialog form { display: grid; gap: 10px; }
 .wv-add { font-size: 12px; max-width: 150px; }
 .wv-del { padding: 3px 8px; font-size: 12px; }
 #bWaves[aria-pressed="true"] { border-color: var(--bronze); color: var(--bronze); }
+.app.wv-open .rail { visibility: hidden; }
+.app.wv-open #secTool { display: none; }
+.app:not(.wv-open) #secWvHelp { display: none; }
+.wv-guide ol { margin: 0; padding-left: 20px; display: grid; gap: 4px; font-size: 13px; }
+.wv-guide summary { cursor: pointer; font-weight: 600; }
+.wv-chip { cursor: pointer; }
+.wv-chip .cd { width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; flex: none; }
+.wv-chip .sm { color: var(--dim); margin-left: 4px; font-size: 11px; }
+.wv-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 11px; color: var(--dim); }
+.wv-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.wv-row.flash { outline: 2px solid var(--bronze); background: var(--raised); }
+.wv-tag { font-size: 11px; color: var(--dim); }
+.help-btn { border-color: var(--bronze); color: var(--bronze); }
+#dlgHelp { max-width: min(680px, calc(100% - 32px)); }
+#dlgHelp ol { margin: 0; padding-left: 20px; display: grid; gap: 8px; }
+#dlgHelp h4 { margin: 6px 0 0; font: 600 13px var(--ui); color: var(--bronze); }
+#dlgHelp p, #dlgHelp li { font-size: 13px; margin: 0; }
+#dlgHelp ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+.namehint { font-size: 12px; margin: 0; }
 @media (max-width: 860px) {
   .app { height: auto; }
   .main { grid-template-columns: 1fr; }
@@ -123,13 +144,14 @@ dialog form { display: grid; gap: 10px; }
       <div class="sub" id="subtitle">Map editor for Battle for Bersia MP</div>
     </div>
     <div class="grow"></div>
-    <button class="btn" id="bOpen" type="button">Open map files…</button>
-    <button class="btn" id="bNew" type="button">New flat map…</button>
-    <button class="btn" id="bWaves" type="button" aria-pressed="false">Waves</button>
+    <button class="btn help-btn" id="bHelp" type="button" title="How to make a map, step by step">Help</button>
+    <button class="btn" id="bOpen" type="button" title="Pick a map's .map, .stg and .dds files (all three) from Data\Mission\Live in your game folder">Open map files…</button>
+    <button class="btn" id="bNew" type="button" title="Replace the ground with a flat empty map (your troops and spawn areas are kept)">New flat map…</button>
+    <button class="btn" id="bWaves" type="button" aria-pressed="false" title="Invasion maps only: which enemy troops come in each wave">Waves</button>
     <button class="btn" id="bUndo" type="button" title="Undo (Ctrl+Z)">Undo</button>
     <button class="btn" id="bRedo" type="button" title="Redo (Ctrl+Y)">Redo</button>
-    <button class="btn" id="bProject" type="button">Save project</button>
-    <button class="btn primary" id="bExport" type="button">Export for the game</button>
+    <button class="btn" id="bProject" type="button" title="Save your work so you can carry on later (not playable - use Export for that)">Save project</button>
+    <button class="btn primary" id="bExport" type="button" title="Make the playable map: a .zip to unzip into your game folder">Export for the game</button>
     <input class="hidden-file" type="file" id="fileIn" multiple accept=".map,.stg,.dds,.json">
     <input class="hidden-file" type="file" id="aiIn" accept=".txt">
     <input class="hidden-file" type="file" id="impIn" accept=".stg">
@@ -140,14 +162,24 @@ dialog form { display: grid; gap: 10px; }
       <canvas id="view"></canvas>
       <div class="banner" id="banner" hidden></div>
       <div class="waves" id="waves" hidden>
-        <div class="wv-top"><h2>Invasion waves</h2><div class="grow"></div><button class="btn" id="bAI" type="button">Open AI2_Ruin.txt…</button><button class="btn" id="bImp" type="button">Add troop kinds from a stage file…</button></div>
+        <div class="wv-top"><h2>Invasion waves</h2><div class="grow"></div><button class="btn" id="bAI" type="button" title="Optional: Data\AI\AI2_Ruin.txt from your game folder names what each AI number does">Explain the AI numbers…</button><button class="btn" id="bImp" type="button" title="Pick any other .stg file (e.g. a campaign mission in Data\Mission) to use its kinds of troops in your waves">Borrow troop types from another map…</button></div>
         <div id="wavesBody" class="wv-body"></div>
       </div>
       <div class="drop" id="drop" hidden>Drop the .map, .stg and .dds files here</div>
       <div class="hud"><span class="chip" id="hudPos">–</span><span class="chip" id="hudZoom">–</span></div>
     </div>
     <aside>
-      <section>
+      <section id="secWvHelp" class="wv-guide">
+        <h2>Waves - quick guide</h2>
+        <p class="note">The map tools are hidden while you edit waves. Press <b>Back to the map</b> to use them again.</p>
+        <ol>
+          <li>Each <b>group</b> is a row: its troops attack in every wave from its first to its last.</li>
+          <li>Add troops with <b>+ troop</b>. Click a troop to find it in <b>Wave troops</b>, where you can change what it is.</li>
+          <li>Each wave picks one of the <b>spawn areas</b> at random. Drag the blue boxes on the map to move them.</li>
+          <li>Fix anything in the orange <b>Check these</b> box before you export.</li>
+        </ol>
+      </section>
+      <section id="secTool">
         <h2 id="toolTitle">Tool</h2>
         <p class="note" id="toolHelp"></p>
         <div id="toolOpts" style="display:grid;gap:8px"></div>
@@ -165,8 +197,9 @@ dialog form { display: grid; gap: 10px; }
         <h2>Map</h2>
         <dl class="kv" id="info"></dl>
         <div class="row"><label for="tileset">Ground type</label><select id="tileset"></select></div>
-        <div class="row"><label for="expName">Save as</label><input type="text" id="expName" value="9_Custom" spellcheck="false"></div>
-        <p class="note">The export holds <b>name.map</b>, <b>name.stg</b> and the minimap <b>name.dds</b> for the game's <b>Data\Mission\Live</b> folder. Every player in a game needs the same files, or the battle goes out of sync.</p>
+        <div class="row"><label for="expName">Map name</label><input type="text" id="expName" value="9_Custom" spellcheck="false" maxlength="27" aria-describedby="nameHint"></div>
+        <p class="namehint note" id="nameHint"></p>
+        <p class="note"><b>Export for the game</b> makes a .zip: unzip its <b>Data</b> folder into your Kingdom Under Fire: Heroes folder. The map shows in the lobby as <b>Custom: name</b>, and players who join without it get it from the host automatically.</p>
       </section>
     </aside>
   </div>
@@ -180,6 +213,29 @@ dialog form { display: grid; gap: 10px; }
     <div class="row"><label for="nTile">Ground</label><select id="nTile"></select></div>
     <div class="row"><label for="nHeight">Height</label><input type="number" id="nHeight" value="300" min="0" max="6375" step="25"></div>
     <div class="row" style="justify-content:flex-end"><button class="btn" value="cancel" type="submit">Cancel</button><button class="btn primary" value="ok" type="submit">Create</button></div>
+  </form>
+</dialog>
+<dialog id="dlgHelp" aria-labelledby="helpTitle">
+  <form method="dialog">
+    <h3 id="helpTitle">How to make a map</h3>
+    <ol>
+      <li><b>Open a map to start from.</b> Press <b>Open map files…</b> and pick all three files of one map from your game folder, <b>Data\Mission\Live</b>: the <b>.map</b> (the ground), the <b>.stg</b> (troops, starts, spawn areas and waves) and the <b>.dds</b> (the minimap). Start from a map of the mode you want: the 4_ and 6_ maps are Versus, 8_Ruin and 9_IceStorm are Invasion. The map shown before you open anything is a made-up example for trying the tools.</li>
+      <li><b>Change it with the tools on the left.</b> Click a tool, and the panel on the right says what it does and shows its settings. Mouse wheel zooms; drag with the right mouse button to move the view. <b>Ctrl+Z</b> undoes, <b>Ctrl+Y</b> redoes.</li>
+      <li><b>Place the troops.</b> With <b>Select</b> (the top tool), drag a player's troops or a blue spawn area. Q and E turn the selected troop. Versus maps: choose the number of players under <b>Sides and spawn areas</b>.</li>
+      <li><b>Invasion maps: set the waves.</b> Press <b>Waves</b> to choose which enemy troops come in each wave. The waves page has its own guide.</li>
+      <li><b>Save project</b> keeps your work so you can carry on another day. It only holds your changes, so to reopen it, open the same three original map files and the project file together.</li>
+      <li><b>Export for the game</b> makes the playable map, a .zip. Unzip its <b>Data</b> folder into your Kingdom Under Fire: Heroes folder (next to Heroes.exe). It shows in the lobby as <b>Custom: name</b>. Players who join without it get it from the host automatically.</li>
+    </ol>
+    <h4>Good to know</h4>
+    <ul>
+      <li><b>Map name:</b> up to 27 letters, numbers, - or _. It can't be the name of one of the game's own maps (such as 9_IceStorm), and the lobby shows up to 8 custom maps.</li>
+      <li><b>Always export with the .stg open</b>, or the map has no troops and won't show in the lobby.</li>
+      <li><b>Block</b> paints red marks, but troops can still walk through them for now: the game needs a navigation (.nav) file for that, which the editor can't make yet.</li>
+      <li><b>Layers</b> (right panel) only change what you see in the editor, never the map.</li>
+      <li>A <b>cell</b> is 1.25 m. Heights are in centimetres.</li>
+    </ul>
+    <label class="note" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="helpNoShow"> Don't show this when the editor opens</label>
+    <div class="row" style="justify-content:flex-end"><button class="btn primary" value="ok" type="submit">Got it</button></div>
   </form>
 </dialog>
 <div class="toast" id="toast" hidden></div>
@@ -713,8 +769,10 @@ const ICON = {
   forest: '<path d="M12 3l5 8h-3l4 6H6l4-6H7z"/><path d="M12 17v4"/>', clearforest: '<path d="M12 3l5 8h-3l4 6H6l4-6H7z" stroke-dasharray="2 2"/><path d="M4 20L20 4"/>',
   prop: '<circle cx="12" cy="10" r="5"/><path d="M12 15v6M8 21h8"/>', eraseprop: '<path d="M7 17l-3-3 9-9 7 7-6 6H8z"/><path d="M11 21h9"/>',
 };
+const SHORT = { select: 'Select', pan: 'Move view', raise: 'Raise', lower: 'Lower', flatten: 'Flatten', smooth: 'Smooth', level: 'Set height', paint: 'Paint', pick: 'Pick', block: 'Block', unblock: 'Unblock', forest: 'Trees', clearforest: 'Clear trees', prop: 'Prop', eraseprop: 'Erase prop' };
+const GROUPS = ['Troops', 'Height', 'Ground', 'Marks & trees'];
 const TOOLS = [
-  ['select', 'Troops and areas', 'Drag a troop or a spawn area to move it. Drag an area\'s corner square to resize it. With a troop selected, press Q or E to turn it.'],
+  ['select', 'Select: troops and areas', 'Drag a troop or a spawn area to move it. Drag an area\'s corner square to resize it. With a troop selected, press Q or E to turn it.'],
   ['pan', 'Move the view', 'Drag to move around. The mouse wheel zooms anywhere; right-drag also moves the view with any tool.'],
   '-',
   ['raise', 'Raise ground', 'Paint to build hills. Heights are in centimetres; the shipped maps stay between 0 and 6375.'],
@@ -735,12 +793,14 @@ const TOOLS = [
 ];
 const brushTools = new Set(['raise', 'lower', 'flatten', 'smooth', 'level', 'paint', 'pick', 'block', 'unblock', 'forest', 'clearforest', 'eraseprop']);
 function buildRail() {
-  const rail = $('rail'); rail.innerHTML = '';
+  const rail = $('rail'); rail.innerHTML = ''; let g = 0;
+  const head = () => { const h = document.createElement('div'); h.className = 'grp'; h.textContent = GROUPS[g++] || ''; rail.append(h); };
+  head();
   for (const t of TOOLS) {
-    if (t === '-') { const s = document.createElement('div'); s.className = 'sep'; rail.append(s); continue; }
+    if (t === '-') { const s = document.createElement('div'); s.className = 'sep'; rail.append(s); head(); continue; }
     const b = document.createElement('button');
     b.className = 'tool'; b.type = 'button'; b.title = t[1]; b.setAttribute('aria-label', t[1]); b.dataset.tool = t[0];
-    b.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + ICON[t[0]] + '</svg>';
+    b.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + ICON[t[0]] + '</svg><span class="tl">' + SHORT[t[0]] + '</span>';
     b.onclick = () => setTool(t[0]);
     rail.append(b);
   }
@@ -938,7 +998,7 @@ function buildTroopList() {
   for (const [p, ts] of [...byP.entries()].sort((a, b) => a[0] - b[0])) {
     const now = ts.filter(t => t.start).length, pt = s.playerType[p] || 0;
     const b = document.createElement('button'); b.type = 'button'; b.className = 'item';
-    b.innerHTML = `<span class="dot" style="background:${PLAYER_COL[p] || '#fff'}"></span><span class="t">Player ${p + 1} · ${PTYPE[pt] || 'unknown'}</span><span class="n">${ts.length - now ? now + ' + ' + (ts.length - now) + ' later' : now + ' troops'}</span>`;
+    b.title = 'Click to find this side on the map. "later" = troops that are not on the field at the start (waves or reinforcements).'; b.innerHTML = `<span class="dot" style="background:${PLAYER_COL[p] || '#fff'}"></span><span class="t">Player ${p + 1} · ${PTYPE[pt] || 'unknown'}</span><span class="n">${ts.length - now ? now + ' + ' + (ts.length - now) + ' later' : now + ' troops'}</span>`;
     b.onclick = () => { const t = ts.find(x => x.start) || ts[0]; selectObj({ type: 'troop', obj: t }); centerOn(t.x, t.y); };
     list.append(b);
   }
@@ -971,7 +1031,7 @@ function setPlayers(n) {
   s.troops.forEach((t, i) => t.idx = i);
   for (let k = 0; k < 8; k++) { const on = k < n; s.head[8 + k] = on ? 1 : 0; s.head[0x10 + k] = on ? k : 0; if (!on) s.head[0x18 + k] = 0; }
   s.playerType = Array.from(s.head.subarray(8, 16));
-  const nm = $('expName').value.replace(/^\d_/, n + '_'); if (/^\d_/.test($('expName').value)) $('expName').value = nm;
+  const nm = $('expName').value.replace(/^\d_/, n + '_'); if (/^\d_/.test($('expName').value)) { $('expName').value = nm; showNameHint(); }
   S.sel = null; buildTroopList(); refreshInfo(); needDraw = true;
   toast(n > cur ? `Added ${n - cur} player start${n - cur > 1 ? 's' : ''} in the middle of the map - drag them into place.` : `The map now has ${n} player starts.`, 6000);
 }
@@ -1181,7 +1241,7 @@ async function openFiles(files) {
       S.m = m; S.origTiles = m.tiles.slice(); S.tplBytes = buf; S.tplCrc = crc32(buf); S.tplName = fm.name; S.example = false; S.mini = null; S.undo = []; S.redo = []; S.sel = null; S.treeSel.clear(); S.dirtyForest = false;
       if (!fs) { S.stg = null; S.stgOrig = null; }
       const base = fm.name.replace(/\.map$/i, '');
-      $('expName').value = base;
+      $('expName').value = BUILTIN_MAPS.some(b => b.toLowerCase() === base.toLowerCase()) ? base + '_Custom' : base; showNameHint();
       $('banner').hidden = true;
       $('subtitle').textContent = 'Editing ' + fm.name;
     }
@@ -1243,15 +1303,34 @@ function minimapRGBA() {
   }
   return out;
 }
-function exportName() { let n = $('expName').value.trim().replace(/\.(map|stg|dds)$/i, '').replace(/[^A-Za-z0-9_\- ]/g, ''); if (!n) n = '9_Custom'; if (n.length > 40) { n = n.slice(0, 40); $('expName').value = n; } return n; }
+/* the lobby lists a .stg in Data\Mission\Live as "Custom: <name>" when the name is at most 27 characters and is not one of the
+   game's own 27 maps (net.c cm_scan; up to 8 custom maps) */
+const BUILTIN_MAPS = ['4_Colonock','4_ForestDubine','4_Posterus','4_ToukenCliff','6_AgerSanguini','6_Blackedmark','6_BronzeWood','6_BurialGround','6_CloudBourne','6_DangerZone','6_DesertDowns','6_DryGlade','6_Gremium','6_Greywood','6_Halmoral','6_Mushroom','6_NorthWind','6_Norwart','6_Nymphbarren','6_Osmond','6_PathFinder','6_Posterus','6_TurtleBeach','6_Whitewolf','8_Ruin','9_IceStorm','9_Plains'];
+const cleanName = v => v.trim().replace(/\.(map|stg|dds|zip)$/i, '').replace(/[^A-Za-z0-9_\-]/g, '');
+function nameProblem(n) {
+  if (!n) return 'Type a name for your map.';
+  if (BUILTIN_MAPS.some(b => b.toLowerCase() === n.toLowerCase())) return `"${n}" is one of the game's own maps - exporting under that name would replace it, and the lobby would not list it as a custom map. Pick a new name, e.g. ${n}_2.`;
+  if (n.length > 27) return 'Use 27 characters or fewer.';
+  return '';
+}
+function showNameHint() {
+  const raw = $('expName').value, n = cleanName(raw), pr = nameProblem(n), h = $('nameHint');
+  if (pr) { h.textContent = pr; h.className = 'namehint warn'; }
+  else { h.textContent = (n !== raw.trim() ? `Spaces and other symbols are left out: the map will be saved as "${n}". ` : '') + `In the lobby: Custom: ${n}`; h.className = 'namehint note'; }
+}
+$('expName').addEventListener('input', showNameHint);
+function exportName() { return cleanName($('expName').value); }
 $('bExport').onclick = async () => {
   if (!S.m) return;
-  const m = S.m, name = exportName();
+  const m = S.m, name = exportName(), pr = nameProblem(name);
+  if (pr) { showNameHint(); $('expName').focus(); toast('Not exported: ' + pr, 8000); return; }
+  if (S.example) toast('Note: this is the made-up example map. To make a real map, open one from your game folder first (Help explains how).', 8000);
+  else if (!S.stg) toast('Exported without a .stg file: the map has no troops and won\'t show in the lobby. Open the map\'s .stg as well and export again.', 9000);
   if (S.dirtyForest) rebuildForestGrids(m);
   const mapBytes = buildMap(m), dds = encodeDDS(minimapRGBA(), 512, 512);
   const files = [{ name: 'Data/Mission/Live/' + name + '.map', data: mapBytes }, { name: 'Data/Mission/Live/' + name + '.dds', data: dds }];
   if (S.stg) files.push({ name: 'Data/Mission/Live/' + name + '.stg', data: buildStg(S.stg, name + '.map', name + '.bmp') });
-  const readme = `${name} - made with Bersia Map Forge\r\n\r\nCopy the Data folder into your Kingdom Under Fire: Heroes game folder.\r\nEvery player in a game must have exactly the same files, or the battle goes out of sync.\r\n` + (S.stg ? '' : '\r\nThis export has no .stg stage file: open one in the editor to include player starts and spawn areas.\r\n');
+  const readme = `${name} - made with Bersia Map Forge\r\n\r\nHow to install: copy the Data folder from this zip into your Kingdom Under Fire: Heroes game folder (the folder with Heroes.exe).\r\nThe files go into Data\\Mission\\Live. In the multiplayer lobby the map is listed as "Custom: ${name}".\r\nOnly the host needs it: players who join without it get it from the host automatically (Battle for Bersia MP 1.5 and later).\r\n` + (S.stg ? '' : '\r\nThis export has no .stg stage file: open one in the editor to include player starts and spawn areas.\r\n');
   files.push({ name: 'README.txt', data: new TextEncoder().encode(readme) });
   await saveFile(name + '.zip', makeZip(files));
 };
@@ -1302,7 +1381,7 @@ async function loadProject(file) {
   S.m = m; S.dirtyForest = fz || (p.addProps && p.addProps.length > 0);
   if (p.stage && p.stage.ops && S.stgOrig && S.stgCrc === p.stage.crc) { S.stg = parseStg(patchBytes(S.stgOrig, p.stage.ops)); }
   else if (p.stage) toast('Open the original ' + (p.stage.file || '.stg') + ' with the project to get the troop, area and wave changes back.', 7000);
-  if (p.name) $('expName').value = p.name;
+  if (p.name) { $('expName').value = p.name; showNameHint(); }
   S.undo = []; S.redo = []; updUndo();
   computeTileColours(); fitView(); redrawAll(); refreshInfo(); buildTroopList(); buildToolOpts();
 }
@@ -1387,7 +1466,15 @@ function patchBytes(a, ops) {
 }
 
 /* ---------- Invasion waves ---------- */
-const JOBNAME = ['Archer','Longbow','Infantry','Spearmen','H.Infantry','Knight','Paladin','Cavalry','H.Cavalry','Storm Rider','Sapper','PyroTech','Black Wing','Mortar','Ballista','Job 15','Catapult','Battaloon','Dark Archer','Cav.Archer','Dark Fighter','Dark Knight','Dark Cavalry','Orc Infantry','Orc Rider','Orc H.Rider','Orc Axemen','Orc Heavy','Orc Sapper','Scorpion','Siege Mammoth','Dirigible','Wyvern','Ghoul','Bone Dragon','Job 35','Job 36','Job 37','Encablossa','Enca.Flyer','Enca.Spitter','Job 41','Job 42','Earth Golem','Ice Maiden','Thunder Rhino','Fire Wraith','Earth Golem','Ice Maiden','Thunder Rhino','Fire Wraith','Earth Golem','Ice Maiden','Thunder Rhino','Fire Wraith','Enca.Infested','Dwarf','Elf Warrior','Dark Elf Guard','Lich','Ogre'];
+const JOBNAME = ['Archer','Longbow','Infantry','Spearmen','Heavy Infantry','Knight','Paladin','Cavalry','Heavy Cavalry','Storm Rider','Sapper','Pyrotechnician','Bomber Wing','Mortar','Ballista','Ballista (2)','Catapult','Battaloon',
+  'Dark Elf Archer','Cavalry Archer','Dark Elf Fighter','Dark Knight','Dark Cavalry','Orc Infantry','Orc Rider','Orc Heavy Rider','Orc Axemen','Orc Heavy','Orc Sapper','Scorpion','Swamp Mammoth','Dirigible','Black Wyvern','Ghoul','Bone Dragon',
+  'Wall Guards','Scout','Exploding Ghoul','Encablossa','Encablossa Flyer','Encablossa Spitter','Dark Wall Guards','Encablossa (2)',
+  'Earth Golem','Ice Maiden','Thunder Rhino','Flame Wraith','Earth Golem (dark 1)','Ice Maiden (dark 1)','Thunder Rhino (dark 1)','Flame Wraith (dark 1)','Earth Golem (dark 2)','Ice Maiden (dark 2)','Thunder Rhino (dark 2)','Flame Wraith (dark 2)',
+  'Encablossa Infested','Dwarf','Elf Warrior','Dark Elf Guard','Lich','Ogre','Encablossa (E build)','Encablossa Spitter (E build)','Encablossa Infested (E build)','Encablossa Flyer (E build)'];
+/* colour per kind of troop, so a wave can be read at a glance */
+const JOBCAT = [['Bows', '#7bd389', [0, 1, 18, 19]], ['Foot', '#d7a35e', [2, 3, 4, 20, 23, 26, 27, 35, 41, 56, 57, 58]], ['Horse', '#5aa9e8', [5, 6, 7, 8, 21, 22, 24, 25]],
+  ['Air', '#9ad0d0', [9, 12, 31, 32, 34, 39, 64]], ['Siege & support', '#e8735a', [10, 11, 13, 14, 15, 16, 17, 28, 29, 30]], ['Monsters & elementals', '#d98ae0', []]];
+const jobCat = j => JOBCAT.find(c => c[2].includes(j)) || JOBCAT[5];
 const jobName = j => JOBNAME[j] || ('Job ' + j);
 const tLabel = t => jobName(t.job) + ' #' + t.id;
 S.ai = {}; S.waveFilter = 0; S.importPool = []; S.importName = '';
@@ -1428,33 +1515,62 @@ function numIn(id, val, min, max, onchange) {
   i.onchange = () => { let v = Math.round(+i.value); if (!isFinite(v)) v = min; v = Math.max(min, Math.min(max, v)); pushUndo(); onchange(v); buildWaves(); };
   return i;
 }
+function chipFor(t, id) {
+  const c = el('span', { class: 'wv-chip', role: 'button', tabindex: '0', title: t ? `${jobName(t.job)} · ${t.w * t.d} soldiers · leader level ${t.level || '?'} · troop #${t.id}${t.name ? ' "' + t.name + '"' : ''}. Click to find it in Wave troops.` : 'This troop is missing from the stage file' });
+  if (t) { c.append(el('span', { class: 'cd', style: 'background:' + jobCat(t.job)[1] }), el('span', { text: jobName(t.job) }), el('span', { class: 'sm', text: '#' + t.id + ' · ' + t.w * t.d })); }
+  else c.append(el('span', { text: 'missing #' + id }));
+  const go = () => { const r = document.getElementById('wk' + (t ? t.idx : -1)); if (!r) return; const row = r.closest('.wv-row'); row.scrollIntoView({ block: 'center', behavior: 'smooth' }); row.classList.add('flash'); setTimeout(() => row.classList.remove('flash'), 1600); r.focus({ preventScroll: true }); };
+  c.onclick = e => { if (e.target.tagName !== 'BUTTON') go(); };
+  c.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } };
+  return c;
+}
+function legend() {
+  const l = el('div', { class: 'wv-legend', 'aria-label': 'Troop colours' });
+  for (const [n, col] of JOBCAT) l.append(el('span', {}, el('span', { class: 'cd', style: `width:8px;height:8px;border-radius:50%;background:${col}` }), n));
+  l.append(el('span', { text: '· the number after # is the troop\'s id, then its soldiers' }));
+  return l;
+}
 function buildWaves() {
   const box = $('wavesBody'); box.innerHTML = '';
-  if (!S.stg) { box.append(el('p', { class: 'note', text: 'Open an Invasion map\'s .stg file (8_Ruin.stg or 9_IceStorm.stg in Data\\Mission\\Live) to edit its waves.' })); return; }
+  if (!S.stg) { box.append(el('p', { class: 'note', text: 'Open an Invasion map first: press Open map files… and pick 8_Ruin or 9_IceStorm (.map, .stg and .dds) from Data\\Mission\\Live in your game folder.' })); return; }
   const w = waveModel(S.stg);
-  if (!w.lines.length && !w.begin) { box.append(el('p', { class: 'note', text: 'This stage file has no Invasion waves. Only Invasion maps (8_Ruin, 9_IceStorm and maps made from them) have them.' })); return; }
+  if (!w.lines.length && !w.begin) { box.append(el('p', { class: 'note', text: 'This map has no Invasion waves - it is a Versus map. Only Invasion maps (8_Ruin, 9_IceStorm and maps made from them) have waves. To make an Invasion map, start from one of those two.' })); return; }
   const lines = w.lines.map(l => ({ l, ...lineGet(l) }));
   const byId = new Map(S.stg.troops.map(t => [t.id, t]));
   const maxN = w.param ? pInt(w.param.params[6]) : 0, begin = w.begin ? pInt(w.begin.params[0]) : 0;
   const lastWave = Math.max(1, ...lines.map(x => x.to));
 
+  /* guide */
+  const guide = el('details', { class: 'wv-card wv-guide' });
+  try { if (localStorage.getItem('bmf.wvGuide') !== 'closed') guide.open = true; } catch (_) { guide.open = true; }
+  guide.ontoggle = () => { try { localStorage.setItem('bmf.wvGuide', guide.open ? 'open' : 'closed'); } catch (_) {} };
+  const ol = el('ol');
+  [['Groups. ', 'Each row under Wave groups is one group of enemy troops. A group attacks in every wave from its first wave to its last (1 – 1 means wave 1 only; 3 – 10 means waves 3 to 10), at the level you give it, with the AI orders you pick.'],
+   ['Adding troops. ', 'Use + troop at the end of a row: pick an enemy troop that is not used yet, or "Make a new troop like…" to add a fresh copy of any kind. × removes a troop from that group (the troop stays in the map).'],
+   ['Finding a troop. ', 'Every troop has a colour for its kind (see the key), its id after # and its number of soldiers. Click it to jump to it in Wave troops, where you can turn it into another kind of troop.'],
+   ['Where they arrive. ', 'Each wave comes out of one of the spawn areas in Settings, picked at random. Drag the blue boxes on the map (Back to the map) to move them.'],
+   ['Before you export, ', 'fix anything listed in the orange Check these box. The bar chart shows how many troops each wave has - red bars have more than can be out at once.']]
+    .forEach(([b, t]) => ol.append(el('li', {}, el('b', { text: b }), t)));
+  guide.append(el('summary', { text: 'How waves work (click to show or hide)' }), ol);
+  box.append(guide);
+
   /* settings */
   const set = el('div', { class: 'wv-card' }, el('h3', { text: 'Settings' }));
   const r1 = el('div', { class: 'row' });
-  if (w.begin) r1.append(el('label', { for: 'wvBegin', text: 'Waves' }), numIn('wvBegin', begin, 1, 999, v => setPInt(w.begin.params[0], v)));
-  if (w.param) r1.append(el('label', { for: 'wvMax', text: 'Most troops at once' }), numIn('wvMax', maxN, 1, 230, v => setPInt(w.param.params[6], v)));
+  if (w.begin) r1.append(el('label', { for: 'wvBegin', text: 'Number of waves', title: 'How many waves the battle has' }), numIn('wvBegin', begin, 1, 999, v => setPInt(w.begin.params[0], v)));
+  if (w.param) r1.append(el('label', { for: 'wvMax', text: 'Most enemy troops out at once', title: 'If a wave has more troops than this, the rest wait until some are beaten' }), numIn('wvMax', maxN, 1, 230, v => setPInt(w.param.params[6], v)));
   set.append(r1);
   if (w.param) {
-    const r2 = el('div', { class: 'row' }, el('span', { class: 'note', text: 'Spawn areas (a wave picks one at random):' }));
+    const r2 = el('div', { class: 'row' }, el('span', { class: 'note', text: 'Spawn areas (each wave picks one of these at random; "none" = slot not used):' }));
     for (let k = 0; k < 6; k++) {
       const sel = el('select', { id: 'wvArea' + k, 'aria-label': 'Spawn area ' + (k + 1) });
       sel.append(el('option', { value: '-1', text: 'none' }));
-      for (const a of S.stg.rects) sel.append(el('option', { value: String(a.id), text: 'A' + a.id }));
+      for (const a of S.stg.rects) sel.append(el('option', { value: String(a.id), text: 'Area ' + a.id }));
       sel.value = String(pInt(w.param.params[k]));
       sel.onchange = () => { pushUndo(); setPInt(w.param.params[k], +sel.value); buildWaves(); needDraw = true; };
       r2.append(sel);
     }
-    set.append(r2, el('p', { class: 'note', text: 'Drag the areas on the map to change where waves arrive.' }));
+    set.append(r2, el('p', { class: 'note', text: 'The areas are the blue boxes on the map, labelled A0, A1… Press Back to the map to drag or resize them, or to add a new one (Select tool → Add an area).' }));
   }
   box.append(set);
 
@@ -1462,7 +1578,7 @@ function buildWaves() {
   const counts = [], lv = [];
   for (let n = 1; n <= lastWave; n++) { const ls = lines.filter(x => x.from <= n && n <= x.to); counts.push(ls.reduce((s, x) => s + x.troops.length, 0)); lv.push(ls.length ? Math.round(ls.reduce((s, x) => s + x.level, 0) / ls.length) : 0); }
   const top = Math.max(1, ...counts, maxN && maxN < 60 ? maxN : 0);
-  const chart = el('div', { class: 'wv-card' }, el('h3', { text: 'Troops per wave' }), el('p', { class: 'note', text: 'Bar height = troops listed for the wave, number above = average starting level. Click a wave to show only its lines.' }));
+  const chart = el('div', { class: 'wv-card' }, el('h3', { text: 'Troops per wave' }), el('p', { class: 'note', text: 'Bar height = number of troops in the wave; the small number above = their average level; the number below = the wave. Click a wave to show only its groups; click it again to show all.' }));
   const bars = el('div', { class: 'wv-bars', role: 'list' });
   counts.forEach((c, i) => {
     const n = i + 1, over = maxN && c > maxN;
@@ -1478,90 +1594,94 @@ function buildWaves() {
   const warn = [];
   const seen = new Map();
   lines.forEach((x, li) => {
-    if (!x.troops.length) warn.push(`Line ${li + 1} has no troops.`);
-    if (x.from > x.to) warn.push(`Line ${li + 1} runs from wave ${x.from} to ${x.to}, so it never comes.`);
-    if (begin && x.from > begin) warn.push(`Line ${li + 1} starts at wave ${x.from}, after the last wave (${begin}).`);
+    if (!x.troops.length) warn.push(`Group ${li + 1} has no troops: add some with + troop, or delete the group.`);
+    if (x.from > x.to) warn.push(`Group ${li + 1} runs from wave ${x.from} to ${x.to}, so it never comes. Make the first wave the smaller number.`);
+    if (begin && x.from > begin) warn.push(`Group ${li + 1} starts at wave ${x.from}, after the last wave (${begin}). Raise Number of waves or lower its first wave.`);
     for (const id of x.troops) {
-      if (!byId.has(id)) warn.push(`Line ${li + 1} lists troop #${id}, which is not in this stage file.`);
-      for (const [lj, y] of seen.get(id) || []) if (Math.max(x.from, y.from) <= Math.min(x.to, y.to)) warn.push(`${byId.has(id) ? tLabel(byId.get(id)) : '#' + id} is in lines ${lj + 1} and ${li + 1} for the same waves: only line ${lj + 1} counts.`);
+      if (!byId.has(id)) warn.push(`Group ${li + 1} lists troop #${id}, which is not in this map. Remove it with ×.`);
+      for (const [lj, y] of seen.get(id) || []) if (Math.max(x.from, y.from) <= Math.min(x.to, y.to)) warn.push(`${byId.has(id) ? tLabel(byId.get(id)) : '#' + id} is in groups ${lj + 1} and ${li + 1} for the same waves: only group ${lj + 1} counts. Use a new troop (+ troop → Make a new troop like…) instead.`);
       if (!seen.has(id)) seen.set(id, []); seen.get(id).push([li, x]);
     }
   });
-  counts.forEach((c, i) => { if (maxN && c > maxN) warn.push(`Wave ${i + 1} lists ${c} troops but only ${maxN} can be out at once.`); });
-  if (S.stg.troops.length > 230) warn.push(`The stage file has ${S.stg.troops.length} troops; keep it at 230 or fewer.`);
+  counts.forEach((c, i) => { if (maxN && c > maxN) warn.push(`Wave ${i + 1} has ${c} troops but only ${maxN} can be out at once - the rest wait until some are beaten.`); });
+  if (S.stg.troops.length > 230) warn.push(`The map has ${S.stg.troops.length} troops; the game allows 230 at most. Remove some troops from groups and delete unused ones.`);
   if (warn.length) { const wc = el('div', { class: 'wv-card wv-warn' }, el('h3', { text: 'Check these' })); const ul = el('ul'); for (const x of warn.slice(0, 12)) ul.append(el('li', { text: x })); if (warn.length > 12) ul.append(el('li', { text: `…and ${warn.length - 12} more.` })); wc.append(ul); box.append(wc); }
 
-  /* lines */
+  /* groups */
   const aiIds = [...new Set([...lines.map(x => x.ai), ...Object.keys(S.ai).map(Number)])].sort((a, b) => a - b);
   const aiLabel = id => S.ai[id] ? `${id} · ${S.ai[id].sum}` : `AI ${id}`;
   const enemy = S.stg.troops.filter(t => (S.stg.playerType[t.player] || 0) === 3);
-  const lc = el('div', { class: 'wv-card' }, el('h3', { text: S.waveFilter ? `Lines for wave ${S.waveFilter}` : 'Wave lines' }),
-    el('p', { class: 'note', text: 'Each line sends its troops back in every wave from its first to its last, at its starting level and with its AI orders.' + (Object.keys(S.ai).length ? '' : ' Open AI2_Ruin.txt from Data\\AI to see what each AI number does.') }));
+  const lc = el('div', { class: 'wv-card' }, el('h3', { text: S.waveFilter ? `Groups in wave ${S.waveFilter}` : 'Wave groups' }),
+    el('p', { class: 'note', text: 'One row = one group of troops that attacks in every wave from its first to its last, at its level and with its AI orders.' + (Object.keys(S.ai).length ? '' : ' AI orders: if unsure, keep the number the group already has. "Explain the AI numbers…" (top) shows what each number does.') }), legend());
   const tbl = el('div', { class: 'wv-table', role: 'table' });
-  tbl.append(el('div', { class: 'wv-row wv-th', role: 'row' }, ...['Waves', 'Level', 'AI orders', 'Troops', ''].map(h => el('span', { role: 'columnheader', text: h }))));
+  tbl.append(el('div', { class: 'wv-row wv-th', role: 'row' }, ...['Waves (first – last)', 'Level', 'AI orders', 'Troops', ''].map(h => el('span', { role: 'columnheader', text: h }))));
   lines.forEach((x, li) => {
     if (S.waveFilter && !(x.from <= S.waveFilter && S.waveFilter <= x.to)) return;
     const row = el('div', { class: 'wv-row', role: 'row' });
-    const wv = el('span', { class: 'wv-cell' }, numIn('wf' + li, x.from, 1, 999, v => lineSet(x.l, { from: v })), el('span', { class: 'note', text: '–' }), numIn('wt' + li, x.to, 1, 999, v => lineSet(x.l, { to: v })));
+    const wv = el('span', { class: 'wv-cell' }, el('span', { class: 'wv-tag', text: (li + 1) + '.' }), numIn('wf' + li, x.from, 1, 999, v => lineSet(x.l, { from: v })), el('span', { class: 'note', text: '–' }), numIn('wt' + li, x.to, 1, 999, v => lineSet(x.l, { to: v })));
+    wv.querySelector('#wf' + li).setAttribute('aria-label', `Group ${li + 1}: first wave`); wv.querySelector('#wt' + li).setAttribute('aria-label', `Group ${li + 1}: last wave`);
     const lvl = el('span', { class: 'wv-cell' }, numIn('wl' + li, x.level, 1, 99, v => lineSet(x.l, { level: v })));
-    const ai = el('select', { id: 'wa' + li, 'aria-label': 'AI orders for line ' + (li + 1) });
+    lvl.querySelector('input').setAttribute('aria-label', `Group ${li + 1}: level`);
+    const ai = el('select', { id: 'wa' + li, 'aria-label': 'AI orders for group ' + (li + 1) });
     for (const id of aiIds) ai.append(el('option', { value: String(id), text: aiLabel(id) }));
     ai.value = String(x.ai); ai.onchange = () => { pushUndo(); lineSet(x.l, { ai: +ai.value }); buildWaves(); };
     const chips = el('span', { class: 'wv-chips' });
     x.troops.forEach((id, k) => {
-      const t = byId.get(id);
-      const c = el('span', { class: 'wv-chip', title: t ? `${t.name} · ${t.w * t.d} soldiers` : 'missing troop' }, el('span', { text: t ? tLabel(t) : '#' + id }));
-      c.append(el('button', { type: 'button', 'aria-label': 'Remove ' + (t ? tLabel(t) : id), text: '×', onclick: () => { pushUndo(); const tr = x.troops.slice(); tr.splice(k, 1); lineSet(x.l, { troops: tr }); buildWaves(); } }));
+      const t = byId.get(id), c = chipFor(t, id);
+      c.append(el('button', { type: 'button', 'aria-label': 'Remove ' + (t ? tLabel(t) : id) + ' from this group', title: 'Remove from this group', text: '×', onclick: () => { pushUndo(); const tr = x.troops.slice(); tr.splice(k, 1); lineSet(x.l, { troops: tr }); buildWaves(); } }));
       chips.append(c);
     });
     if (x.troops.length < 10) {
-      const add = el('select', { id: 'wn' + li, 'aria-label': 'Add a troop to line ' + (li + 1), class: 'wv-add' });
+      const add = el('select', { id: 'wn' + li, 'aria-label': 'Add a troop to group ' + (li + 1), class: 'wv-add' });
       add.append(el('option', { value: '', text: '+ troop' }));
       const used = new Set(lines.flatMap(y => y.troops));
-      const og1 = el('optgroup', { label: 'Not in any line' }), og2 = el('optgroup', { label: 'Already in a line' }), og3 = el('optgroup', { label: 'New troop, a copy of…' });
+      const og3 = el('optgroup', { label: 'Make a new troop like…' }), og1 = el('optgroup', { label: 'Enemy troops not in any group yet' }), og2 = el('optgroup', { label: 'Enemy troops already in another group' });
       for (const t of enemy) if (!x.troops.includes(t.id)) (used.has(t.id) ? og2 : og1).append(el('option', { value: 'id:' + t.id, text: tLabel(t) + ' · ' + t.w * t.d + ' soldiers' }));
       const kinds = new Map(); for (const t of S.stg.troops.concat(S.importPool)) { const k = t.job + ':' + t.unit + ':' + t.w * t.d; if (!kinds.has(k) && t.job >= 0 && t.unit >= 0) kinds.set(k, t); }
-      for (const [k, t] of kinds) og3.append(el('option', { value: 'new:' + (S.importPool.includes(t) ? 'i' + S.importPool.indexOf(t) : t.idx), text: jobName(t.job) + ' · ' + t.w * t.d + ' soldiers' + (S.importPool.includes(t) ? ' (from ' + S.importName + ')' : '') }));
-      [og1, og2, og3].forEach(g => { if (g.children.length) add.append(g); });
+      for (const [k, t] of [...kinds].sort((a, b) => jobName(a[1].job).localeCompare(jobName(b[1].job)))) og3.append(el('option', { value: 'new:' + (S.importPool.includes(t) ? 'i' + S.importPool.indexOf(t) : t.idx), text: jobName(t.job) + ' · ' + t.w * t.d + ' soldiers' + (S.importPool.includes(t) ? ' (from ' + S.importName + ')' : '') }));
+      [og3, og1, og2].forEach(g => { if (g.children.length) add.append(g); });
       add.onchange = () => {
         const v = add.value; if (!v) return; pushUndo();
         let id;
         if (v.startsWith('id:')) id = +v.slice(3);
         else { const key = v.slice(4), src = key[0] === 'i' ? S.importPool[+key.slice(1)] : S.stg.troops[+key]; id = newWaveTroop(src, w).id; }
         lineSet(x.l, { troops: x.troops.concat([id]) }); buildWaves(); buildTroopList(); needDraw = true;
+        toast('Added ' + tLabel(byId.get(id) || S.stg.troops.find(t => t.id === id)) + ' to group ' + (li + 1) + '.');
       };
       chips.append(add);
-    }
-    const del = el('button', { type: 'button', class: 'btn wv-del', text: 'Delete', 'aria-label': 'Delete line ' + (li + 1), onclick: () => { pushUndo(); removeWaveLine(w, x.l); buildWaves(); } });
+    } else chips.append(el('span', { class: 'note', text: 'full (10 troops)' }));
+    const del = el('button', { type: 'button', class: 'btn wv-del', text: 'Delete', title: 'Delete this group (its troops stay in the map)', 'aria-label': 'Delete group ' + (li + 1), onclick: () => { pushUndo(); removeWaveLine(w, x.l); buildWaves(); toast(`Group ${li + 1} deleted. Ctrl+Z brings it back.`); } });
     row.append(wv, lvl, el('span', { class: 'wv-cell' }, ai), chips, el('span', { class: 'wv-cell' }, del));
     tbl.append(row);
   });
   lc.append(tbl);
-  lc.append(el('div', { class: 'row' }, el('button', { type: 'button', class: 'btn', text: S.waveFilter ? `Add a line for wave ${S.waveFilter}` : 'Add a wave line', onclick: () => {
+  lc.append(el('div', { class: 'row' }, el('button', { type: 'button', class: 'btn', text: S.waveFilter ? `Add a group for wave ${S.waveFilter}` : 'Add a group (for the next wave)', onclick: () => {
     pushUndo(); const n = S.waveFilter || lastWave + 1;
     addWaveLine(S.stg, w, { from: n, to: n, level: Math.max(1, lv[n - 2] || lv[lv.length - 1] || 1), ai: lines.length ? lines[lines.length - 1].ai : 1 }); buildWaves();
+    toast(`Added an empty group for wave ${n}. Add troops to it with + troop.`);
   } })));
   box.append(lc);
 
   /* troop kinds */
-  const tk = el('div', { class: 'wv-card' }, el('h3', { text: 'Wave troops' }), el('p', { class: 'note', text: 'Change what a troop is by copying another troop\'s kind (job, model, soldiers and leader); its place in the waves stays. Add kinds from any other stage file, such as a campaign mission, with the button above.' }));
+  const tk = el('div', { class: 'wv-card' }, el('h3', { text: 'Wave troops' }), el('p', { class: 'note', text: 'Every enemy troop that can come in a wave. To change what a troop is, pick a kind under "Turn it into…": it copies that kind\'s job, look, soldiers and leader, and the troop keeps its place in the groups. "Borrow troop types from another map…" (top) adds the kinds from any other .stg, such as a campaign mission.' }), legend());
   const list = el('div', { class: 'wv-table' });
-  list.append(el('div', { class: 'wv-row wv-row2 wv-th' }, ...['Troop', 'Soldiers', 'In waves', 'Make it a…'].map(h => el('span', { text: h }))));
+  list.append(el('div', { class: 'wv-row wv-row2 wv-th' }, ...['Troop', 'Soldiers', 'In waves', 'Turn it into…'].map(h => el('span', { text: h }))));
   const inWaves = id => lines.filter(x => x.troops.includes(id)).map(x => x.from === x.to ? String(x.from) : x.from + '–' + x.to).join(', ');
   const srcKinds = new Map(); for (const t of S.stg.troops.concat(S.importPool)) { const k = t.job + ':' + t.unit + ':' + t.w * t.d; if (!srcKinds.has(k) && t.job >= 0 && t.unit >= 0) srcKinds.set(k, t); }
-  const wp = wavePlayer(w);
-  for (const t of S.stg.troops.filter(t => t.player === wp)) {
-    const sel = el('select', { 'aria-label': 'Change the kind of ' + tLabel(t), id: 'wk' + t.idx });
-    sel.append(el('option', { value: '', text: 'keep' }));
-    for (const [k, s] of srcKinds) if (s !== t) sel.append(el('option', { value: S.importPool.includes(s) ? 'i' + S.importPool.indexOf(s) : String(s.idx), text: jobName(s.job) + ' · ' + s.w * s.d + ' soldiers' + (S.importPool.includes(s) ? ' (' + S.importName + ')' : '') }));
-    sel.onchange = () => { if (!sel.value) return; pushUndo(); const s = sel.value[0] === 'i' ? S.importPool[+sel.value.slice(1)] : S.stg.troops[+sel.value]; copyTroopKind(t, s); buildWaves(); needDraw = true; };
-    list.append(el('div', { class: 'wv-row wv-row2' }, el('span', { text: tLabel(t), title: t.name }), el('span', { text: String(t.w * t.d) }), el('span', { class: 'note', text: inWaves(t.id) || 'none' }), sel));
+  const kindsSorted = [...srcKinds].sort((a, b) => jobName(a[1].job).localeCompare(jobName(b[1].job)));
+  for (const t of enemy) {
+    const sel = el('select', { 'aria-label': 'Turn ' + tLabel(t) + ' into another kind', id: 'wk' + t.idx });
+    sel.append(el('option', { value: '', text: 'keep as it is' }));
+    for (const [k, s] of kindsSorted) if (s !== t) sel.append(el('option', { value: S.importPool.includes(s) ? 'i' + S.importPool.indexOf(s) : String(s.idx), text: jobName(s.job) + ' · ' + s.w * s.d + ' soldiers' + (S.importPool.includes(s) ? ' (' + S.importName + ')' : '') }));
+    sel.onchange = () => { if (!sel.value) return; pushUndo(); const s = sel.value[0] === 'i' ? S.importPool[+sel.value.slice(1)] : S.stg.troops[+sel.value]; copyTroopKind(t, s); buildWaves(); needDraw = true; toast(`Troop #${t.id} is now ${jobName(t.job)}.`); };
+    const name = el('span', { class: 'wv-cell', title: t.name || '' }, el('span', { class: 'cd', style: `width:8px;height:8px;border-radius:50%;flex:none;background:${jobCat(t.job)[1]}` }), el('span', { text: tLabel(t) }));
+    list.append(el('div', { class: 'wv-row wv-row2' }, name, el('span', { text: String(t.w * t.d) }), el('span', { class: 'note', text: inWaves(t.id) || 'not in any group' }), sel));
   }
   tk.append(list);
   box.append(tk);
 }
 function initWaves() {
-  $('bWaves').onclick = () => { const p = $('waves'); p.hidden = !p.hidden; $('bWaves').setAttribute('aria-pressed', p.hidden ? 'false' : 'true'); $('bWaves').textContent = p.hidden ? 'Waves' : 'Back to the map'; if (!p.hidden) buildWaves(); needDraw = true; };
+  $('bWaves').onclick = () => { const p = $('waves'); p.hidden = !p.hidden; document.querySelector('.app').classList.toggle('wv-open', !p.hidden); $('bWaves').setAttribute('aria-pressed', p.hidden ? 'false' : 'true'); $('bWaves').textContent = p.hidden ? 'Waves' : 'Back to the map'; if (!p.hidden) buildWaves(); needDraw = true; };
   $('bAI').onclick = () => $('aiIn').click();
   $('aiIn').onchange = async e => {
     const f = e.target.files[0]; e.target.value = ''; if (!f) return;
@@ -1572,7 +1692,7 @@ function initWaves() {
   $('bImp').onclick = () => $('impIn').click();
   $('impIn').onchange = async e => {
     const f = e.target.files[0]; e.target.value = ''; if (!f) return;
-    try { const s = parseStg(await f.arrayBuffer()); S.importPool = s.troops.filter(t => t.job >= 0 && t.unit >= 0); S.importName = f.name; toast(`${S.importPool.length} troops from ${f.name} can now be copied into waves.`); buildWaves(); }
+    try { const s = parseStg(await f.arrayBuffer()); S.importPool = s.troops.filter(t => t.job >= 0 && t.unit >= 0); S.importName = f.name; toast(`Borrowed the troop types of ${f.name}: pick them under + troop → Make a new troop like…, or under Turn it into….`, 8000); buildWaves(); }
     catch (err) { toast(err.message, 7000); }
   };
 }
@@ -1581,9 +1701,13 @@ function initWaves() {
 buildRail(); buildLayers(); fillSelects(); initWaves();
 S.m = exampleMap(); S.example = true; S.tplName = 'example (made up)';
 computeTileColours();
-$('banner').innerHTML = 'This is a made-up example map. <b>Open map files…</b> to load one from your game folder (<span style="font-family:var(--mono)">Data\\Mission\\Live</span>), or drop the .map, .stg and .dds here.';
+$('banner').innerHTML = 'This is a made-up example map for trying the tools. <b>Open map files…</b> to load a real one from your game folder (<span style="font-family:var(--mono)">Data\\Mission\\Live</span>: the .map, .stg and .dds), or drop them here. New here? Press <b>Help</b>.';
 $('banner').hidden = false;
-setTool('select'); refreshInfo(); buildTroopList(); updUndo();
+setTool('select'); refreshInfo(); buildTroopList(); updUndo(); showNameHint();
+/* help: shown by the Help button, and once when the editor first opens */
+$('bHelp').onclick = () => { try { $('helpNoShow').checked = localStorage.getItem('bmf.helpSeen') === '1'; } catch (_) {} $('dlgHelp').showModal(); };
+$('dlgHelp').addEventListener('close', () => { try { localStorage.setItem('bmf.helpSeen', $('helpNoShow').checked ? '1' : '0'); } catch (_) {} });
+try { if (localStorage.getItem('bmf.helpSeen') !== '1') setTimeout(() => $('bHelp').click(), 400); } catch (_) { }
 requestAnimationFrame(() => { fitView(); redrawAll(); $('hudZoom').textContent = Math.round(S.zoom * 100 / 3) + '%'; frame(); });
 
 </script>
