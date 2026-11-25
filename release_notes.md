@@ -1,38 +1,32 @@
-**REQUIRED TESTS FOR TEST 41** (everyone in a game must be on Test 41; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 42** (everyone in a game must be on Test 42; send KUF_netlog.txt from every player after EVERY game, even if it seemed fine)
 
-New in Test 41:
-- If a game goes out of sync, "OUT OF SYNC" now shows in the battle's message box (where "Fire at Will: ON" appears). If you see it, send KUF_netlog.txt from BOTH players.
-- Players on Direct3D 12: please say so when you send a log. A fix for DX12 / DX9 players going out of sync together is in this build.
-- If players are on different test builds, a warning now shows in the lobby chat at the start of the battle.
+New in Test 42:
+1. Sound: soldiers' sounds now carry 40 m instead of 15 m. Can you hear longbows firing from every camera angle, and mortar men firing?
+2. Computer troops (thanks Keaton): a game bug made some AI target rules do nothing. Flying troops (Storm Riders, Black Wyverns, Battaloons, Bone Dragons) and archers using Fire Arrow could go for troops of their own side. Do enemy flyers and archers now go for your troops properly? Do any campaign enemies act strangely?
+3. Black Wyverns: if they seem too hard to kill with archers, or too weak against Dirigibles, play that fight for a minute or two and send KUF_netlog.txt. This build records the first arrow hits on flyers and the first flyer strikes in each battle, so we can see which value is wrong.
+4. Dark Elf troops can learn Taming.
+5. After leaving an online game early (host left, disconnect, quit), single-player battles no longer keep online-only rules.
 
-From Test 40:
-0. Co-op: enemy heroes, officers and troop leaders have +50% HP. Do they still die too quickly, or is it too much now? (Levels are unchanged.)
+Still to check from Test 41 and earlier:
+6. "OUT OF SYNC" message in battle; DX12 / DX9 players together; lobby warning when players are on different test builds.
+7. Co-op: enemy heroes, officers and leaders with +50% HP - too weak, right, or too strong?
+8. Effects: Heal and Chilling Attack sprites, status effects on units, Elemental Boost aura, Flame Wraith / Ice Maiden glow. (Bless & Heal and Holy Explosion are confirmed working.)
+9. Invasion Randomiser with every troop kind: any troop that looks wrong, can't be killed, or crashes?
+10. Co-op cut-scenes (Ellen 2), custom map auto-download, Roguelike / Roguelike Hero cards and Reinforcements.
+11. Normal Invasion, Versus and co-op: still exactly as before?
 
-From Test 39:
-1. Spell and status effects: use Bless & Heal, Heal and Chilling Attack. Do the glowing sprites look smooth now instead of blocky squares?
-2. Status effects on units: fire, lightning, ice, poison and curse hits, Holy Explosion and Elemental Boost. Can you see effects on the affected units / an aura on the boosted troop?
-3. Flame Wraiths and Ice Maidens: does their fire / icy glow follow them properly?
-4. Invasion - Randomiser: enemy waves can now be any troop (Encablossa, elementals, Bomber Wings, Catapults, Mammoths, Bone Dragons...). Any troop that looks wrong, can't be killed, or crashes the game? Note which troop.
+For each game, note: mission or mode, who hosted, whether "OUT OF SYNC" appeared, and anything that looks, sounds or feels wrong.
 
-Still to check from Test 38:
-5. Co-op cut-scenes (thanks Keaton): play Ellen 2 in co-op and watch the second cut-scene (Gerald and Ellen talking after the first enemies). Does each shot show the right character on BOTH players' screens? Other co-op cut-scenes too.
-6. Custom map auto-download: the host picks a "Custom: <name>" map; a player who doesn't have it joins. Does the chat say "Downloaded custom map <name>" and does Start then work, without "out of sync"?
-7. Roguelike / Roguelike Hero: cards readable and pickable with 1 / 2 / 3? Reinforcements arrive?
-8. Normal Invasion, Versus and co-op: still exactly as before?
+**Test build 42 - for testers only. Not the official release (the official version is v1.4).**
 
-For each game, note: mission or mode, who hosted, whether the "OUT OF SYNC" message appeared, and anything that looks, sounds or feels wrong.
+- NEW: soldiers' sounds carry 40 m (longbows heard from every angle, mortar men heard firing).
+- NEW: AI target rules fixed (thanks Keaton) - flyers, Fire Arrow archers and catapults pick proper enemy targets.
+- NEW: Dark Elf troops can learn Taming.
+- NEW: online-only rules no longer carry over into single player after leaving a game early.
+- NEW: extra logging for Black Wyvern damage.
+- Includes everything from Test 41 and earlier.
 
-**Test build 41 - for testers only. Not the official release (the official version is v1.4).**
-
-- NEW: "OUT OF SYNC" message in battle; fix for desyncs between Direct3D 12 and Direct3D 9 players; each test build has its own build id.
-- Co-op enemy heroes, officers and troop leaders have +50% HP.
-- Bless & Heal, Heal and Chilling Attack: sprites no longer blocky (thanks Keaton).
-- Status effects and Elemental Boost / Holy Explosion auras now show on units (thanks Keaton).
-- Effects fixed to units (Flame Wraith fire, Ice Maiden glow, hand glows) follow the unit again.
-- Invasion Randomiser now uses every troop kind.
-- Includes everything from Test 38 (co-op cut-scene fix, custom map auto-download).
-
-Please update from Test 40 - everyone in a game should be on the same test build.
+Please update from Test 41 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -71,6 +65,14 @@ Fixes
 - Co-op: when the host leaves, player 2 returns to the menu and the game
   no longer closes.
 - Create Game: Left and Right on Game Type now go back and forward.
+- After leaving an online battle early (host left, disconnected or quit),
+  single-player battles in the same session no longer keep online-only
+  rules such as the Versus damage scale or leaders' item stats being
+  ignored.
+- Computer troops: fixed an original game bug where AI target filters
+  numbered above 127 were ignored or misread. Flying troops, archers using
+  Fire Arrow and catapults could pick troops of their own side as targets,
+  and some campaign AI orders never worked (thanks Keaton).
 
 
 New
@@ -234,6 +236,13 @@ New
   now appears in the battle's message box (where "Fire at Will: ON" shows),
   once per battle, and again in the lobby chat afterwards. Before, a desync
   was only recorded in KUF_netlog.txt.
+- Sound: soldiers' action sounds (bows firing, mortar men firing, sword
+  swings and so on) were cut off 15 m from the camera, so with the normal
+  battle camera many were silent and others only played when the camera was
+  close or at a low angle. They now carry to 40 m (they still get quieter
+  with distance).
+- Dark Elf troops can now learn Taming in the skill window (it was only
+  open to Orc troops).
 - Co-op: computer armies keep their campaign colours. Before, an army whose
   colour matched a player's lobby colour was given another colour, so the
   Hironeiden army changed colour depending on what player 2 picked.
