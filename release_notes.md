@@ -67,6 +67,7 @@ For each game, note: mission or mode, who hosted, whether "OUT OF SYNC" appeared
 
 **Test build 56 - for testers only. Not the official release (the official version is v1.4).**
 
+- NEW: launcher 1.0.3 - a MAP EDITOR tab that downloads the latest Bersia Map Forge into your game folder and opens it (the launcher offers the update on its HOME page).
 - NEW: co-op troops wear the right armour for their troop type; heroes keep their best earlier troop (Walter's Paladins); Encablossa portraits fit the lobby; credits show v1.5.
 - From Test 55: the Encablossa faction (E.Regnier and four Encablossa troop types) in the main build; Battle Order hero + 3 + 1 support; co-op player 2 always gets a support troop.
 - From Test 54: player 2's skill levels add up to the troop's level in co-op (thanks Keaton).
