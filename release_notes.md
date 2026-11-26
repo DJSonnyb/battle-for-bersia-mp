@@ -1,6 +1,12 @@
-**REQUIRED TESTS FOR TEST 55** (everyone in a game must be on Test 55; send KUF_netlog.txt from EVERY player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 56** (everyone in a game must be on Test 56; send KUF_netlog.txt from EVERY player after EVERY game, even if it seemed fine)
 
-New in Test 55:
+New in Test 56:
+L1. Co-op (also solo co-op): your troops should look like their troop type - Knights and Heavy Cavalry in full plate, Longbows, Cavalry, Dark Knights and heavy orcs in their own armour (before, many were plain infantry holding the wrong weapon).
+L2. Co-op: a hero's own troop keeps its best earlier troop - Walter has Paladins from Walter 3 on (Walter 5 too), Walter 2 and Rupert 5 / 6 have Heavy Infantry, Urukubarr 4 heavy orc infantry, Morene 4 Dark Knights.
+L3. Encablossa portraits fit the lobby and hero-select frames (the installer adds the new pictures).
+Known issue: Encablossa troops make no movement or attack sounds on the Versus maps (they do in Invasion and co-op).
+
+From Test 55 (please use Test 56 for these tests):
 E1. The Encablossa faction is now in the main build: Create Army > Encablossa. Hero E.Regnier (blue fire), troops Brood, Spitter, Infested and Flyer. Check the barracks pictures, portraits, learnable skills, and play a battle with them (Versus, Invasion and co-op player 2).
 E2. Battle Order: hero + 3 normal troops + 1 support troop (yellow slot). In Versus, check that only those troops go into battle.
 E3. Co-op player 2: if your army has no support troop, you get a copy of the host's support troop (same level and skills); if you bring one, yours is used. Send the netlog - it says which.
@@ -59,9 +65,10 @@ Known, not fixed yet: Ellen's weapon disappears after she is knocked down.
 
 For each game, note: mission or mode, who hosted, whether "OUT OF SYNC" appeared, and anything that looks, sounds or feels wrong.
 
-**Test build 55 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 56 - for testers only. Not the official release (the official version is v1.4).**
 
-- NEW: the Encablossa faction (E.Regnier and four Encablossa troop types) in the main build; Battle Order hero + 3 + 1 support; co-op player 2 always gets a support troop.
+- NEW: co-op troops wear the right armour for their troop type; heroes keep their best earlier troop (Walter's Paladins); Encablossa portraits fit the lobby; credits show v1.5.
+- From Test 55: the Encablossa faction (E.Regnier and four Encablossa troop types) in the main build; Battle Order hero + 3 + 1 support; co-op player 2 always gets a support troop.
 - From Test 54: player 2's skill levels add up to the troop's level in co-op (thanks Keaton).
 - From Test 53: co-op troops get their proper job skills (archers vs Wyverns fixed) and single-player melee damage sharing (thanks Keaton).
 - From Test 52: Keaton's Urukubarr 1 camera fix in the installer; Ellen's troop look fixed; troop voice fix; Randomiser without Sappers; damage-to-enemies log.
@@ -76,7 +83,7 @@ For each game, note: mission or mode, who hosted, whether "OUT OF SYNC" appeared
 - NEW: co-op enemy leaders +70% HP; enemy officers hit 20% harder.
 - Includes everything from Test 51 and earlier.
 
-Please update from Test 54 - everyone in a game should be on the same test build.
+Please update from Test 55 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -139,6 +146,15 @@ Fixes
 - Battle order: hero + 3 normal troop slots + 1 support slot (yellow).
   The battle takes up to 3 normal troops and 1 support troop. Invasion is
   unaffected (its maps take hero + 3).
+- Co-op: the host's troops now look like their troop type. Many missions
+  give them the plain infantry body whatever the troop (e.g. Walter 5's
+  Knights looked like basic infantry holding a two-handed sword); Knights
+  and Heavy Cavalry now wear full plate, Longbows, Cavalry, Dark Knights and
+  heavy orcs their own armour. Solo co-op too.
+- Co-op: a hero's own troop no longer drops back to a weaker troop than in
+  an earlier mission of the campaign: Walter keeps his Paladins from Walter 3
+  on, Walter 2 and Rupert 5 / 6 keep Heavy Infantry, Urukubarr 4 keeps the
+  heavy orc infantry and Morene 4 the Dark Knights. Solo co-op too.
 - Co-op: if player 2's army has no support troop, player 2 gets a copy of
   the host's support troop (same troop, level and skills). If player 2
   brings a support troop, that one is used, scaled to the mission.
@@ -466,6 +482,8 @@ The settings are kept in Documents\KUF2 Heroes\KUFH.ini.
 
 Known issues still being looked at
 ----------------------------------
+- Encablossa troops make no movement or attack sounds on the Versus maps
+  (they do in Invasion and co-op).
 - Invasion desyncs reported with test build 12 (v1.4 is fine). This build
   runs Invasion and versus battles like v1.4 for draw distance, shadow range
   and Shock Wave - please retest Invasion.
