@@ -1,6 +1,11 @@
-**REQUIRED TESTS FOR TEST 54** (everyone in a game must be on Test 54; send KUF_netlog.txt from EVERY player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 55** (everyone in a game must be on Test 55; send KUF_netlog.txt from EVERY player after EVERY game, even if it seemed fine)
 
-New in Test 54 (same tests as Test 53 - please use Test 54 for them):
+New in Test 55:
+E1. The Encablossa faction is now in the main build: Create Army > Encablossa. Hero E.Regnier (blue fire), troops Brood, Spitter, Infested and Flyer. Check the barracks pictures, portraits, learnable skills, and play a battle with them (Versus, Invasion and co-op player 2).
+E2. Battle Order: hero + 3 normal troops + 1 support troop (yellow slot). In Versus, check that only those troops go into battle.
+E3. Co-op player 2: if your army has no support troop, you get a copy of the host's support troop (same level and skills); if you bring one, yours is used. Send the netlog - it says which.
+
+From Test 54 (please use Test 55 for these tests):
 S1. Player 2: your skill levels now add up to your troop's level in co-op (before, troops with several skills lost levels). Check your troops' skills in the troop info.
 S2. Your troops should hold up much better now that they have Melee - the most important skill for defence. Do they?
 
@@ -54,9 +59,10 @@ Known, not fixed yet: Ellen's weapon disappears after she is knocked down.
 
 For each game, note: mission or mode, who hosted, whether "OUT OF SYNC" appeared, and anything that looks, sounds or feels wrong.
 
-**Test build 54 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 55 - for testers only. Not the official release (the official version is v1.4).**
 
-- NEW: player 2's skill levels add up to the troop's level in co-op (thanks Keaton).
+- NEW: the Encablossa faction (E.Regnier and four Encablossa troop types) in the main build; Battle Order hero + 3 + 1 support; co-op player 2 always gets a support troop.
+- From Test 54: player 2's skill levels add up to the troop's level in co-op (thanks Keaton).
 - From Test 53: co-op troops get their proper job skills (archers vs Wyverns fixed) and single-player melee damage sharing (thanks Keaton).
 - From Test 52: Keaton's Urukubarr 1 camera fix in the installer; Ellen's troop look fixed; troop voice fix; Randomiser without Sappers; damage-to-enemies log.
 - From Test 51: lobby chat messages no longer overlap.
@@ -70,7 +76,7 @@ For each game, note: mission or mode, who hosted, whether "OUT OF SYNC" appeared
 - NEW: co-op enemy leaders +70% HP; enemy officers hit 20% harder.
 - Includes everything from Test 51 and earlier.
 
-Please update from Test 53 - everyone in a game should be on the same test build.
+Please update from Test 54 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -130,10 +136,24 @@ Fixes
 - Co-op: player 2's skill levels now add up to their troop's level when
   scaled to the mission. Before, each skill was rounded down on its own, so
   troops with several skills lost levels (thanks Keaton).
+- Battle order: hero + 3 normal troop slots + 1 support slot (yellow).
+  The battle takes up to 3 normal troops and 1 support troop. Invasion is
+  unaffected (its maps take hero + 3).
+- Co-op: if player 2's army has no support troop, player 2 gets a copy of
+  the host's support troop (same troop, level and skills). If player 2
+  brings a support troop, that one is used, scaled to the mission.
 
 
 New
 ---
+- NEW: the Encablossa faction (Create Army > Encablossa):
+  - Hero: E.Regnier - a darker Regnier with blue fire and his own name.
+  - Troops: Brood, Spitter, Infested and Flyer, each its own troop type.
+  - Each troop learns its own skills: Spitters Ranged, Infested Frontal,
+    Flyers Riding, and the ground troops magic.
+  - Their own portraits and barracks pictures (the installer adds them to
+    Data\Interface\Body and Data\Interface\Portrait).
+  - A new Encablossa army starts with its EXP like other armies.
 - Co-op missions added: Rupert 6, Morene 2 and Cirith 2.
 - Cirith 2: army level raised so it matches the enemies.
 - Co-op cut-scenes: Player 2 now walks / runs along with the host's hero when
@@ -169,9 +189,9 @@ New
   grey (12 in all). They are made in the game from its own team textures,
   so no extra files are needed.
 - Multiplayer armies: Battle Order now opens the campaign's briefing troop
-  list over the army screen. Your hero is fixed at the top; pick the 4 troops
-  that go into battle (max 1 support). Press B and choose Save or Don't
-  Save. The order is used in every mode.
+  list over the army screen. Your hero is fixed at the top; pick 3 normal
+  troops and 1 support troop (yellow slot) for the battle. Press B and
+  choose Save or Don't Save. The order is used in every mode.
 - Co-op levels (original campaigns): both players' heroes and troops are now
   the typical (median) enemy level + 1. One very strong story enemy (e.g.
   Regnier in Gerald 5) no longer lifts the players' levels. Player 2 matches
