@@ -1,6 +1,10 @@
-**REQUIRED TESTS FOR TEST 53** (everyone in a game must be on Test 53; send KUF_netlog.txt from EVERY player after EVERY game, even if it seemed fine)
+**REQUIRED TESTS FOR TEST 54** (everyone in a game must be on Test 54; send KUF_netlog.txt from EVERY player after EVERY game, even if it seemed fine)
 
-New in Test 53:
+New in Test 54 (same tests as Test 53 - please use Test 54 for them):
+S1. Player 2: your skill levels now add up to your troop's level in co-op (before, troops with several skills lost levels). Check your troops' skills in the troop info.
+S2. Your troops should hold up much better now that they have Melee - the most important skill for defence. Do they?
+
+From Test 53:
 T1. Walter 5 co-op (most wanted): let your archers shoot the enemy Black Wyverns. They should now do real damage. Send KUF_netlog.txt from BOTH players - the log shows the skills given to the host's troops and the damage done to the Wyverns.
 T2. Co-op in general: your troops now have their proper job skills (e.g. Archers have Melee and Ranged) and lose soldiers less quickly in melee, as in single player. Does co-op feel playable again - too easy, right, or still too hard?
 T3. Player 2: your troops keep their own Barracks skills. Do they look right in the troop info?
@@ -50,9 +54,10 @@ Known, not fixed yet: Ellen's weapon disappears after she is knocked down.
 
 For each game, note: mission or mode, who hosted, whether "OUT OF SYNC" appeared, and anything that looks, sounds or feels wrong.
 
-**Test build 53 - for testers only. Not the official release (the official version is v1.4).**
+**Test build 54 - for testers only. Not the official release (the official version is v1.4).**
 
-- NEW: co-op troops get their proper job skills (archers vs Wyverns fixed) and single-player melee damage sharing (thanks Keaton).
+- NEW: player 2's skill levels add up to the troop's level in co-op (thanks Keaton).
+- From Test 53: co-op troops get their proper job skills (archers vs Wyverns fixed) and single-player melee damage sharing (thanks Keaton).
 - From Test 52: Keaton's Urukubarr 1 camera fix in the installer; Ellen's troop look fixed; troop voice fix; Randomiser without Sappers; damage-to-enemies log.
 - From Test 51: lobby chat messages no longer overlap.
 - From Test 50: netlog records troop resistances and any changes (to find the one-sided damage, e.g. archers vs Wyverns).
@@ -65,7 +70,7 @@ For each game, note: mission or mode, who hosted, whether "OUT OF SYNC" appeared
 - NEW: co-op enemy leaders +70% HP; enemy officers hit 20% harder.
 - Includes everything from Test 51 and earlier.
 
-Please update from Test 52 - everyone in a game should be on the same test build.
+Please update from Test 53 - everyone in a game should be on the same test build.
 
 ```
 KINGDOM UNDER FIRE: HEROES - BATTLE FOR BERSIA MP
@@ -122,6 +127,9 @@ Fixes
 - Co-op: both players' troops now share melee and charge damage between
   their soldiers as in single player, so soldiers die less quickly and can
   be healed in time (thanks Keaton). Versus and Invasion are unchanged.
+- Co-op: player 2's skill levels now add up to their troop's level when
+  scaled to the mission. Before, each skill was rounded down on its own, so
+  troops with several skills lost levels (thanks Keaton).
 
 
 New
