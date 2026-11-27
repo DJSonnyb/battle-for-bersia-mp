@@ -1,0 +1,13 @@
+LIBRARY gdi32.dll
+EXPORTS
+  CreateCompatibleDC
+  CreateCompatibleBitmap
+  SelectObject
+  BitBlt
+  DeleteDC
+  DeleteObject
+  CreateFontW
+  SetBkMode
+  SetTextColor
+  CreateSolidBrush
+  GetDeviceCaps

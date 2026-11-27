@@ -1,0 +1,245 @@
+<title>Bersia Map Forge</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a working table - tool rail left, the map in the middle, options and lists right. One deliberate dark look. */
+:root {
+  --bg: #14100e; --panel: #1d1815; --raised: #27201c; --line: #3b302a; --fg: #ece2d6; --dim: #a8988a;
+  --bronze: #d7a35e; --bronze-ink: #1c130c; --crimson: #c0392f; --sea: #6aa6c8;
+  --display: "Cinzel", "Trajan Pro", Georgia, serif; --ui: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif; --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--fg); font: 14px/1.45 var(--ui); }
+* { box-sizing: border-box; }
+button, input, select { font: inherit; color: inherit; }
+.app { display: grid; grid-template-rows: auto 1fr; height: 100%; }
+header { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding-block: 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); border-bottom: 1px solid var(--line); background: var(--panel); }
+h1 { font: 700 19px/1 var(--display); letter-spacing: .06em; margin: 0; color: var(--bronze); text-wrap: balance; }
+.sub { color: var(--dim); font-size: 12px; }
+.grow { flex: 1 1 auto; }
+.btn { border: 1px solid var(--line); background: var(--raised); border-radius: 6px; padding: 6px 12px; cursor: pointer; white-space: nowrap; }
+.btn:hover { border-color: var(--bronze); }
+.btn.primary { background: var(--bronze); color: var(--bronze-ink); border-color: var(--bronze); font-weight: 600; }
+.btn:disabled { opacity: .45; cursor: default; }
+:focus-visible { outline: 2px solid var(--bronze); outline-offset: 2px; }
+.main { display: grid; grid-template-columns: 78px minmax(0, 1fr) 320px; min-height: 0; }
+.rail { display: flex; flex-direction: column; gap: 4px; padding: 8px 6px; border-right: 1px solid var(--line); background: var(--panel); overflow-y: auto; }
+.rail .sep { height: 1px; background: var(--line); margin: 4px 2px; }
+.tool { width: 64px; min-height: 46px; padding: 4px 2px 3px; border-radius: 6px; border: 1px solid transparent; background: none; cursor: pointer; display: grid; justify-items: center; align-content: center; gap: 2px; color: var(--dim); }
+.tool .tl { font-size: 10px; line-height: 1.15; text-align: center; }
+.rail .grp { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--bronze); text-align: center; margin-top: 4px; opacity: .8; }
+.tool svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.tool:hover { color: var(--fg); background: var(--raised); }
+.tool[aria-pressed="true"] { color: var(--bronze); border-color: var(--bronze); background: var(--raised); }
+.stage { position: relative; min-width: 0; min-height: 0; background: #0b0908; overflow: hidden; }
+#view { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
+.hud { position: absolute; left: 10px; bottom: 10px; display: flex; gap: 8px; flex-wrap: wrap; pointer-events: none; }
+.chip { background: rgba(20,16,14,.82); border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; font: 12px var(--mono); color: var(--dim); font-variant-numeric: tabular-nums; }
+.banner { position: absolute; left: 50%; top: 12px; transform: translateX(-50%); max-width: min(560px, calc(100% - 24px)); background: rgba(29,24,21,.94); border: 1px solid var(--bronze); border-radius: 8px; padding: 8px 14px; font-size: 13px; text-align: center; }
+.drop { position: absolute; inset: 12px; pointer-events: none; border: 2px dashed var(--bronze); border-radius: 12px; display: grid; place-items: center; background: rgba(20,16,14,.75); font: 600 16px var(--ui); color: var(--bronze); }
+aside { border-left: 1px solid var(--line); background: var(--panel); overflow-y: auto; min-width: 0; }
+section { padding: 12px 14px; border-bottom: 1px solid var(--line); display: grid; gap: 8px; }
+h2 { margin: 0; font: 600 11px var(--ui); letter-spacing: .12em; text-transform: uppercase; color: var(--bronze); }
+.row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.row label { color: var(--dim); font-size: 12px; min-width: 64px; }
+input[type="range"] { flex: 1 1 120px; accent-color: var(--bronze); }
+input[type="number"], input[type="text"], select { background: var(--bg); border: 1px solid var(--line); border-radius: 5px; padding: 4px 6px; min-width: 0; }
+input[type="text"] { flex: 1 1 140px; }
+.val { font: 12px var(--mono); color: var(--fg); min-width: 38px; text-align: right; font-variant-numeric: tabular-nums; }
+.note { color: var(--dim); font-size: 12px; margin: 0; }
+.note b { color: var(--fg); font-weight: 600; }
+.warn { color: #f0b36a; }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; font-size: 12px; }
+.kv dt { color: var(--dim); } .kv dd { margin: 0; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.tiles { display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); gap: 2px; }
+.tiles button { aspect-ratio: 1; max-width: 100%; border: 1px solid rgba(0,0,0,.4); border-radius: 2px; cursor: pointer; padding: 0; }
+.tiles button.unused { opacity: .3; }
+.tiles button[aria-pressed="true"] { outline: 2px solid var(--bronze); outline-offset: 0; opacity: 1; }
+.list { display: grid; gap: 2px; max-height: 220px; overflow-y: auto; }
+.item { display: flex; align-items: center; gap: 8px; padding: 4px 6px; border-radius: 5px; cursor: pointer; font-size: 12px; border: 1px solid transparent; background: none; text-align: left; width: 100%; }
+.item:hover { background: var(--raised); }
+.item[aria-pressed="true"] { border-color: var(--bronze); background: var(--raised); }
+.item .n { font-family: var(--mono); color: var(--dim); min-width: 34px; }
+.item .t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.layers { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; font-size: 12px; }
+.layers label { display: flex; align-items: center; gap: 6px; color: var(--fg); }
+.swatch { width: 12px; height: 12px; border-radius: 2px; flex: none; }
+.toast { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); background: var(--raised); border: 1px solid var(--bronze); border-radius: 8px; padding: 8px 14px; max-width: min(420px, calc(100% - 32px)); z-index: 20; }
+dialog { background: var(--panel); color: var(--fg); border: 1px solid var(--bronze); border-radius: 10px; padding: 18px; max-width: min(460px, calc(100% - 32px)); }
+dialog::backdrop { background: rgba(0,0,0,.6); }
+dialog h3 { margin: 0 0 10px; font: 700 16px var(--display); color: var(--bronze); letter-spacing: .05em; }
+dialog form { display: grid; gap: 10px; }
+.hidden-file { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.waves { position: absolute; inset: 0; overflow-y: auto; background: var(--bg); z-index: 5; padding: 14px 16px 40px; display: grid; align-content: start; gap: 12px; }
+.wv-top { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.wv-body { display: grid; gap: 12px; max-width: 1100px; }
+.wv-card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; display: grid; gap: 8px; min-width: 0; }
+.wv-card h3 { margin: 0; font: 600 14px var(--ui); color: var(--fg); }
+.wv-warn { border-color: #8a5a2a; } .wv-warn ul { margin: 0; padding-left: 18px; color: #f0b36a; font-size: 12px; display: grid; gap: 2px; }
+.wv-num { width: 64px; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.wv-bars { display: flex; align-items: flex-end; gap: 2px; height: 150px; overflow-x: auto; padding-bottom: 2px; }
+.wv-bar { flex: 1 0 18px; max-width: 34px; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; gap: 2px; background: none; border: 0; padding: 0; cursor: pointer; }
+.wv-fill { background: var(--bronze); border-radius: 2px 2px 0 0; min-height: 2px; opacity: .8; }
+.wv-bar:hover .wv-fill, .wv-bar.on .wv-fill { opacity: 1; background: #f0c27e; }
+.wv-bar.over .wv-fill { background: var(--crimson); }
+.wv-lv, .wv-n { font: 10px var(--mono); color: var(--dim); text-align: center; font-variant-numeric: tabular-nums; }
+.wv-bar.on .wv-n { color: var(--bronze); font-weight: 600; }
+.wv-table { display: grid; gap: 2px; overflow-x: auto; }
+.wv-row { display: grid; grid-template-columns: 170px 80px minmax(150px, 230px) minmax(260px, 1fr) 76px; gap: 8px; align-items: center; padding: 5px 6px; border-radius: 5px; min-width: 760px; }
+.wv-row:nth-child(even) { background: var(--raised); }
+.wv-row2 { grid-template-columns: minmax(150px, 1fr) 80px minmax(120px, 1fr) minmax(180px, 1fr); min-width: 560px; }
+.wv-th { color: var(--dim); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; background: none !important; }
+.wv-cell { display: flex; gap: 4px; align-items: center; min-width: 0; }
+.wv-cell select { width: 100%; }
+.wv-chips { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; min-width: 0; }
+.wv-chip { display: inline-flex; align-items: center; gap: 2px; background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 1px 4px 1px 9px; font-size: 12px; }
+.wv-chip button { border: 0; background: none; cursor: pointer; color: var(--dim); padding: 0 4px; font-size: 14px; line-height: 1; }
+.wv-chip button:hover { color: var(--crimson); }
+.wv-add { font-size: 12px; max-width: 150px; }
+.wv-del { padding: 3px 8px; font-size: 12px; }
+#bWaves[aria-pressed="true"] { border-color: var(--bronze); color: var(--bronze); }
+.app.wv-open .rail { visibility: hidden; }
+.app.wv-open #secTool { display: none; }
+.app:not(.wv-open) #secWvHelp { display: none; }
+.wv-guide ol { margin: 0; padding-left: 20px; display: grid; gap: 4px; font-size: 13px; }
+.wv-guide summary { cursor: pointer; font-weight: 600; }
+.wv-chip { cursor: pointer; }
+.wv-chip .cd { width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; flex: none; }
+.wv-chip .sm { color: var(--dim); margin-left: 4px; font-size: 11px; }
+.wv-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 11px; color: var(--dim); }
+.wv-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.wv-row.flash { outline: 2px solid var(--bronze); background: var(--raised); }
+.wv-tag { font-size: 11px; color: var(--dim); }
+.help-btn { border-color: var(--bronze); color: var(--bronze); }
+#dlgHelp { max-width: min(680px, calc(100% - 32px)); }
+#dlgHelp ol { margin: 0; padding-left: 20px; display: grid; gap: 8px; }
+#dlgHelp h4 { margin: 6px 0 0; font: 600 13px var(--ui); color: var(--bronze); }
+#dlgHelp p, #dlgHelp li { font-size: 13px; margin: 0; }
+#dlgHelp ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+.namehint { font-size: 12px; margin: 0; }
+@media (max-width: 860px) {
+  .app { height: auto; }
+  .main { grid-template-columns: 1fr; }
+  .rail { flex-direction: row; flex-wrap: wrap; border-right: 0; border-bottom: 1px solid var(--line); padding-left: max(8px, env(safe-area-inset-left, 0px)); padding-right: max(8px, env(safe-area-inset-right, 0px)); }
+  .rail .sep { width: 1px; height: auto; margin: 2px 4px; }
+  .stage { height: 62vh; }
+  aside { border-left: 0; }
+  section { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="app">
+  <header>
+    <div>
+      <h1>Bersia Map Forge</h1>
+      <div class="sub" id="subtitle">Map editor for Battle for Bersia MP</div>
+    </div>
+    <div class="grow"></div>
+    <button class="btn help-btn" id="bHelp" type="button" title="How to make a map, step by step">Help</button>
+    <button class="btn" id="bOpen" type="button" title="Pick a map's .map, .stg and .dds files (all three) from Data\Mission\Live in your game folder">Open map files…</button>
+    <button class="btn" id="bNew" type="button" title="Replace the ground with a flat empty map (your troops and spawn areas are kept)">New flat map…</button>
+    <button class="btn" id="bWaves" type="button" aria-pressed="false" title="Invasion maps only: which enemy troops come in each wave">Waves</button>
+    <button class="btn" id="bUndo" type="button" title="Undo (Ctrl+Z)">Undo</button>
+    <button class="btn" id="bRedo" type="button" title="Redo (Ctrl+Y)">Redo</button>
+    <button class="btn" id="bProject" type="button" title="Save your work so you can carry on later (not playable - use Export for that)">Save project</button>
+    <button class="btn primary" id="bExport" type="button" title="Make the playable map: a .zip to unzip into your game folder">Export for the game</button>
+    <input class="hidden-file" type="file" id="fileIn" multiple accept=".map,.stg,.dds,.json">
+    <input class="hidden-file" type="file" id="aiIn" accept=".txt">
+    <input class="hidden-file" type="file" id="impIn" accept=".stg">
+  </header>
+  <div class="main">
+    <nav class="rail" id="rail" aria-label="Tools"></nav>
+    <div class="stage" id="stage">
+      <canvas id="view"></canvas>
+      <div class="banner" id="banner" hidden></div>
+      <div class="waves" id="waves" hidden>
+        <div class="wv-top"><h2>Invasion waves</h2><div class="grow"></div><button class="btn" id="bAI" type="button" title="Optional: Data\AI\AI2_Ruin.txt from your game folder names what each AI number does">Explain the AI numbers…</button><button class="btn" id="bImp" type="button" title="Pick any other .stg file (e.g. a campaign mission in Data\Mission) to use its kinds of troops in your waves">Borrow troop types from another map…</button></div>
+        <div id="wavesBody" class="wv-body"></div>
+      </div>
+      <div class="drop" id="drop" hidden>Drop the .map, .stg and .dds files here</div>
+      <div class="hud"><span class="chip" id="hudPos">–</span><span class="chip" id="hudZoom">–</span></div>
+    </div>
+    <aside>
+      <section id="secWvHelp" class="wv-guide">
+        <h2>Waves - quick guide</h2>
+        <p class="note">The map tools are hidden while you edit waves. Press <b>Back to the map</b> to use them again.</p>
+        <ol>
+          <li>Each <b>group</b> is a row: its troops attack in every wave from its first to its last.</li>
+          <li>Add troops with <b>+ troop</b>. Click a troop to find it in <b>Wave troops</b>, where you can change what it is.</li>
+          <li>Each wave picks one of the <b>spawn areas</b> at random. Drag the blue boxes on the map to move them.</li>
+          <li>Fix anything in the orange <b>Check these</b> box before you export.</li>
+        </ol>
+      </section>
+      <section id="secTool">
+        <h2 id="toolTitle">Tool</h2>
+        <p class="note" id="toolHelp"></p>
+        <div id="toolOpts" style="display:grid;gap:8px"></div>
+      </section>
+      <section>
+        <h2>Layers</h2>
+        <div class="layers" id="layers"></div>
+      </section>
+      <section id="secTroops">
+        <h2>Sides and spawn areas</h2>
+        <p class="note" id="troopNote">Open the map's .stg file to see player starts, enemy troops and spawn areas.</p>
+        <div class="list" id="troopList"></div>
+      </section>
+      <section>
+        <h2>Map</h2>
+        <dl class="kv" id="info"></dl>
+        <div class="row"><label for="tileset">Ground type</label><select id="tileset"></select></div>
+        <div class="row"><label for="expName">Map name</label><input type="text" id="expName" value="9_Custom" spellcheck="false" maxlength="27" aria-describedby="nameHint"></div>
+        <p class="namehint note" id="nameHint"></p>
+        <p class="note"><b>Export for the game</b> makes a .zip: unzip its <b>Data</b> folder into your Kingdom Under Fire: Heroes folder. The map shows in the lobby as <b>Custom: name</b>, and players who join without it get it from the host automatically.</p>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<dialog id="dlgNew">
+  <form method="dialog" id="formNew">
+    <h3>New flat map</h3>
+    <p class="note">Builds a map from nothing, the way the mod builds Plains: one height, no trees, everything walkable. Your open stage file is kept, so start from an Invasion map's .stg (200 cells) or a Versus map's (320 cells).</p>
+    <div class="row"><label for="nSize">Size</label><select id="nSize"><option value="200">200 × 200 cells (Invasion, 250 m)</option><option value="320">320 × 320 cells (Versus, 400 m)</option></select></div>
+    <div class="row"><label for="nTile">Ground</label><select id="nTile"></select></div>
+    <div class="row"><label for="nHeight">Height</label><input type="number" id="nHeight" value="300" min="0" max="6375" step="25"></div>
+    <div class="row" style="justify-content:flex-end"><button class="btn" value="cancel" type="submit">Cancel</button><button class="btn primary" value="ok" type="submit">Create</button></div>
+  </form>
+</dialog>
+<dialog id="dlgHelp" aria-labelledby="helpTitle">
+  <form method="dialog">
+    <h3 id="helpTitle">How to make a map</h3>
+    <ol>
+      <li><b>Open a map to start from.</b> Press <b>Open map files…</b> and pick all three files of one map from your game folder, <b>Data\Mission\Live</b>: the <b>.map</b> (the ground), the <b>.stg</b> (troops, starts, spawn areas and waves) and the <b>.dds</b> (the minimap). Start from a map of the mode you want: the 4_ and 6_ maps are Versus, 8_Ruin and 9_IceStorm are Invasion. The map shown before you open anything is a made-up example for trying the tools.</li>
+      <li><b>Change it with the tools on the left.</b> Click a tool, and the panel on the right says what it does and shows its settings. Mouse wheel zooms; drag with the right mouse button to move the view. <b>Ctrl+Z</b> undoes, <b>Ctrl+Y</b> redoes.</li>
+      <li><b>Place the troops.</b> With <b>Select</b> (the top tool), drag a player's troops or a blue spawn area. Q and E turn the selected troop. Versus maps: choose the number of players under <b>Sides and spawn areas</b>.</li>
+      <li><b>Invasion maps: set the waves.</b> Press <b>Waves</b> to choose which enemy troops come in each wave. The waves page has its own guide.</li>
+      <li><b>Save project</b> keeps your work so you can carry on another day. It only holds your changes, so to reopen it, open the same three original map files and the project file together.</li>
+      <li><b>Export for the game</b> makes the playable map, a .zip. Unzip its <b>Data</b> folder into your Kingdom Under Fire: Heroes folder (next to Heroes.exe). It shows in the lobby as <b>Custom: name</b>. Players who join without it get it from the host automatically.</li>
+    </ol>
+    <h4>Good to know</h4>
+    <ul>
+      <li><b>Map name:</b> up to 27 letters, numbers, - or _. It can't be the name of one of the game's own maps (such as 9_IceStorm), and the lobby shows up to 8 custom maps.</li>
+      <li><b>Always export with the .stg open</b>, or the map has no troops and won't show in the lobby.</li>
+      <li><b>Block</b> paints red marks, but troops can still walk through them for now: the game needs a navigation (.nav) file for that, which the editor can't make yet.</li>
+      <li><b>Layers</b> (right panel) only change what you see in the editor, never the map.</li>
+      <li>A <b>cell</b> is 1.25 m. Heights are in centimetres.</li>
+    </ul>
+    <label class="note" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="helpNoShow"> Don't show this when the editor opens</label>
+    <div class="row" style="justify-content:flex-end"><button class="btn primary" value="ok" type="submit">Got it</button></div>
+  </form>
+</dialog>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+%%CORE%%
+</script>
+<script>
+const PROPCAT = %%CAT%%;
+%%APP%%
+</script>

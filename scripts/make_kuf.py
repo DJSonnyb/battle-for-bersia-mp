@@ -8,12 +8,15 @@ import os as _os
 _TK=' -DKUF_TESTKILL' if _os.environ.get('KUF_TESTKILL') else ''
 ENCA=bool(_os.environ.get('KUF_ENCA'))   # v1.2E: Encablossa faction build (USER: separate from the main build)
 if ENCA: _TK+=' -DKUF_ENCA'
+if _os.environ.get('KUF_BO'): _TK+=' -DKUF_BO'   # Battle Order prototype build (USER test exe only)
 if _os.environ.get('KUF_BUILD_STAMP'): _TK+=" '-DKUF_BUILD_STAMP=\"%s\"'"%_os.environ['KUF_BUILD_STAMP']   # reproducible release build id
+if _os.environ.get('KUF_START_EXP'): _TK+=' -DKUF_START_EXP=%d'%int(_os.environ['KUF_START_EXP'])   # USER screenshot build: Encablossa army too
 KUF=0xAE1000
 TBLOFF=0xC00
 # lobby controls to create: (kind,id)
 rows=[]
-def row1(): return [('SPRITE',710),('OUTLINE',711),('BUTTON',712),('BUTTON',713),('PRINT',715),('PRINT',717),('BUTTON',714),('PRINT',716)]
+# TEST25 (USER: own colour icon still dim): the colour button 714 was created after its icon print 715, so it drew over it -> button first
+def row1(): return [('SPRITE',710),('OUTLINE',711),('BUTTON',712),('BUTTON',713),('BUTTON',714),('PRINT',715),('PRINT',717),('PRINT',716)]
 LOBBY=[('PANEL',709)]+row1()
 for base in (718,724,730,736,742):
     LOBBY+=[('SPRITE',base),('OUTLINE',base+1),('BUTTON',base+2),('PRINT',base+3),('PRINT',base+5),('PRINT',base+4)]
@@ -38,6 +41,7 @@ COOP=[
     ('Rupert 3','1020',36,1),   # v100q: P2 in an empty AI slot
     ('Rupert 4','1030',36,1),
     ('Rupert 5','1050',36,1),
+    ('Rupert 6','1060',36,1),   # v1.5: enemy slot 7 (intro actors) merged into enemy slot 3 -> slot 7 free
     ('Urukubarr 1','2000',26,0),
     ('Urukubarr 2','2010',26,1),
     ('Urukubarr 3','2020',26,1),
@@ -57,10 +61,12 @@ COOP=[
     ('Walter 4','4060',68,1),
     ('Walter 5','4070',68,1),
     ('Morene 1','5000',35,0),   # v100q: P2 takes allied slot 5
+    ('Morene 2','5020',35,1),   # v1.5: cut-scene actor slot 7 merged into allied slot 1 -> slot 7 free
     ('Morene 3','5040',35,1),
     ('Morene 4','5060',35,1),
     ('Morene 5','5080',35,1),   # v100q
     ('Cirith 1','6000',38,0),
+    ('Cirith 2','6020',38,1),   # v1.5: enemy slot 4 merged into enemy slot 3 -> slot 4 free
     ('Cirith 3','6030',38,1),   # v100q
     ('Cirith 4','6040',38,1),   # v100q: enemy slot 7 merged into 6
     ('Cirith 5','6060',38,1),
@@ -128,7 +134,7 @@ def coop_lv(name):
 # v100q (USER: P2's army too weak in later missions, e.g. Walter 5: P2 army 27/25 next to the mission's 37-47): P2 level = the
 #        mission's own P1 army level (average of slot 0 placements in the stage file) when that is higher than the curve.
 #        Ellen 8/9 (USER: final too hard) - P1 raised to 25/30 in co-op (eq.c coop_p1_min), counted here too.
-COOP_P1MIN={'0070':25,'0080':30,'1020':25,'1030':25,'1050':35,'6030':35}
+COOP_P1MIN={'0070':25,'0080':30,'1020':25,'1030':25,'1050':35,'6030':35,'6020':30}
 def coop_p1avg(f):
     p=os.path.join(KUF_GAME,'Data','Mission','%s.stg'%f)
     if not os.path.exists(p): return 0   # Crusaders missions are not Heroes stage files - curve level only
@@ -136,7 +142,7 @@ def coop_p1avg(f):
     lv=[max(d[588+i*548+0x5b],COOP_P1MIN.get(f,0)) for i in range(cnt) if d[588+i*548+0x24]==0]
     return int(round(sum(lv)/float(len(lv)))) if lv else 0
 COOP_LV=[min(60,max(coop_lv(r[0]),coop_p1avg(r[1]))) for r in COOP]
-open(_ND+'coops.inc','w').write('#define COOP_N %d\nstatic const char *coops[COOP_N] = {%s};\nstatic const unsigned char coop_lvtab[COOP_N] = {%s};\nstatic const char *coopf[COOP_N] = {%s};\n'%(len(COOP),','.join('"%s"'%r[0].replace('Crusaders: ','') for r in COOP),','.join(str(v) for v in COOP_LV),','.join('"%s"'%r[1] for r in COOP)))
+open(_ND+'coops.inc','w').write('#define COOP_N %d\nstatic const char *coops[COOP_N] = {%s};\nstatic const unsigned char coop_lvtab[COOP_N] = {%s};\nstatic const char *coopf[COOP_N] = {%s};\nstatic const unsigned char coop_rt[COOP_N] = {%s};\n'%(len(COOP),','.join('"%s"'%r[0].replace('Crusaders: ','') for r in COOP),','.join(str(v) for v in COOP_LV),','.join('"%s"'%r[1] for r in COOP),','.join('0' if os.path.exists(os.path.join(KUF_GAME,'Data','Mission','%s.stg'%r[1])) else '1' for r in COOP)))
 sys.path.insert(0,ROOT+'scripts'); import jobs_gen as _jg; _jg.gen()   # v93: net/jobs.inc (custom jobs 56-60)
 print('coop levels',list(zip([r[0] for r in COOP],COOP_LV))[-20:])
 subprocess.run('clang'+_TK+' -target i686-unknown-elf -O2 -ffreestanding -fno-builtin -fno-pic -fno-stack-protector -mno-sse -fno-asynchronous-unwind-tables -c net.c -o net.o && ld.lld -T link.ld net.o -o net.elf 2>/dev/null && llvm-objcopy -O binary --only-section=.text net.elf net.bin && llvm-objcopy -O binary --only-section=.rodata --only-section=.data net.elf netdata.bin && llvm-objcopy -O binary --only-section=.ktext net.elf ktext.bin',shell=True,cwd=_ND,check=True)
@@ -147,7 +153,7 @@ for _l in subprocess.run(['nm',_ND+'net.elf'],capture_output=True,text=True).std
 import re as _re
 _bss=_re.search(r'\.bss\s+NOBITS\s+([0-9a-f]+)\s+[0-9a-f]+\s+([0-9a-f]+)',subprocess.run(['llvm-readelf','-S',_ND+'net.elf'],capture_output=True,text=True).stdout)
 _bss_end=int(_bss.group(1),16)+int(_bss.group(2),16)
-assert os.path.getsize(_ND+'ktext.bin')<0x7000 and os.path.getsize(_ND+'net.bin')<0xF000 and os.path.getsize(_ND+'netdata.bin')<0x4000 and 0xB1A000<=_bss_end<=0xB1C000, ('net module too big (code 0xAF1000-0xB00000, data .kjb 0xB16000-0xB1A000, bss -0xB23000)', hex(_bss_end))
+assert os.path.getsize(_ND+'ktext.bin')<0x27000 and os.path.getsize(_ND+'net.bin')<0xF000 and os.path.getsize(_ND+'netdata.bin')<0x4000 and 0xB1A000<=_bss_end<=0xB1C000, ('net module too big (code 0xAF1000-0xB00000, data .kjb 0xB16000-0xB1A000, bss -0xB23000)', hex(_bss_end))
 def gen():
     s=[]
     a=s.append
@@ -316,7 +322,7 @@ def gen():
     a(' mov ecx,[ebp-4]; mov eax,[ecx+0xf8]')
     a(' cmp eax,0x30; je back')
     a(' cmp eax,0x2e; je open_mm')
-    a(' cmp eax,0x2f; je open_mm')
+    a(' cmp eax,0x2f; je open_gx')     # v1.5: Multiplayer Options = Graphics page
     a(' jmp orig_pop')
     a('lobby_active:')
     a(' cmp dword [0x%X],0; je la_n'%NET['net_dirty'])
@@ -399,7 +405,8 @@ def gen():
     a(' mov eax,[0x%X]; cmp eax,100; jb m_pvp'%(KUF+0x808))
     a(' inc eax; cmp eax,%d; jb m_ok; mov eax,100; jmp m_ok'%(100+N))
     a('m_pvp:')
-    a(' inc eax; cmp eax,%d; jb m_ok; xor eax,eax'%len(MAPS))
+    a(' pushad; call 0x%X; popad'%NET['cm_scan'])   # TEST37: custom maps from Data\\Mission\\Live
+    a(' inc eax; cmp eax,[0x%X]; jb m_ok; xor eax,eax'%NET['cm_total'])
     a('m_ok:')
     a(' mov [0x%X],eax; call map_name'%(KUF+0x808))
     a(' mov eax,[0x%X]; call set_text; jmp orig_pop'%(KUF+TBLOFF+4*(755-709)))
@@ -475,6 +482,7 @@ def gen():
     a(' jmp exit_pop')
     a('open_as:')
     a(' cmp byte [0xAE1BF7],0; jne oa_noload')
+    a(' call hc_other')
     a(' call mp_load')
     a('oa_noload:')
     a(' mov ecx,[0xAE1D40]; call pshow; mov ecx,[0xAE1D4C]; call pshow; mov ecx,[0xAE1D48]; call phide; mov ecx,[0xAE1D44]; call pshow')
@@ -500,6 +508,7 @@ def gen():
     a(' mov ecx,[0xAE1D50]; call phide; mov ecx,[0xAE1D54]; call phide; mov ecx,[0xAE1D58]; call phide')
     a(' ret')
     a('as_active:')
+    a(' pushad; call 0x%X; mov [esp+28],eax; popad; test eax,eax; jnz orig_pop'%NET['bo_block'])   # Battle Order overlay up
     a(' mov ecx,[0xA75BC8]; call 0x4689D0; test al,al; jnz as_cancel')
     a(' mov ecx,[0xA75BC8]; call 0x468B60; movzx eax,al; push eax')
     a(' mov ecx,[0xA75BC8]; call 0x468B10; movzx eax,al; add eax,eax; pop ecx; or eax,ecx')
@@ -533,8 +542,8 @@ def gen():
     a('asl_ne:')
     a(' cmp byte [0xAE1D85],0; je asl_set')
     a(' mov eax,[0xAE1D88]; add eax,11; jmp as_hmod')
-    a('asl_set:')
-    a(' mov eax,[0xAE1D7C]; add eax,2; jmp as_mod')
+    a('asl_set:')      # TEST25 (USER): 6 armies on two pages of 3 - absolute army = page*3 + slot
+    a(' movzx eax,byte [mp_page]; imul eax,eax,3; add eax,[0xAE1D7C]; add eax,5; jmp as_mod')
     a('as_right:')
     a(' mov byte [0xAE1D86],0')
     a(' cmp byte [0xAE1D94],0; je asr_ne')
@@ -550,9 +559,14 @@ def gen():
     a(' call as_refresh')
     a(' jmp orig_pop')
     a('asr_set:')
-    a(' mov eax,[0xAE1D7C]; inc eax')
+    a(' movzx eax,byte [mp_page]; imul eax,eax,3; add eax,[0xAE1D7C]; inc eax')
     a('as_mod:')
-    a(' xor edx,edx; mov ecx,3; div ecx; mov [0xAE1D7C],edx')
+    a(' xor edx,edx; mov ecx,6; div ecx; mov eax,edx; xor edx,edx; mov ecx,3; div ecx')   # eax page, edx slot
+    a(' push edx; movzx ecx,byte [mp_page]; cmp eax,ecx; je asm_same')
+    a(' push eax; call mp_save; pop eax')                                                # keep the page we leave
+    a(' mov [mp_page],al; mov ecx,mp_fname; test eax,eax; jz asm_f; mov ecx,mp_fname2')
+    a('asm_f: mov [mp_cur],ecx; mov [curfn],ecx; call mp_load')
+    a('asm_same: pop edx; mov [0xAE1D7C],edx')
     a(' call as_refresh')
     a(' jmp orig_pop')
     a('as_barracks:')
@@ -570,6 +584,9 @@ def gen():
     a(' call 0x4372D0; mov ecx,eax; push dword [0xAE1D7C]; call 0x71CFD0')
     a(' cmp eax,-1; je orig_pop')
     a(' call ed_count; cmp eax,2; jl orig_pop')
+    a(' cmp dword [0x%X],0; je asb_old'%NET['bo_proto'])      # Battle Order prototype (KUF_BO): briefing troop menu overlay
+    a(' pushad; call 0x%X; popad; jmp orig_pop'%NET['bo_request'])
+    a('asb_old:')
     a(' mov byte [0xAE1D94],1; mov byte [0xAE1D86],0; mov dword [0xAE1D98],1; mov dword [0xAE1D9C],-1')
     a(' call as_refresh')
     a(' jmp orig_pop')
@@ -613,7 +630,7 @@ def gen():
     a(' cmp eax,39; jne asc_std')
     a(' pushad; push dword [0xAE1D7C]; call 0x%X; add esp,4; popad; jmp asc_built'%NET['enca_build'])
     a('asc_std:')
-    a(' push 0x3E8; push eax; push dword [0xAE1D7C]')
+    a(' push 0x%X; push eax; push dword [0xAE1D7C]'%int(os.environ.get('KUF_START_EXP','1000')))   # new army EXP (USER screenshot build: KUF_START_EXP)
     a(' call 0x4372D0; mov ecx,eax; call 0x71A7C0')
     a('asc_built:')
     a(' mov byte [0xAE1D85],0')
@@ -797,6 +814,7 @@ def gen():
     a(' cmp eax,659; je cg_create')
     a(' mov edx,1')
     a('cg_step:')
+    a(' cmp dword [0x%X],0; jne gx_stepj'%NET['gx_menu'])
     a(' mov ecx,[ebp-4]; mov eax,[ecx+0xf8]')
     a(' cmp eax,628; je cg_map')
     a(' cmp eax,636; je cg_type')
@@ -847,16 +865,21 @@ def gen():
     a(' call cg_clamp; call cg_refresh')
     a(' jmp orig_pop')
     a('cg_type:')     # v1.1: Versus is offered at 100/75/50/25/1 % damage (USER), then Invasion, Co-op (the PC form has no spare row)
-    a(' mov eax,[0xAE1DDC]; test eax,eax; jnz cgt_n')
-    a(' mov ecx,[0x%X]; inc ecx; cmp ecx,4; ja cgt_v; mov [0x%X],ecx; call cg_refresh; jmp orig_pop'%(NET['net_dmg'],NET['net_dmg']))
-    a('cgt_v:')
-    a(' mov dword [0x%X],0'%NET['net_dmg'])
-    a(' cmp byte [0xAE1BF6],0; je cgt_n; call cg_refresh; jmp orig_pop')
-    a('cgt_n:')
-    a(' inc eax; cmp eax,3; jb cgt0; xor eax,eax; mov dword [0x%X],0'%NET['net_dmg'])
-    a('cgt0:')
-    a(' cmp byte [0xAE1BF6],0; je cgt0b; xor eax,eax')     # v70: Hero Battle = Versus only (user)
-    a('cgt0b:')
+    # v1.5 (USER test: Left and Right both went forward): one list 0-4 Versus 100..1 %, 5 Invasion, 6 Co-op, stepped by edx (+1 / -1)
+    # TEST25 (USER): 0-4 Versus 100..1 %, 5-8 Invasion normal / Randomiser / Insanity / both, 9 Co-op
+    a(' mov eax,[0xAE1DDC]; mov ecx,eax; test eax,eax; jnz cgt_a; mov eax,[0x%X]; jmp cgt_b'%NET['net_dmg'])
+    a('cgt_a: cmp eax,1; jne cgt_a2; mov eax,[0x%X]; and eax,7; add eax,5; jmp cgt_b'%NET['net_inv'])   # TEST36: 5-9 Invasion incl. Roguelike
+    a('cgt_a2: mov eax,11')
+    a('cgt_b: add eax,edx')
+    a(' mov edx,11; cmp byte [0xAE1BF6],0; je cgt_c; mov edx,4')     # v70: Hero Battle = Versus only (user)
+    a('cgt_c: cmp eax,0; jge cgt_d; mov eax,edx')
+    a('cgt_d: cmp eax,edx; jle cgt_e; xor eax,eax')
+    a('cgt_e: cmp eax,4; ja cgt_f')
+    a(' mov [0x%X],eax; xor eax,eax; jmp cgt_g'%NET['net_dmg'])
+    a('cgt_f: mov dword [0x%X],0; cmp eax,11; jae cgt_f2'%NET['net_dmg'])
+    a(' sub eax,5; mov [0x%X],eax; mov eax,1; jmp cgt_g'%NET['net_inv'])
+    a('cgt_f2: mov eax,2')
+    a('cgt_g: cmp eax,ecx; je cgt1')
     a(' mov [0xAE1DDC],eax')
     a(' mov dword [0xAE1DD8],17')
     a(' cmp eax,2; jne cgt2; mov dword [0xAE1DD8],100; jmp cgt1')
@@ -875,9 +898,11 @@ def gen():
     a(' call cg_refresh')
     a(' jmp orig_pop')
     a('cg_back:')
+    a(' cmp dword [0x%X],0; jne gx_back'%NET['gx_menu'])
     a(' mov ecx,[0xAE1DB8]; call phide')
     a(' jmp open_as_gm')
     a('cg_create:')
+    a(' cmp dword [0x%X],0; jne gx_back'%NET['gx_menu'])
     a(' mov ecx,[0xAE1DB8]; call phide')
     a(' mov dword [0xAE1800],1; mov dword [0xAE1804],1')
     a(' mov eax,[0xAE1DD8]; mov [0xAE1808],eax')
@@ -892,6 +917,28 @@ def gen():
     a('cgc_d:')
     a(' popad')
     a(' jmp open_lobby_keep')
+    # v1.5 (USER): Graphics page on the Create Game form, opened by the title's "Multiplayer Options" button
+    a('open_gx:')
+    a(' cmp dword [0xAE1DB8],0; je open_mm')
+    a(' mov ecx,[ebx+0x360]; push 0; call 0x6E9180')
+    a(' mov ecx,[0xAE1DB8]; call pshow')
+    a(' pushad; call 0x%X; popad'%NET['gx_menu_open'])
+    a(' mov byte [0xAE1D80],3')
+    a(' push 0; push 628; mov ecx,ebx; call 0x819BA0')
+    a(' push eax; mov ecx,ebx; call 0x819CA0')
+    a(' mov ecx,[0xA7510C]; push 1; push -1; push 0x6d; call 0x48FD70')
+    a(' jmp exit_pop')
+    a('gx_stepj:')
+    a(' mov ecx,[ebp-4]; mov eax,[ecx+0xf8]')
+    a(' pushad; push edx; push eax; call 0x%X; add esp,8; popad'%NET['gx_menu_step'])
+    a(' jmp orig_pop')
+    a('gx_back:')
+    a(' mov ecx,[0xAE1DB8]; call phide')
+    a(' pushad; call 0x%X; popad'%NET['gx_menu_close'])
+    a(' mov byte [0xAE1D84],0')
+    a(' mov ecx,ebx; call 0x728860')
+    a(' mov ecx,[0xA7510C]; push 1; push -1; push 0x64; call 0x48FD70')
+    a(' jmp exit_pop')
     a('back:')
     a(' mov byte [0xAE1D84],0')
     a(' push 0x1e; mov edx,[ebp-4]; push dword [edx+0x2c]; mov ecx,[0xA75DC8]; call 0x6F2640')
@@ -908,7 +955,11 @@ def gen():
     a(' jmp 0x6A7702')
     # v44: map id (eax) -> name (edx): PvP 0..len-1, co-op 100..100+N-1, anything else "?" (keeps eax)
     a('map_name:')
-    a(' cmp eax,%d; jae mn_c; mov edx,[eax*4+maptab]; ret'%len(MAPS))
+    a(' cmp eax,%d; jae mn_x; mov edx,[eax*4+maptab]; ret'%len(MAPS))
+    a('mn_x: cmp eax,[0x%X]; jae mn_c; push eax; push ecx; push eax; call 0x%X; add esp,4; mov edx,eax; pop ecx; pop eax; ret'%(NET['cm_total'],NET['cm_name_ptr']))
+    a('cm_ft: cmp eax,%d; jae cft_x; mov eax,[eax*4+filetab]; ret'%len(MAPS))
+    a('cft_x: cmp eax,[0x%X]; jae cft_0; push ecx; push edx; push eax; call 0x%X; add esp,4; pop edx; pop ecx; ret'%(NET['cm_total'],NET['cm_file_ptr']))
+    a('cft_0: xor eax,eax; ret')
     a('mn_c:')
     a(' cmp eax,100; jb mn_bad; cmp eax,%d; jae mn_bad; mov edx,[eax*4+cotab-400]; ret'%(100+N))
     a('mn_bad:')
@@ -995,7 +1046,7 @@ def gen():
     a(' mov eax,[0xAE1D6C]; mov edx,t_cancel; call set_text')
     a(' jmp ar_done')
     a('ar_norm:')
-    a(' mov eax,[0xAE1D7C]; imul edx,eax,12; add edx,t_army1')
+    a(' movzx eax,byte [mp_page]; imul eax,eax,3; add eax,[0xAE1D7C]; imul edx,eax,12; add edx,t_army1')
     a(' mov eax,[0xAE1D60]; call set_text')
     a(' mov eax,[0xAE1D64]; mov edx,t_hint; call set_text')
     a(' mov edx,t_select; cmp ebx,-1; jne ar_b1; mov edx,t_create')
@@ -1057,10 +1108,23 @@ def gen():
     a(' mov eax,[0xAE1D88]; lea eax,[eax+esi+11]; xor edx,edx; mov ecx,12; div ecx')
     a(' mov eax,[edx*4+herotab]')
     a(' ret')
-    a('dh_set:')
-    a(' mov eax,[0xAE1D7C]; lea eax,[eax+esi+2]; xor edx,edx; mov ecx,3; div ecx')
-    a(' push edx; call 0x4372D0; pop edx; mov ecx,eax; push edx; call 0x71CFD0')
+    a('dh_set:')       # TEST25: neighbours of all 6 armies from the hero cache (the other page is not loaded)
+    a(' movzx eax,byte [mp_page]; imul eax,eax,3; add eax,[0xAE1D7C]; lea eax,[eax+esi+5]; xor edx,edx; mov ecx,6; div ecx')
+    a(' mov eax,[hcache+edx*4]')
     a(' ret')
+    a('hc_fill:')      # hero of each army of the loaded page -> hcache[page*3 + i]
+    a(' pushad; xor esi,esi')
+    a('hcf_l: cmp esi,3; jge hcf_d')
+    a(' call 0x4372D0; mov ecx,eax; push esi; call 0x71CFD0')
+    a(' movzx edx,byte [mp_page]; imul edx,edx,3; add edx,esi; mov [hcache+edx*4],eax')
+    a(' inc esi; jmp hcf_l')
+    a('hcf_d: popad; ret')
+    a('hc_other:')     # read the other page once (hero cache), then the caller loads the current page again
+    a(' pushad; movzx eax,byte [mp_page]; push eax')
+    a(' xor eax,1; mov [mp_page],al; mov ecx,mp_fname; test eax,eax; jz ho1; mov ecx,mp_fname2')
+    a('ho1: mov [curfn],ecx; call mp_load')
+    a(' pop eax; mov [mp_page],al; mov ecx,[mp_cur]; mov [curfn],ecx')
+    a(' popad; ret')
     a('hb_prep:')
     a(' call mp_save')
     a(' call mp_delete')
@@ -1154,6 +1218,7 @@ def gen():
     a('ml_close:')
     a(' push ebx; call [0x988144]')
     a('ml_done:')
+    a(' call hc_fill')
     a(' pop edi; pop esi; pop ebx')
     a(' ret')
     a('fs_nop:')
@@ -1204,6 +1269,7 @@ def gen():
     a(' dec dword [0xAEF33C]; jnz ms_set')
     a(' push dword [0xAEF32C]; call [0x988144]')
     a('ms_done:')
+    a(' call hc_fill')
     a(' pop edi; pop esi; pop ebx')
     a(' ret')
     a('wr_troop:')
@@ -1258,6 +1324,33 @@ def gen():
     # v1.3 Fire at Will (net.c afw_*): UseAbility 0x560470(request) with ability 10 toggles the troop; engage update 0x49D250 ticks
     # v1.3 (USER dump, Walter 2 co-op P2): Con_PlayerInSight 0x557EA0 walks the minimap sight list; an entry held troop 0x40 ->
     #      0x4238B0 read [0x40+0x4c]. Skip entries that are not pointers.
+    # v1.5 sky follows the render camera every frame (net.c sky_tick) + diagnostics
+    a('sky_dr:')
+    a(' pushad; push ecx; call 0x%X; add esp,4; popad'%NET['sky_tick'])
+    a(' push ebp; mov ebp,esp; push -1; push 0x980A51; jmp 0x85DFDA')
+    a('gx_cdev:')   # v1.5 optional MSAA before CreateDeviceEx
+    a(' pushad; push esi; call 0x%X; add esp,4; popad'%NET['gx_dev'])
+    a(' mov eax,[ecx]; push 0; push ecx; jmp 0x8762DE')
+    # v1.5 draw distance: device holds scaled fog/far, the game's getters return the map's own values (net.c gx_fog_set)
+    a('gx_fset:')
+    a(' jmp 0x%X'%NET['gx_fog_set'])
+    a('gx_fend:')
+    a(' jmp 0x%X'%NET['gx_fog_end'])
+    a('gx_fsta:')
+    a(' jmp 0x%X'%NET['gx_fog_start'])
+    a('gx_fget:')
+    a(' jmp 0x%X'%NET['gx_far_get'])
+    a('gx_fsc:')
+    a(' push eax; push ecx; push edx; push dword [esp+20]; call 0x%X; add esp,4; mov [esp+20],eax; pop edx; pop ecx; pop eax'%NET['gx_far_scale'])
+    a(' push ebp; mov ebp,esp; push esi; push edi; mov edi,ecx; jmp 0x876E67')
+    a('sky_del:')
+    a(' test dword [esp+4],0x7FFFFFFF; jnz sdl_o')
+    a(' pushad; push dword [esp+32]; push dword [esp+40]; push 1; call 0x%X; add esp,12; popad'%NET['sky_note'])
+    a('sdl_o: push ebp; mov ebp,esp; mov eax,[ebp+8]; jmp 0x87B856')
+    a('sky_mx:')
+    a(' cmp dword [esp+4],0; jne smx_o; cmp dword [esp],0x85E0B8; je smx_o')
+    a(' pushad; push dword [esp+32]; push 0; push 2; call 0x%X; add esp,12; popad'%NET['sky_note'])
+    a('smx_o: push ebp; mov ebp,esp; mov eax,[ebp+8]; jmp 0x87E296')
     a('pis_guard:')
     a(' mov ecx,[ebp-8]; cmp ecx,0x10000; jb pis_s; call 0x4238B0; jmp 0x557EF3')
     a('pis_s: jmp 0x557EC7')
@@ -1311,6 +1404,262 @@ def gen():
     a(' cmp dword [0x%X],0; je lps_o'%NET['ls_on'] if 'ls_on' in NET else ' nop')
     a(' push 0; call 0x466AD0; ret')
     a('lps_o: mov eax,[ecx+0x2c]; ret')
+    a('lp_build:')    # v1.5: 0x69C6D5 per-update 'known troops' list - in network co-op for slot 0 and P2's slot on every PC (net.c lp_build_c)
+    a(' cmp dword [0x%X],0; je lpb_o'%NET['ls_coop'])
+    a(' cmp dword [0x%X],0; je lpb_o'%NET['ls_on'])
+    a(' pushad; push ecx; call 0x%X; add esp,4; popad; add dword [esp],7; ret'%NET['lp_build_c'])
+    a('lpb_o: mov eax,[ecx+0x2c]; ret')
+    a('in_bth_a:')    # v1.5 co-op: input on/off for slot 0 and P2 (net.c in_both)
+    a(' jmp 0x%X'%NET['in_both_a'])
+    a('in_bth_b:')
+    a(' jmp 0x%X'%NET['in_both_b'])
+    a('rp_alloc:')    # v1.5 (USER test: Ellen 1 co-op crashed both PCs at the first cut-scene; dumps in 0x4D1730 / 0x4CFC50 from
+    #   lp_build_c): the remote human player (K2RemotePlayer, 0xEC bytes) is allocated at the local player's size (0x295C) and
+    #   zeroed, with the known-troops list's first-build flag (+0x265C) set like K2LocalPlayer's list constructor does - so the
+    #   co-op known-troops rebuild (0x4D0D90) writes into the object instead of past its end. 0x598CC7 push 0xEC/new/add esp.
+    a(' push 0x295C; call 0x8D5E88; add esp,4')
+    a(' test eax,eax; jz rpa_r')
+    a(' push eax; push 0x295C; push 0; push eax; call 0x8F9260; add esp,12; pop eax')
+    a(' mov byte [eax+0x265C],1')
+    a('rpa_r: ret')
+    a('sw_dir_h:')    # v1.5: 0x4831D7 Shock Wave start: normalise the step vector [ebp-0x40] (net.c sw_dir), then the moved code
+    a(' pushad; lea eax,[ebp-0x40]; push eax; push dword [ebp-0x38]; call 0x%X; add esp,8; popad'%NET['sw_dir'])
+    a(' mov edx,[ebp-0x38]; mov eax,[ebp-0x40]; mov [edx+0x44],eax; mov ecx,[ebp-0x3c]; mov [edx+0x48],ecx; ret')
+    a('sw_upd:')      # v1.5: KufAbility_ShockWave vtable slot 2 (update, thiscall, ret): end a wave that runs too long
+    a(' pushad; push ecx; call 0x%X; add esp,4; mov [ls_r],eax; popad'%NET['sw_age'])
+    a(' cmp dword [ls_r],0; jne swu_end')
+    a(' jmp 0x4833C0')
+    a('swu_end:')
+    a(' mov eax,[ecx]; jmp dword [eax+0x1c]')
+    a('lk_view:')     # TEST13: 0x827B71 call 0x82BF10(char, look) of the unit view [ebp-0x38] -> net.c lk_view_c (cdecl)
+    a(' push dword [esp+8]; push dword [esp+8]; push dword [ebp-0x38]; call 0x%X; add esp,12; ret'%NET['lk_view_c'])
+    a('lk_live:')     # TEST13: 0x82C0B4 Live test in 0x82BF10 (char [ebp+8], look [ebp+0xc])
+    a(' pushad; push dword [ebp+0xc]; push dword [ebp+8]; call 0x%X; add esp,8; mov [ls_r],eax; popad; mov eax,[ls_r]; ret'%NET['lk_live_c'])
+    a('lk_pre:')      # TEST13: 0x6BB246 Live test in the preload 0x6BB010 (this [ebp-0xd8], args from [ebp+8])
+    a(' pushad; lea eax,[ebp+8]; push eax; push dword [ebp-0xd8]; call 0x%X; add esp,8; mov [ls_r],eax; popad; mov eax,[ls_r]; ret'%NET['lk_pre_c'])
+    a('ds_spr:')      # USER 2026-11-25: 0x55E5A7 damage-spread Live test (troop [ebp-0x4]) -> net.c ds_spread_c (co-op humans 0.95)
+    a(' pushad; push dword [ebp-0x4]; call 0x%X; add esp,4; mov [ls_r],eax; popad; mov eax,[ls_r]; ret'%NET['ds_spread_c'])
+    a('sk_live_a:')   # v1.5 co-op: 0x56B9C9 (troop [ebp-0x28]) / 0x55D495 (troop [ebp-0x10]) Live test -> net.c sk_live_c
+    a(' mov eax,[ebp-0x28]; jmp sk_live')
+    a('sk_live_b:')
+    a(' mov eax,[ebp-0x10]')
+    a('sk_live:')
+    a(' pushad; push eax; call 0x%X; add esp,4; mov [ls_r],eax; popad; mov eax,[ls_r]; ret'%NET['sk_live_c'])
+    a('walk_w:')      # v1.5 co-op: vtable Execute of Act_TroopWalkTo / RunTo / CamForce -> net.c (thiscall, no stack args)
+    a(' push ecx; call 0x%X; add esp,4; ret'%NET['walk_exec'])
+    a('run_w:')
+    a(' push ecx; call 0x%X; add esp,4; ret'%NET['run_exec'])
+    a('camf_w:')
+    a(' push ecx; call 0x%X; add esp,4; ret'%NET['camf_exec'])
+    a('camt_w:')      # TEST38 (Keaton): ACT_SET_CAM_TARGET vtable 0x9951A0 -> remember the scripted camera target
+    a(' push ecx; call 0x%X; add esp,4; ret'%NET['camt_exec'])
+    a('cam_kp:')      # TEST38 (Keaton): 0x490F8F the camera update clears a target outside its troop list - keep a fresh scripted one in co-op
+    a(' pushad; push edx; call 0x%X; add esp,4; test eax,eax; popad; jnz ck_s'%NET['cam_keep'])
+    a(' mov dword [edx+0x134],0')
+    a('ck_s: jmp 0x490F99')
+    a('ps_st1:')      # TEST39 (Keaton: Bless & Heal 'breaks its alpha'): Healing bird (Bless & Heal), Heal and Chilling Attack draw their
+    a(' push ecx')                     # point sprites on texture STAGE 3 - the Xbox's point-sprite stage. On PC stages 0-2 keep whatever the
+    a(' push dword [esp+16]; push dword [esp+16]; push dword [esp+16]')   # last mesh left (other textures, specular), so the sprites
+    a(' call 0x8772D0')                # came out as blocky squares. The stage bytes are moved to 0; this replaces the last stage call
+    a(' mov ecx,[esp]; push 1; push 1; push 1; call 0x8772D0')   # and also disables stage 1 (COLOROP / ALPHAOP = DISABLE).
+    a(' mov ecx,[esp]; push 1; push 4; push 1; call 0x8772D0')   # The effects save/restore all states (state block) around the draw.
+    a(' pop ecx; ret 12')
+    # TEST42 (Keaton): AI filter ids are stored in one byte (entry +0x1d / +0x1e) and the filter switch 0x575BC0 read them signed:
+    # filters 128-255 never filtered and 305 / 323 became 49 / 67. The parser now keeps bit 8 of each in the spare byte +0x1f
+    # (bit 0 = filter 1, bit 1 = filter 2), these four readers put it back, and the switch reads the full value.
+    a('flt_a:')       # 0x573EF2 (0x573E80, filter 1)
+    a(' mov edx,[ebp+0xc]; movzx eax,byte [edx+0x1d]; test byte [edx+0x1f],1; jz fa_1; or eax,0x100')
+    a('fa_1: jmp 0x573EFA')
+    a('flt_b:')       # 0x574049 (0x573E80, filter 2)
+    a(' mov ecx,[ebp+0xc]; movzx edx,byte [ecx+0x1e]; test byte [ecx+0x1f],2; jz fb_1; or edx,0x100')
+    a('fb_1: jmp 0x574051')
+    a('flt_c:')       # 0x574441 (0x5742D0, filter i = [ebp-0x10])
+    a(' mov edx,[ebp+0xc]; mov ecx,[ebp-0x10]; movzx eax,byte [edx+ecx+0x1d]; movzx edx,byte [edx+0x1f]; shr edx,cl; and edx,1; shl edx,8; or eax,edx; push eax; jmp 0x57444C')
+    a('flt_d:')       # 0x57454A (0x5742D0, filter i = [ebp-0xc])
+    a(' mov eax,[ebp+0xc]; mov ecx,[ebp-0xc]; movzx edx,byte [eax+0x1f]; shr edx,cl; and edx,1; shl edx,8; movzx ecx,byte [eax+ecx+0x1d]; or ecx,edx; push ecx; jmp 0x574555')
+    a('fly_dg:')      # TEST42 diagnostic: 0x58BF22 end of arrows-on-flyers damage -> net.c fly_dbg(ebp)
+    a(' pushad; push ebp; call 0x%X; add esp,4; popad; fld dword [ebp-4]; jmp 0x58BF29'%NET['fly_dbg'])
+    a('hx_ld:')       # TEST43: 0x772A90 load sound bank (thiscall, path) -> note the Hexter scorpion bank's key (net.c hexsp_note)
+    a(' push dword [esp+4]; call hx_ld_o')
+    a(' push eax; push dword [esp+8]; push eax; call 0x%X; add esp,8; pop eax; ret 4'%NET['hexsp_note'])
+    a('hx_ld_o: push ebp; mov ebp,esp; sub esp,8; jmp 0x772A96')
+    a('hx_cue:')      # TEST43: 0x772C70 play cue (channel, bank, cue) - scorpion bank: 15/16 nothing, 17+ two back
+    a(' mov eax,[esp+8]')
+    a(' cmp eax,[0x%X]; je hc_m; cmp eax,[0x%X]; je hc_m; cmp eax,[0x%X]; je hc_m; cmp eax,[0x%X]; jne hc_o'%(NET['hexsp_key'],NET['hexsp_key']+4,NET['hexsp_key']+8,NET['hexsp_key']+12))
+    a('hc_m: mov eax,[esp+0xc]; cmp eax,15; jl hc_o; cmp eax,17; jl hc_none; sub eax,2; mov [esp+0xc],eax; jmp hc_o')
+    a('hc_none: ret 0xc')
+    a('hc_o: push ebp; mov ebp,esp; sub esp,8; jmp 0x772C76')
+    a('mm_guard:')    # TEST47 (Keaton crash, Urukubarr 2 co-op): 0x4D12A0 show/hide the battle minimap - its widget (+0x108) was NULL (ACT_FORCE_MINIMAP_ON)
+    a(' test ecx,ecx; jz mmg_r; cmp dword [ecx+0x108],0; je mmg_r; push ebp; mov ebp,esp; sub esp,0xc; jmp 0x4D12A6')
+    a('mmg_r: ret 4')
+    a('ldr_d:')       # TEST46: 0x58CB79 / 0x58CBD9 end of the officer damage functions -> net.c ldr_dmg(unit, damage) (co-op enemy leaders x1.2)
+    a(' push dword [ebp+0xc]; push dword [ebp+8]; call 0x%X; add esp,8; mov esp,ebp; pop ebp; ret'%NET['ldr_dmg'])
+    a('v3n:')         # TEST46: 0x871EE4 D3DXVec3Normalize thunk (stdcall out, in) -> net.c v3n_c, same on every processor
+    a(' push dword [esp+8]; push dword [esp+8]; call 0x%X; add esp,8; ret 8'%NET['v3n_c'])
+    a('fls_dg:')      # TEST42 diagnostic: 0x58C4DC end of flyer strike damage -> net.c fls_dbg(ebp)
+    a(' pushad; push ebp; call 0x%X; add esp,4; popad; fld dword [ebp-8]; jmp 0x58C4E3'%NET['fls_dbg'])
+    a('ldr_hp:')      # TEST40 (USER): 0x5692F8 troop refresh: leader max HP (0x58AF50, thiscall level -> st0) -> net.c ldr_hpm (co-op enemies +50%)
+    a(' push ecx; push dword [esp+8]; call 0x58AF50; pop ecx')
+    a(' sub esp,4; fstp dword [esp]; push ecx; call 0x%X; add esp,8; ret 4'%NET['ldr_hpm'])
+    if ENCA:   # USER 2026-11-23: E.Regnier = Regnier's body in an Encablossa troop (net/eq.c rn_*); E build only
+        a('rn_nm:')       # 0x6B4F53 record name <- CharInfo name: "E.Regnier" for his record
+        a(' push dword [esp+4]; push dword [ebp-0x10]; call 0x%X; add esp,8; ret 4'%NET['rn_recname'])
+        a('rn_nm2:')      # USER 2026-11-25 ("Regnier still shows his normal name in the barracks"): 0x6B33B4 rebuilds each army record's
+                          # hero name after loading (0x6AACE0(type, variation)) - "E.Regnier" for his record (type 34, job 61)
+        a(' mov eax,[ebp-0x10]; cmp dword [eax+0x28],34; jne rn2_o; cmp dword [eax+0x48],61; jne rn2_o')
+        a(' push 34; push eax; call 0x%X; add esp,8; ret 8'%NET['rn_recname'])
+        a('rn2_o: jmp 0x6AACE0')
+        a('rn_fw:')       # 0x846D12 K2RegnierView sword flame emitter: slot 123 + dark light for E.Regnier
+        a(' push ecx; push dword [esp+8]; push dword [ebp-0xc0]; call 0x%X; add esp,8; pop ecx; mov [esp+4],eax; jmp 0x87A470'%NET['rn_fire'])
+        a('rn_fsw:')      # USER 2026-11-25 (still orange): 0x845B10 K2RegnierView ctor stores its FireSword handle -> eq.c rn_sword(view, handle)
+        a(' mov edx,[ebp-0x10]; mov [edx+0x60],eax; pushad; push eax; push edx; call 0x%X; add esp,8; popad; ret'%NET['rn_sword'])
+        a('rn_fsp:')      # 0x643FF8 FireSword (0x643F40) starts its REG_FIRE emitter: push 1; push 1; push slot (6, or 123 for E.Regnier's)
+        a(' pop edx; push 1; push 1; push edx; push dword [ebp-0x4c]; call 0x%X; add esp,4; pop edx; push eax; jmp edx'%NET['rn_swslot'])
+        a('rn_fw2:')      # 0x846173 K2RegnierView::vfunction3 attack flame (0x829990 bone emitter): push 1; push slot; push 0
+        a(' pop edx; push 1; push edx; push 6; push dword [ebp-0x8c]; call 0x%X; add esp,8; pop edx; push eax; push 0; jmp edx'%NET['rn_fire'])
+        a('rn_nm3:')      # USER 2026-11-25 (battle HUD "Regnier"): 0x56B07F troop name / 0x6B45F1 stage troop name = 0x6AABD0(name, x, type, look)
+        a(' cmp dword [esp+12],34; jne rn3_o; cmp dword [esp+16],1; jne rn3_o; mov eax,rn3_s; ret 16')
+        a('rn3_o: jmp 0x6AABD0')
+        a('rn3_s: db "E.Regnier",0')
+        a('rn_chap:')     # 0x6AA430 army hero -> chapter/nation: Encablossa (39) -> Regnier's chapter 10 / Hexter, so W_PLR_Regnier (his voices) loads
+        a(' cmp dword [esp+4],39; jne rc_o; mov dword [ecx+8],39; mov dword [ecx+4],10; mov dword [ecx],3; ret 4')
+        a('rc_o: push ebp; mov ebp,esp; sub esp,8; jmp 0x6AA436')
+        a('fh_job:')      # 0x583D80 troop flying height by job: the E build's own jobs -> their base job (eq.c fly_job)
+        a(' push dword [esp+4]; call 0x%X; add esp,4; mov [esp+4],eax'%NET['fly_job'])
+        a(' push ebp; mov ebp,esp; push ecx; mov eax,[ebp+8]; jmp 0x583D87')
+        a('rn_msh:')      # 0x87CEC9 mesh loader, file name [ebp-0x218] ready: C_DP_RNE.SMFX (E.Regnier) -> read C_DP_RN.SMFX on the sync path
+        a(' pushad; lea eax,[ebp-0x218]; push eax; call 0x%X; add esp,4; test eax,eax; popad; jnz rm_s'%NET['rn_mesh_name'])
+        a(' cmp byte [edi+0x14ae8],0; jmp 0x87CED0')
+        a('rm_s: mov ecx,[edi+0x14ae4]; jmp 0x87CF22')
+        a('rn_mrd:')      # 0x87CF30 whole-file mesh read -> rn_mesh_fix (renames his body texture)
+        a(' push dword [esp+8]; push dword [esp+8]; call 0x88FB50')
+        a(' pushad; mov edx,[esp+40]; push eax; push dword [edx]; call 0x%X; add esp,8; popad; ret 8'%NET['rn_mesh_fix'])
+    else:      # labels only (relink needs them); the patches that use them are E build only
+        for _l in ('rn_nm', 'rn_nm2', 'rn_fw', 'rn_fsw', 'rn_fsp', 'rn_fw2', 'rn_nm3', 'rn_chap', 'rn_msh', 'rn_mrd', 'fh_job'): a(_l + ':'); a(' int3')
+    a('st_ptc_w:')    # TEST39 (Keaton, X08): 0x8678A0 empty unit-view status particle handler (thiscall kind, particle; ret 8) -> net.c
+    a(' pushad; push dword [esp+40]; push dword [esp+40]; push ecx; call 0x%X; add esp,12; popad; ret 8'%NET['st_ptc'])
+    # ---- Battle Order prototype (KUF_BO): campaign briefing troop menu (menu 10, K2MenuBattle) over the MP army screen
+    a('ldr_keep:')    # TEST27 (Keaton's fix): 0x6A2402 network load clears every non-hero mission leader (+0x58 = 0) - keep them in co-op
+    a(' pushad'); a(' call 0x%X'%NET['coop_net']); a(' test eax,eax'); a(' popad')
+    a(' jnz 0x6A23B0')                 # co-op: keep the mission's leader (story heroes, officers)
+    a(' mov byte [edx+0x58],0')       # Versus / Invasion / Hero Battle: as before
+    a(' jmp 0x6A23B0')
+    a('elf_fix:')     # TEST33 (USER: Elvish speech shows as symbols): 0x750B86 Elvish glyph map - the PC font table has no ELF runes
+    a(' mov eax,[ebp+8]')              # (base [0xA4D150] = -1), so letters became '#$%&...'; then draw the plain letters instead
+    a(' cmp dword [0xA4D150],-1')
+    a(' je 0x750BE9')                  # glyph unchanged
+    a(' add eax,0x21; mov [ebp-4],eax')
+    a(' jmp 0x750B92')
+    a('smp_mag:')     # TEST35 (USER: Bless & Heal, Heal, Holy Explosion, Elemental Boost look blocky/pixelated): the game asks for
+    a(' cmp dword [esp+8],5; jne sm_go')   # ANISOTROPIC magnification (D3DSAMP_MAGFILTER 3) everywhere; graphics cards that do not offer
+    a(' cmp dword [esp+12],3; jne sm_go')  # anisotropic magnification (and none for volume textures, which every particle picture is)
+    a(' mov dword [esp+12],2')             # fall back to POINT = square pixels on every enlarged effect sprite. LINEAR looks the same
+    a('sm_go: push ebp; mov ebp,esp; sub esp,0xc; jmp 0x877136')   # as anisotropic when magnifying (anisotropy only helps minifying)
+    a('ptc_smp:')     # TEST35: 0x896AE3 particle states (ADDRESSW clamp): also MINFILTER LINEAR for the particle's volume texture -
+    a(' mov byte [0x%X],1'%NET['gx_noan'])   # TEST37: the anisotropy option must not turn it back
+    a(' push ecx')                         # set 3 then 2 so the cached value is right even after the mesh code set it on the device directly
+    a(' push dword [esp+0x10]; push dword [esp+0x10]; push dword [esp+0x10]; call 0x877130')
+    a(' mov ecx,[esp]; push 3; push 6; push 0; call 0x877130')
+    a(' mov ecx,[esp]; push 2; push 6; push 0; call 0x877130')
+    a(' mov byte [0x%X],0'%NET['gx_noan'])
+    a(' pop ecx; ret 0xc')
+    a('rg_hudv:')     # TEST36: 0x458BB6 HUD variable lines - "variable" 0x5247 = text only (Roguelike overlay), no number after it
+    a(' mov eax,[ebp-0xb8]; cmp dword [eax],0x5247; jne rhv_n')
+    a(' mov byte [ebp-0x84],0; jmp 0x458C26')
+    a('rhv_n: jmp 0x458BBC')
+    a('enca_pic:')    # E build: 0x81C680 unit picture file (type, look, kind) - Encablossa types 39/55/61-63 -> the Encablossa's own (39, look 1)
+    a(' cmp byte [0x%X],0; je ep_go'%NET['enca_on'])
+    if ENCA:   # USER 2026-11-23: each Encablossa its own pictures (rendered from its model, scripts/tools/enca_pics.py) as
+               # looks of type 39 (whose Portrait name is UV_ANCIENTHEART; its Body name, empty in the game, is set to the same):
+               # 39 Spitter -> look 2, 55 Flyer -> 3, 63 Infested -> 4, 61/62 -> 2. Type 39 look 1 (the Ancient Heart) is kept.
+        a(' mov eax,[esp+4]; cmp eax,39; jne ep_1; cmp dword [esp+8],1; je ep_go; mov dword [esp+8],2; jmp ep_go')
+        a('ep_1: cmp eax,55; jne ep_2; mov dword [esp+4],39; mov dword [esp+8],3; jmp ep_go')
+        a('ep_2: cmp eax,63; jne ep_3; mov dword [esp+4],39; mov dword [esp+8],4; jmp ep_go')
+        a('ep_3: cmp eax,61; jb ep_go; cmp eax,62; ja ep_go; mov dword [esp+4],39; mov dword [esp+8],2')
+    else:
+        a(' mov eax,[esp+4]; cmp eax,39; je ep_e; cmp eax,55; je ep_e; cmp eax,61; jb ep_go; cmp eax,63; ja ep_go')
+        a('ep_e: mov dword [esp+4],39; mov dword [esp+8],1')
+    a('ep_go: push ebp; mov ebp,esp; sub esp,0x1c; jmp 0x81C686')
+    a('gx_d3dc:')     # TEST27: 0x876118 Direct3DCreate9Ex call -> net.c gx_d3d_create (stdcall, same 2 args; D3D9On12 option)
+    a(' jmp 0x%X'%NET['gx_d3d_create'])
+    a('bo_rt:')       # 0x6F0CC0 menu manager result router entry (ecx = manager): open / close the overlay here, outside the form loop
+    a(' pushad; push ecx; call 0x%X; add esp,4; mov [esp+28],eax; popad'%NET['bo_tick'])
+    a(' test eax,eax; jz br_go')
+    a(' pushad; cmp eax,2; jne br_ns; call mp_save')
+    a('br_ns: call as_refresh; popad')
+    a('br_go: push ebp; mov ebp,esp; sub esp,0x364; jmp 0x6F0CC9')
+    a('bo_ctor:')     # 0x6F0145 call K2MenuBattle ctor: roster = the army's troop vector, slots = ours
+    a(' cmp dword [0x%X],0; je 0x707860'%NET['bo_on'])
+    a(' push eax; mov eax,[0x%X]; mov [esp+0x10],eax; mov dword [esp+0x14],0x%X; pop eax; jmp 0x707860'%(NET['bo_rost'],NET['bo_vec']))
+    a('bo_rdy:')      # 0x707AC5 / 0x707B1F briefing-ready flag (KufBriefing +0x11, none on the title) -> ready
+    a(' cmp dword [0x%X],0; je 0x43B930; mov al,1; ret'%NET['bo_on'])
+    a('bo_flt:')      # 0x709D18 choice list: slot support flag must equal the troop's -> ours: any troop, max 1 support
+    a(' cmp dword [0x%X],0; jne bf_my'%NET['bo_on'])
+    a(' mov edx,[ebp+8]; movzx esi,byte [edx+6]; jmp 0x709D1F')
+    a('bf_my: pushad; push dword [ebp-0x298]; push dword [ebp+8]; call 0x%X; add esp,8; mov [esp+28],eax; popad'%NET['bo_ok'])
+    a(' test eax,eax; jnz 0x709D3D; jmp 0x709C26')
+    a('bo_yes:')      # 0x708FCA "Start the mission?" yes (result 0x18 = start battle) -> save the order
+    a(' cmp dword [0x%X],0; jne by_my'%NET['bo_on'])
+    a(' mov dword [edx+0x290],0x18; jmp 0x708FD4')
+    a('by_my: pushad; call 0x%X; popad; jmp 0x708FD4'%NET['bo_apply'])
+    a('bo_no:')       # 0x708F63 "Exit to World Map?" yes (result 0x19) -> close, no change
+    a(' cmp dword [0x%X],0; jne bn_my'%NET['bo_on'])
+    a(' mov dword [ecx+0x290],0x19; jmp 0x708F6D')
+    a('bn_my: mov dword [0x%X],1; jmp 0x708F6D'%NET['bo_close'])
+    a('bo_msg:')      # K2MenuBattle message boxes (0x6E66E0) -> our wording while the overlay is up
+    a(' push ecx; push dword [esp+8]; call 0x6E66E0; pop ecx')
+    a(' cmp dword [0x%X],0; je bm_r'%NET['bo_on'])
+    a(' pushad; push dword [esp+36]; push ecx; call 0x%X; add esp,8; popad'%NET['bo_msgtxt'])
+    a('bm_r: ret 4')
+    a('bo_ans:')      # 0x708F2A message answer switch: B's question while the overlay is up -> 0 save, 1 close unchanged
+    a(' mov edx,[ebp-4]; mov eax,[edx+0x2c4]')
+    a(' cmp dword [0x%X],0; je ba_o; cmp eax,2; jne ba_o'%NET['bo_on'])   # B's question (message 2, OK/Cancel shown as Save / Don't Save)
+    a(' cmp dword [ebp-8],0; jne ba_n; pushad; call 0x%X; popad; jmp 0x70900E'%NET['bo_apply'])
+    a('ba_n: cmp dword [ebp-8],1; jne 0x70900E; mov dword [0x%X],1; jmp 0x70900E'%NET['bo_close'])
+    a('ba_o: jmp 0x708F33')
+    a('st_hk:')       # TEST22: unit status apply 0x499450 -> net.c st_log(self, type, dur, caller), then the moved prologue
+    a(' cmp dword [0x%X],0; je st_hk_n; pushad; lea eax,[esp+36]; push 4; push eax; push dword [ecx]; call 0x%X; add esp,12; test eax,eax; popad; jz st_hk_n'%(NET['fxh_on'],NET['fxh_hit']))
+    a(' mov al,1; ret 0xc')        # TEST24: status inside an ability hit -> host-synced (fxh kind 4)
+    a('st_hk_n:')
+    a(' pushad; push ebp; mov eax,[esp+36]; push eax; push dword [esp+48]; push dword [esp+48]; push ecx; call 0x%X; add esp,20; popad'%NET['st_log'])
+    a(' push ebp; mov ebp,esp; sub esp,0x24; jmp 0x499456')
+    a('fxh_ev:')      # TEST23: ability hit dispatch 0x48B14F (event 9 / 2 -> vt[5]) runs with fxh_on set
+    a(' inc dword [0x%X]; mov ecx,[ebp-4]; call [ebp-0xc]; dec dword [0x%X]; jmp 0x48B155'%(NET['fxh_on'],NET['fxh_on']))
+    a('fxh_fa0:')     # TEST23: unit hit-with-status 0x586FA0 (5 args) inside an ability hit -> fxh_hit(unit, args, 1)
+    a(' cmp dword [0x%X],0; je fxh_fa0o; pushad; lea eax,[esp+36]; push 1; push eax; push ecx; call 0x%X; add esp,12; test eax,eax; popad; jz fxh_fa0o'%(NET['fxh_on'],NET['fxh_hit']))
+    a(' mov al,1; ret 0x14')
+    a('fxh_fa0o:')
+    a(' push ebp; mov ebp,esp; sub esp,0x18; jmp 0x586FA6')
+    a('fxh_hl:')      # TEST24: unit heal 0x4990E0 (1 arg) inside an ability hit -> fxh_hit(unit, args, 3)
+    a(' cmp dword [0x%X],0; je fxh_hlo; pushad; lea eax,[esp+36]; push 3; push eax; push ecx; call 0x%X; add esp,12; test eax,eax; popad; jz fxh_hlo'%(NET['fxh_on'],NET['fxh_hit']))
+    a(' ret 4')
+    a('fxh_hlo:')
+    a(' push ebp; mov ebp,esp; sub esp,8; jmp 0x4990E6')
+    a('fxh_e0:')      # TEST23: unit damage 0x5866E0 (6 args) inside an ability hit -> fxh_hit(unit, args, 2)
+    a(' cmp dword [0x%X],0; je fxh_e0o; pushad; lea eax,[esp+36]; push 2; push eax; push ecx; call 0x%X; add esp,12; test eax,eax; popad; jz fxh_e0o'%(NET['fxh_on'],NET['fxh_hit']))
+    a(' mov al,1; ret 0x18')
+    a('fxh_e0o:')
+    a(' push ebp; mov ebp,esp; sub esp,0x18; jmp 0x5866E6')
+    a('inv_lv:')      # TEST25: wave spawn 0x54A946 (level byte [ebp-0x88] -> the troop record) - Insanity spawns every troop at 99
+    a(' mov dl,[ebp-0x88]; test dword [0x%X],2; jz inv_lv1; mov dl,99'%NET['inv_var'])
+    a('inv_lv1: jmp 0x54A94C')
+    a('tc_nm:')       # TEST25: 0x87D646 texture loader, file name [ebp-0x114] built -> new-colour team textures read <group>_1 (sync path)
+    a(' pushad; lea eax,[ebp-0x114]; push eax; call 0x%X; add esp,4; test eax,eax; popad; jnz tc_nm_s'%NET['tc_name'])
+    a(' cmp byte [edi+0x14ae8],0; jmp 0x87D64D')
+    a('tc_nm_s: mov ecx,[edi+0x14ae4]; jmp 0x87D6EC')
+    a('tc_fl:')       # TEST25: 0x6AB800 team texture fill (key, tex, colour): colours 6+ -> tc_fill
+    a(' cmp dword [esp+12],6; jl tc_flo')
+    a(' pushad; push dword [esp+44]; movzx eax,word [esp+44]; push eax; push dword [esp+44]; call 0x%X; add esp,12; popad; ret 0xc'%NET['tc_fill'])
+    a('tc_flo: push ebp; mov ebp,esp; sub esp,0x30; jmp 0x6AB806')
+    a('tc_lk:')       # TEST25: 0x6AB8F0 team texture lookup (key, slot): slot colour 6+ -> tc_get
+    a(' mov eax,[esp+8]; cmp eax,8; jae tc_lko; mov eax,[ecx+eax*4+0x718]; cmp eax,6; jl tc_lko')
+    a(' push ecx; push edx; push eax; push dword [esp+16]; call 0x%X; add esp,8; pop edx; pop ecx; ret 8'%NET['tc_get'])
+    a('tc_lko: push ebp; mov ebp,esp; sub esp,0x18; jmp 0x6AB8F6')
+    a('tc_738:')      # TEST25: 0x6C31D0 G+0x738[slot] = colour: 6+ -> 0 (+0x738 == 6 is a special case at 0x69BA5A)
+    a(' cmp edx,6; jl tc_738o; xor edx,edx')
+    a('tc_738o: mov [ecx+eax*4+0x738],edx; jmp 0x6C31D7')
+    a('warp_w:')      # v1.5 co-op: vtable Execute of Act_TroopWarp -> net.c warp_exec (thiscall, no stack args)
+    a(' push ecx; call 0x%X; add esp,4; ret'%NET['warp_exec'])
     a('iv_wait_vt:')  # v100p: vtable slot of Act_Invasion_Cnt_End (0x9958D0) -> iv_wait (thiscall, ecx = action)
     a(' jmp 0x%X'%NET['iv_wait'])
     a('lives_hk:')    # v100q: 0x56AE9A troop init: lives only for human players' troops
@@ -1328,17 +1677,23 @@ def gen():
     a('sg_ok:')
     a(' push eax; mov ecx,[ecx+edx*4]; jmp 0x87AA5C')
     a('dmg_hk:')      # v1.1: TakeDamage 0x5867E6 (xmm0 = amount [ebp+0x10], ecx = unit): amount *= dmg_k (Versus damage scale)
-    a(' mulss xmm0,[0x%X]; movss [ebp+0x10],xmm0; movss [ecx+0xc0],xmm0; jmp 0x5867EE'%NET['dmg_k'])
+    a(' mulss xmm0,[0x%X]; movss [ebp+0x10],xmm0; movss [ecx+0xc0],xmm0'%NET['dmg_k'])
+    a(' pushad; push dword [ebp+4]; push dword [ebp+0x10]; push dword [ebp+8]; push ecx; call 0x%X; add esp,16; popad; jmp 0x5867EE'%NET['dmg_rec'])   # TEST22d
     a('heal_hk:')     # v1.1: unit Heal 0x4990EC: amount [ebp+8] *= dmg_k
     a(' movss xmm0,[ebp+8]; mulss xmm0,[0x%X]; addss xmm0,[eax+0xa8]; jmp 0x4990F9'%NET['dmg_k'])
     a('snd_id1:')     # v1.1: sound manager [0xA75BC4] plays by id from a table at +8 that ends at +0x4800 (0x11FE ids). USER crashes:
-    a(' cmp dword [esp+4],0x11FE; jae snd_bad')   # ids 0x14C9 / 0x14C2 / 0xFFFF read past it. Out-of-range id -> 'no sound' (-1)
+    a(' cmp dword [esp+4],0x11FE; jae snd_bad')   # ids 0x14C9 / 0x14C2 / 0xFFFF read past it. v1.5: out-of-range id -> an empty object of its own
     a(' push ebp; mov ebp,esp; push -1; push 0x981C12; jmp 0x87A1AA')
     a('snd_id2:')
-    a(' cmp dword [esp+4],0x11FE; jae snd_bad')
+    a(' cmp dword [esp+4],0x11FE; jae snd_bad2')
     a(' push ebp; mov ebp,esp; push -1; push 0x981CFF; jmp 0x87A9BA')
-    a('snd_bad:')
-    a(' xor eax,eax; ret 8')   # 0 = no voice (handles start at 10; -1 crashed the voice release 0x87B850)
+    a('obj_draw:')    # v1.5: CStrObject draw 0x897AE0 reads its mesh data (+0x44) before testing it for NULL -> an empty object draws nothing
+    a(' cmp dword [ecx+0x44],0; jne od_ok; ret 4')
+    a('od_ok: push ebp; mov ebp,esp; push ecx; push ebx; jmp 0x897AE5')
+    a('snd_bad:')     # v1.5: was 'xor eax,eax; ret 8' = handle 0 = the sky dome object (net.c snd_empty)
+    a(' jmp 0x%X'%NET['snd_empty1'])
+    a('snd_bad2:')
+    a(' jmp 0x%X'%NET['snd_empty2'])
     a('ogre_var:')    # v100p: 0x55D354 troop build, soldier i = [ebp-0x14]: Ogre soldiers (char 26) get colour 1-3 each
     a(' movsx edx,word [ecx+0x196]')
     a(' cmp word [ecx+0x194],26; jne ov_r')
@@ -1350,6 +1705,8 @@ def gen():
     a(' ret')
     a('rng2_hk:')    # v100o: 0x488B30 unit RNG -> counted (diagnostic), same LCG
     a(' push dword [esp+4]; push dword [esp+4]; call 0x%X; add esp,8; ret'%NET['rng2_c'])
+    a('rndv:')       # TEST20: unit-view calls of 0x488B30 -> own generator (cdecl n, caller cleans)
+    a(' jmp 0x%X'%NET['rnd_view_c'])
     a('rng2_hook:')   # v100f: 0x6A0925 call 0x4B97B0(clock) -> shared seed in network battles
     a(' jmp 0x%X'%NET['rng2_seed'])
     a('stg_open:')    # v94: 0x51A7AD fopen of the stage loader -> co-op support choice
@@ -1434,17 +1791,22 @@ def gen():
     a('t_pickb: db "Pick Unit",0')
     a('t_swapb: db "Swap Here",0')
     a('t_saved: db "Army saved",0')
-    a('t_hint_e1: db "Hero + 4 units, max 1 support",0')
+    a('t_hint_e1: db "Hero + 3 units + 1 support",0')
     a('t_hint_e2: db "Choose a unit to swap with",0')
     a('trooptab: dw 0x24,4,0x28,4,0x2c,4,0x30,4,0x34,4,0x38,4,0x3c,4,0x40,4,0x20,4,0x48,4,0x4c,4,0x44,4,0x50,4,0x54,4,0x58,4,0x5c,1,0x5d,1,0x5e,1,0x64,4,0x68,4,0x6c,4,0x70,0x18,0x88,0x40,0x148,0x40,0x208,0x40,0x2c8,0x40,0x388,0x40,0x448,0x40,0x508,4,0xFFFF,0')
     a('mp_fname: db "MultiplayerArmies.sav",0')
     a('cs_fname: db "CustomArmies.sav",0')
     a('align 4')
     a('curfn: dd mp_fname')
+    a('mp_cur: dd mp_fname')                                  # TEST25: the page's file (armies 1-3 / 4-6)
+    a('hcache: dd -1,-1,-1,-1,-1,-1')
+    a('mp_page: db 0')
+    a('mp_fname2: db "MultiplayerArmies2.sav",0')
+    a('align 4')
     # v36: Custom armies persist in CustomArmies.sav (same format as the MP save), alongside the game's own save path
     a('cs_save_hook:')
     a(' cmp byte [0xAE1BF1],0; jne cssh_o')
-    a(' pushad; mov dword [curfn],cs_fname; call mp_save; mov dword [curfn],mp_fname; popad')
+    a(' pushad; mov dword [curfn],cs_fname; call mp_save; push dword [mp_cur]; pop dword [curfn]; popad')
     a('cssh_o:')
     a(' push ebp; mov ebp,esp; push -1; jmp 0x71B285')
     # v43: while lobby chat is typing, the game's button queries (pad 0x4682F0, mapped keys 0x46A9F0) report nothing pressed
@@ -1605,6 +1967,7 @@ def gen():
     a('ivh_n:')
     a(' mov dword [ebp-0xa0],-1; xor eax,eax; jmp iv_guard')
     a('iv_guard2:')  # only 3 troop entries per record, zero divisor, or no record -> v97 iv_troop(troop, P<n>exp, current level)
+    a(' test dword [0x%X],4; jnz ivg_own'%NET['inv_var'])   # TEST36 Roguelike: every troop levels by our rule (level 1 + 2 per wave)
     a(' cmp dword [ebp-0x58],0; je ivg_own')
     a(' cmp dword [ebp-0x4c],3; jge ivg_own; imul ecx,[ebp-0x4c],0x4c; mov esi,[ebp-0x58]')
     a(' cmp dword [esi+ecx+0x10],0; je ivg_own; jmp 0x54AB84')
@@ -1625,7 +1988,13 @@ def gen():
     #      co-op takes mp_wb's HBB path = army reloaded) -> sw_hook -> Multiplayer Menu, same route as Versus.
     for _lbl,_va,_pro,_res in (('mc_hook',0x541660,' push ebp; mov ebp,esp; sub esp,0x1c; jmp 0x541666',8),
                           ('mf_hook',0x541860,' push ebp; mov ebp,esp; sub esp,0x24; jmp 0x541866',0xF),
-                          ('amc_hook',0x549F60,' push ebp; mov ebp,esp; push ecx; mov [ebp-4],ecx; jmp 0x549F67',8)):
+                          ('amc_hook',0x549F60,' push ebp; mov ebp,esp; push ecx; mov [ebp-4],ecx; jmp 0x549F67',8),
+                          # v1.5 (USER test: Ellen 1 froze at its end cinematic for both players): missions that end with
+                          # 'go to the world map' / 'play movie and go to the world map' / 'load next mission' count as won in MP co-op
+                          ('gw_hook',0x54A160,' push ebp; mov ebp,esp; sub esp,8; jmp 0x54A166',8),
+                          ('fw_hook',0x54A070,' push ebp; mov ebp,esp; sub esp,0x110; jmp 0x54A079',8),
+                          ('lm_hook',0x548EA0,' push ebp; mov ebp,esp; sub esp,0x10; jmp 0x548EA6',8),
+                          ('pv_hook',0x549710,' push ebp; mov ebp,esp; sub esp,0x118; jmp 0x549719',8)):   # Play FMV (movie, next mission): Walter 5
         a(_lbl+':')
         a(' cmp byte [0xAE1BFE],0; je %s_o'%_lbl)
         a(' cmp dword [0xAE1808],100; jb %s_o'%_lbl)
@@ -1698,7 +2067,7 @@ def gen():
     a(' push 0; push 0x80; push 3; push 0; push 1; push 0x80000000; push cs_fname; call [0x988134]')
     a(' cmp eax,-1; je cslh_none')
     a(' push eax; call [0x988144]')
-    a(' mov dword [curfn],cs_fname; call mp_load; mov dword [curfn],mp_fname')
+    a(' mov dword [curfn],cs_fname; call mp_load; push dword [mp_cur]; pop dword [curfn]')
     a(' popad; xor eax,eax; ret')
     a('cslh_none:')
     a(' popad')
@@ -1731,9 +2100,12 @@ def gen():
     a('t_c_ply: db "Players",0')
     a('t_wait: db "Waiting for host",0')
     a('t_needp: db "Need 2+ players",0')
-    a('t_army1: db "Army 1 of 3",0')
-    a('t_army2: db "Army 2 of 3",0')
-    a('t_army3: db "Army 3 of 3",0')
+    a('t_army1: db "Army 1 of 6",0')   # 12 bytes each: indexed by army*12
+    a('t_army2: db "Army 2 of 6",0')
+    a('t_army3: db "Army 3 of 6",0')
+    a('t_army4: db "Army 4 of 6",0')
+    a('t_army5: db "Army 5 of 6",0')
+    a('t_army6: db "Army 6 of 6",0')
     a('cg_max:')
     a(' mov eax,[0xAE1DD8]')
     a(' cmp eax,100; jb cmx_n; mov eax,2; ret')
@@ -1760,6 +2132,8 @@ def gen():
     a(' mov eax,[0xAE1DD8]; call map_name')
     a(' mov eax,[0xAE1DCC]; call set_text')
     a(' mov eax,[0xAE1DDC]; and eax,3; mov edx,[eax*4+modetab]')
+    a(' cmp eax,1; jne vsm_ax; mov eax,[0x%X]; and eax,7; mov edx,[eax*4+invtab]; jmp vsm_a'%NET['net_inv'])   # TEST25
+    a('vsm_ax:')
     a(' test eax,eax; jnz vsm_a; mov eax,[0x%X]; and eax,7; cmp eax,4; jbe vsm_a1; xor eax,eax'%NET['net_dmg'])
     a('vsm_a1:')
     a(' mov edx,[eax*4+vstab]')
@@ -1813,6 +2187,13 @@ def gen():
     a('t_vs1: db "Versus - 1% damage",0')
     a('align 4')
     a('vstab: dd t_vs,t_vs75,t_vs50,t_vs25,t_vs1')
+    a('invtab: dd t_inv,t_inv1,t_inv2,t_inv3,t_inv4,t_inv5,t_inv,t_inv')   # TEST25, TEST36 Roguelike
+    a('t_inv1: db "Invasion - Randomiser",0')
+    a('t_inv2: db "Invasion - Insanity",0')
+    a('t_inv3: db "Invasion - Random Insanity",0')
+    a('t_inv4: db "Invasion - Roguelike",0')
+    a('t_inv5: db "Invasion - Roguelike Hero",0')
+    a('align 4')
     a('t_bdmg: db "Damage",0')
     a('t_d0: db "100% (normal)",0')
     a('t_d1: db "75%",0')
@@ -1851,6 +2232,8 @@ def gen():
     a(' inc esi; jmp lr_l')
     a('lr_d:')
     a(' mov eax,[0xAE1DDC]; and eax,3; mov edx,[eax*4+modetab]')
+    a(' cmp eax,1; jne vsm_bx; mov eax,[0x%X]; and eax,7; mov edx,[eax*4+invtab]; jmp vsm_b'%NET['net_inv'])   # TEST25
+    a('vsm_bx:')
     a(' test eax,eax; jnz vsm_b; mov eax,[0x%X]; and eax,7; cmp eax,4; jbe vsm_b1; xor eax,eax'%NET['net_dmg'])
     a('vsm_b1:')
     a(' mov edx,[eax*4+vstab]')
@@ -1860,7 +2243,8 @@ def gen():
     a(' mov eax,[0xae1cbc]; mov edx,0xAEF000; call set_text')
     a(' mov eax,[0xae1cac]; mov edx,t_gset; call set_text')
     a(' pushad; call 0x%X; popad'%NET['plains_make'])   # v1.2: generated flat Invasion map (id 26)
-    a(' mov eax,[0xAE1808]; cmp eax,26; ja lr_ni; mov eax,[eax*4+filetab]')
+    a(' pushad; call 0x%X; popad'%NET['cm_scan'])
+    a(' mov eax,[0xAE1808]; call cm_ft; test eax,eax; jz lr_ni')
     a(' push eax; push f_bmp; push 0xAEF100; call 0x4321A0; add esp,12')
     a(' mov ecx,[0xAE1DE8]; test ecx,ecx; jz lr_ni')
     a(' push 0x3E828F5C; push 0x3E828F5C; call 0x725430')
@@ -2269,9 +2653,9 @@ def gen():
     a('sm_co:')
     a(' mov esi,[eax*4+cofile-400]; jmp sm_f')
     a('sm_lf:')
-    a(' cmp eax,%d; jb sm_lf2; xor eax,eax; mov [0xAE1808],eax'%len(MAPS))
+    a(' cmp eax,[0x%X]; jb sm_lf2; xor eax,eax; mov [0xAE1808],eax'%NET['cm_total'])
     a('sm_lf2:')
-    a(' mov esi,[eax*4+filetab]')
+    a(' push eax; call cm_ft; mov esi,eax; pop eax')
     a('sm_f:')
     a(' mov edi,0xAEEC00+0x104')
     a('sm_c2:')
@@ -2368,9 +2752,11 @@ def gen():
     a(' push esi; mov ecx,edi; call 0x7253C0')
     a(' test eax,eax; jz cd_n')
     a(' push dword [eax+0x1c8]; call 0x5839F0; add esp,4')
-    a(' test al,al; jz cd_ok')
+    a(' test al,al; jz cd_nrm')
     a(' cmp dword [0xAEF448],1; jge cd_n')
-    a(' inc dword [0xAEF448]')
+    a(' inc dword [0xAEF448]; jmp cd_ok')
+    a('cd_nrm:')      # USER 2026-11-26: hero + 3 normal + 1 support (was any 4, max 1 support)
+    a(' mov eax,[0xAEF444]; sub eax,[0xAEF448]; cmp eax,3; jge cd_n')
     a('cd_ok:')
     a(' inc dword [0xAEF444]')
     a(' mov byte [esi+0xAEF400],1')

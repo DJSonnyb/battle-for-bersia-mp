@@ -1,0 +1,12 @@
+LIBRARY winhttp.dll
+EXPORTS
+  WinHttpOpen
+  WinHttpConnect
+  WinHttpOpenRequest
+  WinHttpSendRequest
+  WinHttpReceiveResponse
+  WinHttpQueryHeaders
+  WinHttpQueryDataAvailable
+  WinHttpReadData
+  WinHttpCloseHandle
+  WinHttpCrackUrl

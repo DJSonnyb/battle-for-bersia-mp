@@ -7,21 +7,24 @@ from PIL import Image
 S = ROOT
 # TroopInfo base-row columns (codex tables.md): 2 speed, 10 melee_attack, 13 unit_spacing, 14 dmg melee %, 15 range, 16 frontal,
 # 17 explosion, 18 fire, 19 ice, 20 lightning, 21 holy, 22 curse, 23 earth, 25 soldier_hp, 27 cols, 28 rows, 29 hp/level
+# eq: soldier equipment (USER 2026-11-17: the custom jobs use their own character's items, cosmetic in MP) = that character's
+#     WorldMap_CharInfo row: item types for slot 0, slot 1, extra 1, extra 2, armour min, armour max (ItemTypeInfo rows, -1 none).
+#     Jobs without eq keep their base job's WorldMap_TroopInfo row.
 NEWJOBS = [
   # id, base, race start (tree), col,row, reqs [(skill,level)], soldier char, token, icon, name, desc, TroopInfo overrides
-  dict(id=56, base=4,  race=0x00, col=1, row=2, req=[(0,10),(2,5)], ch=53, tok='J_Dwarf', icon='Dwarf', name='Dwarf',
+  dict(id=56, base=4,  race=0x00, col=1, row=2, req=[(0,10),(2,5)], eq=(44,93,45,-1,50,50), ch=53, tok='J_Dwarf', icon='Dwarf', name='Dwarf',
        desc='Stout dwarven infantry. Slower than heavy infantry but much tougher, they hold the line against anything that reaches them.',
        ti={2:99, 10:12, 14:85, 20:130, 25:470, 27:5, 28:4, 29:23}),
-  dict(id=57, base=5,  race=0x00, col=1, row=3, req=[(0,12),(12,5)], ch=45, tok='J_FElf', icon='Female_Elf', name='Elf Warrior',
+  dict(id=57, base=5,  race=0x00, col=1, row=3, req=[(0,12),(12,5)], eq=(43,94,41,42,49,49), ch=45, tok='J_FElf', icon='Female_Elf', name='Elf Warrior',
        desc='Swift elven warriors. Faster than knights but lightly armoured, they wield the magic of the earth.',
        ti={2:130, 14:100, 15:90, 20:150, 23:75, 25:340, 27:5, 28:4, 29:17}),
-  dict(id=58, base=21, race=0x12, col=3, row=1, req=[(0,10),(2,5)], ch=49, tok='J_DElfM', icon='Male_Dark_Elf', name='Dark Elf Guard',
+  dict(id=58, base=21, race=0x12, col=3, row=1, req=[(0,10),(2,5)], eq=(69,95,71,72,78,78), ch=49, tok='J_DElfM', icon='Male_Dark_Elf', name='Dark Elf Guard',
        desc='Elite dark elf infantry. Fewer in number than the fighters, but each one is hardier and strikes harder.',
        ti={10:13, 25:400, 27:5, 28:3, 29:20}),
-  dict(id=59, base=33, race=0x17, col=4, row=1, req=[(0,10),(13,5)], ch=54, tok='J_Lich', icon='Lich', name='Lich',
+  dict(id=59, base=33, race=0x17, col=4, row=1, req=[(0,10),(13,5)], eq=(-1,76,-1,-1,-1,-1), ch=54, tok='J_Lich', icon='Lich', name='Lich',
        desc='Undead sorcerers who wield curses. Weak in close combat and vulnerable to holy magic such as Curatio.',
        ti={10:8, 14:110, 21:300, 22:0, 25:330, 27:5, 28:3, 29:17}),
-  dict(id=60, base=27, race=0x17, col=1, row=0, req=[(0,20)], ch=26, tok='J_Ogre', icon='Ogre', name='Ogre',
+  dict(id=60, base=27, race=0x17, col=1, row=0, req=[(0,20)], eq=(-1,82,-1,-1,-1,-1), ch=26, tok='J_Ogre', icon='Ogre', name='Ogre',
        desc='Huge, brutal ogres with great strength and endurance. Slow, and easy prey for archers and ballistae.',
        ti={2:95, 10:30, 13:1200, 14:70, 15:160, 17:150, 25:1200, 27:5, 28:2, 29:60}),
 ]
@@ -77,6 +80,9 @@ def gen():
     for j in NEWJOBS:
         ti = sorted(j['ti'].items()); ti += [(-1,0)]*(16-len(ti))
         o.append(' {%s},'%','.join('{%d,%d}'%x for x in ti))
+    o.append('};')
+    o.append('static const signed char njob_eq[NJOB][6] = {   /* soldier equipment rows (WorldMap_TroopInfo cols 1-6); -2 = keep the base row */')
+    for j in NEWJOBS: o.append(' {%s},'%','.join(str(x) for x in j.get('eq', (-2,)*6)))
     o.append('};')
     blob = b''.join(dxt5(j['icon']) for j in NEWJOBS)
     o.append('#define ABIL_DXT ((const unsigned char *)0xB13000 + %d)   /* v1.3: Fire at Will ability icon, 36x36 = 9x9 packed blocks */'%len(blob))

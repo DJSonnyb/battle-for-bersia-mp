@@ -2,7 +2,9 @@
 usage: exe_patcher.py <ver> <patched exe>
 Targets (each checked by SHA-256, original kept as *_original):
   Heroes.exe                          <- original Steam Heroes.exe ($KUF_HEROES_EXE) + mod code
-  Data\\Interface\\Interface_Misc.txt  <- the game's own file ($KUF_GAME) + ui/Interface_Misc.diff (the multiplayer menus)"""
+  Data\\Interface\\Interface_Misc.txt  <- the game's own file ($KUF_GAME) + ui/Interface_Misc.diff (the multiplayer menus)
+  Data\\Interface\\Font2.dds           <- v1.5: our own purple/brown lobby colour icons written into its two empty cells
+                                        (any 1024x512 DXT5 Font2.dds: Steam's or the community patch's; kept as Font2_original.dds)"""
 import os as _os_; ROOT = _os_.path.dirname(_os_.path.dirname(_os_.path.abspath(__file__))) + '/'   # repository root
 import sys, struct, gzip, base64, hashlib, json, subprocess, tempfile, shutil
 ORIG = _os_.environ.get('KUF_HEROES_EXE') or exit('set KUF_HEROES_EXE to the original Steam Heroes.exe')
@@ -47,13 +49,23 @@ tmp = tempfile.mkdtemp(); ui_new = _os_.path.join(tmp, 'Interface_Misc.txt'); sh
 subprocess.run(['patch', '-s', '--no-backup-if-mismatch', ui_new, ROOT + 'ui/Interface_Misc.diff'], check=True)
 
 targets = [('Heroes.exe', 'Heroes_original.exe', open(ORIG, 'rb').read(), open(new, 'rb').read()),
-           ('Data\\Interface\\Interface_Misc.txt', 'Data\\Interface\\Interface_Misc_original.txt', open(ui_src, 'rb').read(), open(ui_new, 'rb').read())]
+           ('Data\\Interface\\Interface_Misc.txt', 'Data\\Interface\\Interface_Misc_original.txt', open(ui_src, 'rb').read(), open(ui_new, 'rb').read()),
+           # TEST53 (USER: "just use Keaton's cam fix please, we have full permission"): Keaton's Urukubarr 1 camera fix (the Xbox
+           # user.cam: intro shots 100 / 101 around the marked area). Installed whole over any user.cam; the old one is kept as
+           # user_original.cam and put back on uninstall.
+           ('Data\\Camera\\user.cam', 'Data\\Camera\\user_original.cam', b'', open(ROOT + 'assets/keaton/user.cam', 'rb').read())]
+# USER 2026-11-26 (Encablossa merged into the main build): the Encablossa troops' barracks (Body) and hero-select (Portrait)
+# pictures, rendered from their models by scripts/tools/enca_pics.py - new files, installed whole
+for _k, _d in (('Bdy', 'Body'), ('Prt', 'Portrait')):
+    for _n in (2, 3, 4):
+        _f = 'UV_ANCIENTHEART_%d_%s' % (_n, _k)
+        targets.append(('Data\\Interface\\%s\\%s.dds' % (_d, _f), 'Data\\Interface\\%s\\%s_original.dds' % (_d, _f), b'', open(ROOT + 'assets/enca/%s.dds' % _f, 'rb').read()))
 shutil.rmtree(tmp)
 meta = []; blob = bytearray()
 for path, bak, a, b in targets:
     # Text files: store the whole new file, so it installs over any version of the player's file
     # (copies differ between players). The exe is always rebuilt from the exact Steam original.
-    d = (b'L' + struct.pack('<I', len(b)) + b) if path.endswith('.txt') else None
+    d = (b'L' + struct.pack('<I', len(b)) + b) if path.endswith(('.txt', '.cam', '.dds')) else None
     if d is None:   # exe: same-offset runs (the mod only appends sections and patches bytes in place)
         ops = bytearray(); i = 0; n = len(b)
         while i < n:
@@ -66,9 +78,12 @@ for path, bak, a, b in targets:
                 while j < n and not (j + 16 <= len(a) and a[j:j + 16] == b[j:j + 16]): j += 1
                 ops += b'L' + struct.pack('<I', j - i) + b[i:j]; i = j
         d = bytes(ops)
-    meta.append(dict(path=path, bak=bak, osha=sha(a), osize=len(a), nsha=sha(b), nsize=len(b), off=len(blob), len=len(d), any=path.endswith('.txt')))
+    meta.append(dict(path=path, bak=bak, osha=sha(a), osize=len(a), nsha=sha(b), nsize=len(b), off=len(blob), len=len(d), any=path.endswith(('.txt', '.cam', '.dds'))))
     blob += d
-mj = json.dumps(dict(ver=ver, files=meta)).encode()
+sys.path.insert(0, ROOT + 'scripts'); import font_icons
+_fb = font_icons.blocks(font_icons.icon(font_icons.PURPLE), 256, 484) + font_icons.blocks(font_icons.icon(font_icons.BROWN), 286, 484)
+font2 = dict(path='Data\\Interface\\Font2.dds', bak='Data\\Interface\\Font2_original.dds', size=524416, blocks=[[o, base64.b64encode(b).decode()] for o, b in _fb])
+mj = json.dumps(dict(ver=ver, files=meta, font2=font2)).encode()
 pk = gzip.compress(struct.pack('<I', len(mj)) + mj + bytes(blob), 9, mtime=0)
 b64 = base64.b64encode(pk).decode(); lines = [b64[k:k + 100] for k in range(0, len(b64), 100)]
 BAT = r'''@echo off
@@ -77,7 +92,8 @@ rem  Battle for Bersia MP v@VER@ - installer
 rem  Put this file in your KUF Heroes folder (next to Heroes.exe) and run it.
 rem  It turns YOUR OWN Steam Heroes.exe and Data\Interface\Interface_Misc.txt
 rem  into Battle for Bersia MP v@VER@ (the originals are kept as *_original).
-rem  No game files are included in this file. Source: github.com/DJSonnyb/battle-for-bersia-mp
+rem  It also installs Keaton's Urukubarr 1 camera fix (Data\Camera\user.cam, used with permission).
+rem  Source: github.com/DJSonnyb/battle-for-bersia-mp
 rem  Run "BattleForBersiaMP_v@VER@_Install.bat uninstall" to put the originals back.
 rem ============================================================================
 setlocal
@@ -123,6 +139,7 @@ foreach ($f in $m.files) {
 }
 if ($env:HMP_MODE -eq 'uninstall') {
     foreach ($p in $plan) { Copy-Item -LiteralPath $p[2] -Destination $p[3] -Force; Write-Host "  Restored $($p[0].path)" -ForegroundColor Green }
+    if ($m.font2) { $fb = Join-Path $dir $m.font2.bak; if (Test-Path -LiteralPath $fb) { Copy-Item -LiteralPath $fb -Destination (Join-Path $dir $m.font2.path) -Force; Write-Host "  Restored $($m.font2.path)" -ForegroundColor Green } }
     return
 }
 # ---- build ----
@@ -145,7 +162,21 @@ foreach ($x in $outs) {
     $f = $x[0]; $dst = Join-Path $dir $f.path; $bak = Join-Path $dir $f.bak
     $hb = Sha $bak
     if (($f.any -and $hb -eq '' -and (Test-Path -LiteralPath $x[2])) -or (-not $f.any -and $hb -ne $f.osha)) { Copy-Item -LiteralPath $x[2] -Destination $bak -Force; Write-Host "  Backed up the original as $($f.bak)" }
+    $dd = Split-Path -Parent $dst; if (-not (Test-Path -LiteralPath $dd)) { New-Item -ItemType Directory -Force -Path $dd | Out-Null }
     [IO.File]::WriteAllBytes($dst, $x[1])
+}
+# ---- v1.5: purple and brown lobby colour icons into the two empty cells of Font2.dds ----
+if ($m.font2) {
+    $fp = Join-Path $dir $m.font2.path; $fb = Join-Path $dir $m.font2.bak
+    try {
+        $d = $null; if (Test-Path -LiteralPath $fp) { $d = [IO.File]::ReadAllBytes($fp) }
+        if ($d -and $d.Length -eq $m.font2.size -and [Text.Encoding]::ASCII.GetString($d, 84, 4) -eq 'DXT5' -and [BitConverter]::ToInt32($d, 12) -eq 512 -and [BitConverter]::ToInt32($d, 16) -eq 1024) {
+            if (-not (Test-Path -LiteralPath $fb)) { Copy-Item -LiteralPath $fp -Destination $fb -Force }
+            foreach ($bl in $m.font2.blocks) { $x = [Convert]::FromBase64String($bl[1]); [Array]::Copy($x, 0, $d, [int]$bl[0], $x.Length) }
+            [IO.File]::WriteAllBytes($fp, $d)
+            Write-Host '  Added the purple and brown team colour icons'
+        } else { Write-Host '  Data\Interface\Font2.dds is missing or not the usual size - the purple and brown colour icons will be blank.' -ForegroundColor Yellow }
+    } catch { Write-Host '  Could not add the purple and brown colour icons (Font2.dds) - everything else is installed.' -ForegroundColor Yellow }
 }
 Write-Host ''
 Write-Host "  Done - Battle for Bersia MP v$($m.ver) is installed. Start KUF Heroes from Steam as usual." -ForegroundColor Green

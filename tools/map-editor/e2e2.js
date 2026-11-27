@@ -1,0 +1,32 @@
+const { chromium } = require('playwright'); const fs = require('fs'); const C = require('./core.js');
+const L = '/home/claude/game/Data/Mission/Live/';
+(async () => {
+  const b = await chromium.launch(); const pg = await b.newPage({ viewport: { width: 1400, height: 900 }, acceptDownloads: true });
+  const errs = []; pg.on('pageerror', e => errs.push(e.message));
+  await pg.goto('file://' + process.cwd() + '/test.html'); await pg.waitForTimeout(500); await pg.evaluate(() => { const d = document.getElementById('dlgHelp'); if (d && d.open) d.close(); });
+  await pg.setInputFiles('#fileIn', [L + '9_IceStorm.map', L + '9_IceStorm.stg', L + '9_IceStorm.dds']); await pg.waitForTimeout(600);
+  await pg.click('#bWaves'); await pg.waitForTimeout(300);
+  await pg.screenshot({ path: 'out/10_waves.png' });
+  // edit line 1 level -> 8, remove its first troop, add a new Siege Mammoth copy, add a line, change max troops
+  await pg.fill('#wl0', '8'); await pg.dispatchEvent('#wl0', 'change');
+  await pg.click('.wv-row:nth-child(2) .wv-chip button');
+  const opt = await pg.$$eval('#wn0 option', os => os.map(o => [o.value, o.textContent]).find(x => x[1].startsWith('Swamp Mammoth') && x[0].startsWith('new:')));
+  await pg.selectOption('#wn0', opt[0]);
+  await pg.fill('#wvMax', '40'); await pg.dispatchEvent('#wvMax', 'change');
+  await pg.click('.wv-bar >> nth=4');
+  await pg.click('text=Add a group for wave 5');
+  await pg.screenshot({ path: 'out/11_waves_edit.png', fullPage: false });
+  const n1 = await pg.evaluate(() => [S.stg.troops.length, waveModel(S.stg).lines.length]);
+  await pg.keyboard.press('Control+z'); const n2 = await pg.evaluate(() => [S.stg.troops.length, waveModel(S.stg).lines.length]);
+  await pg.keyboard.press('Control+y'); const n3 = await pg.evaluate(() => [S.stg.troops.length, waveModel(S.stg).lines.length]);
+  let [dl] = await Promise.all([pg.waitForEvent('download'), pg.click('#bExport')]); await dl.saveAs('out/waves.zip');
+  [dl] = await Promise.all([pg.waitForEvent('download'), pg.click('#bProject')]); await dl.saveAs('out/wproj.mapforge.json');
+  await pg.reload(); await pg.waitForTimeout(400); await pg.evaluate(() => { const d = document.getElementById('dlgHelp'); if (d && d.open) d.close(); });
+  await pg.setInputFiles('#fileIn', [L + '9_IceStorm.map', L + '9_IceStorm.stg', L + '9_IceStorm.dds', 'out/wproj.mapforge.json']); await pg.waitForTimeout(600);
+  [dl] = await Promise.all([pg.waitForEvent('download'), pg.click('#bExport')]); await dl.saveAs('out/waves2.zip');
+  await pg.setViewportSize({ width: 400, height: 800 }); await pg.click('#bWaves'); await pg.waitForTimeout(300);
+  const ov = await pg.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+  await pg.screenshot({ path: 'out/12_phone_waves.png' });
+  console.log(JSON.stringify({ errs, n1, n2, n3, ov, projSize: fs.statSync('out/wproj.mapforge.json').size }));
+  await b.close();
+})();

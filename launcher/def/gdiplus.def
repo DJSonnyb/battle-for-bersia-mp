@@ -1,0 +1,23 @@
+LIBRARY gdiplus.dll
+EXPORTS
+  GdiplusStartup
+  GdipCreateBitmapFromStream
+  GdipCreateFromHDC
+  GdipDeleteGraphics
+  GdipDrawImageRectI
+  GdipSetSmoothingMode
+  GdipSetInterpolationMode
+  GdipCreateSolidFill
+  GdipDeleteBrush
+  GdipCreatePen1
+  GdipDeletePen
+  GdipCreatePath
+  GdipDeletePath
+  GdipAddPathArcI
+  GdipClosePathFigure
+  GdipFillPath
+  GdipDrawPath
+  GdipFillRectangleI
+  GdipDrawLineI
+  GdipGetImageWidth
+  GdipGetImageHeight

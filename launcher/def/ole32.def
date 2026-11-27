@@ -1,0 +1,5 @@
+LIBRARY ole32.dll
+EXPORTS
+  CreateStreamOnHGlobal
+  CoInitializeEx
+  CoTaskMemFree
